@@ -19,7 +19,7 @@ storiesOf('BadgerBadge', module)
 					currency={select('Currency', currencyOptions, 'USD')}
 					to={text(
 						'To Address',
-						'bitcoincash:qrh335l4sn9rhr8jk23zympmvfud07lttufc7l6qdy'
+						'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 					)}
 					tag={text('Button Text', 'Badger Pay')}
 					text={text('Top Text', 'Payment Total')}
@@ -44,7 +44,7 @@ storiesOf('BadgerBadge', module)
 					currency={'USD'}
 					to={text(
 						'To Address',
-						'bitcoincash:qrh335l4sn9rhr8jk23zympmvfud07lttufc7l6qdy'
+						'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 					)}
 					tag={text('Button Text', 'And the CTA')}
 					text={text('Top Text', 'Customize the Title')}
@@ -66,7 +66,7 @@ storiesOf('BadgerBadge', module)
 					currency={select('Currency', currencyOptions, 'USD')}
 					to={text(
 						'To Address',
-						'bitcoincash:qrh335l4sn9rhr8jk23zympmvfud07lttufc7l6qdy'
+						'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 					)}
 					successFn={() => console.log('success')}
 					failFn={() => console.log('fail')}
@@ -85,7 +85,7 @@ storiesOf('BadgerBadge', module)
 					price={0.01}
 					to={text(
 						'To Address',
-						'bitcoincash:qrh335l4sn9rhr8jk23zympmvfud07lttufc7l6qdy'
+						'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 					)}
 					showSatoshis={boolean('Show Satoshis', false)}
 					successFn={() => console.log('success')}
@@ -105,7 +105,7 @@ storiesOf('BadgerBadge', module)
 					price={0.01}
 					to={text(
 						'To Address',
-						'bitcoincash:qrh335l4sn9rhr8jk23zympmvfud07lttufc7l6qdy'
+						'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 					)}
 					showBrand={boolean('Badger info', false)}
 					successFn={() => console.log('success')}
@@ -125,7 +125,7 @@ storiesOf('BadgerBadge', module)
 					price={0.001}
 					to={text(
 						'To Address',
-						'bitcoincash:qrh335l4sn9rhr8jk23zympmvfud07lttufc7l6qdy'
+						'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 					)}
 					successFn={() => alert('Custom Success function called')}
 					failFn={() => alert('Custom Fail / Cancel function called ')}
