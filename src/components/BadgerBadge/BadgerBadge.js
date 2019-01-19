@@ -153,11 +153,19 @@ class BadgerButton extends React.Component<Props, State> {
 
 		if (window && typeof window.Web4Bch !== 'undefined') {
 			const { web4bch } = window;
+
+
 			const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
+			const {defaultAccount} = web4bch2.bch;
+
+			if(!defaultAccount){
+				this.setState({step: 'login'});
+				return;
+			}
 
 			const txParams = {
 				to,
-				from: web4bch2.bch.defaultAccount,
+				from: defaultAccount,
 				value: satoshis,
 			};
 
@@ -175,7 +183,8 @@ class BadgerButton extends React.Component<Props, State> {
 				}
 			});
 		} else {
-			window.open('https://badger.bitcoin.com');
+			this.setState({state: 'install'});
+			// window.open('https://badger.bitcoin.com');
 		}
 	};
 

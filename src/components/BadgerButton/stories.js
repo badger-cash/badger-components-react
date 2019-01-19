@@ -16,7 +16,7 @@ storiesOf('BadgerButton', module).add(
 			currency={select('Currency', currencyOptions, 'USD')}
 			to={text(
 				'To Address',
-				'bitcoincash:qrh335l4sn9rhr8jk23zympmvfud07lttufc7l6qdy'
+				'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 			)}
 			text={text('Top Text', 'Badger Pay')}
 			showSatoshis={boolean('Show Satoshis', true)}
@@ -36,7 +36,7 @@ storiesOf('BadgerButton', module).add(
 			currency={'USD'}
 			to={text(
 				'To Address',
-				'bitcoincash:qrh335l4sn9rhr8jk23zympmvfud07lttufc7l6qdy'
+				'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 			)}
 		/>
 	),
@@ -53,7 +53,7 @@ storiesOf('BadgerButton', module).add(
 			text="Pay with Badger"
 			to={text(
 				'To Address',
-				'bitcoincash:qrh335l4sn9rhr8jk23zympmvfud07lttufc7l6qdy'
+				'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 			)}
 		/>
 	),
@@ -72,7 +72,7 @@ storiesOf('BadgerButton', module).add(
 			text="Pay now"
 			to={text(
 				'To Address',
-				'bitcoincash:qrh335l4sn9rhr8jk23zympmvfud07lttufc7l6qdy'
+				'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 			)}
 		/>
 	),

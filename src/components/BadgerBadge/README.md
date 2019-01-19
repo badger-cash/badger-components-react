@@ -7,7 +7,7 @@ A Payment Badge for us with the Badger wallet
 
 ```jsx
 import React from 'react';
-import { BadgerBadge } from '@bitcoincom/badger-buttons';
+import { BadgerBadge } from 'badger-components-react';
 
 class MyClass extends React.Component {
 	successFn() {

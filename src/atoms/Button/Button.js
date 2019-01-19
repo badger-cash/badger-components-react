@@ -2,7 +2,7 @@
 import * as React from 'react';
 import styled, { css } from 'styled-components';
 
-import colors from '../styles/colors';
+import colors from '../../styles/colors';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner, faCheck } from '@fortawesome/free-solid-svg-icons';
@@ -15,6 +15,7 @@ const ButtonElement = styled.button`
   outline: none;
   position: relative;
   color: ${colors.bg};
+	background-color: ${colors.brand500};
 
   ${(props) =>
 		props.isFresh &&
@@ -62,7 +63,7 @@ const CompleteCover = styled.div`
 `
 
 type Props = {
-	step: 'fresh' | 'pending' | 'complete',
+	step: 'fresh' | 'pending' | 'complete' | 'login' | 'install',
 	children: React.Node,
 };
 
@@ -73,6 +74,8 @@ class Button extends React.PureComponent<Props> {
 		const isFresh = step === 'fresh';
 		const isPending = step === 'pending';
 		const isComplete = step === 'complete';
+		const isLogin = step === 'login';
+		const isInstall = step === 'install';
 
 		return (
 			<ButtonElement

@@ -6,17 +6,10 @@ This component renders a basic BadgerButton to integrate with the Badger wallet
 
 ```jsx
 import React from 'react';
-import { BadgerButton } from '@bitcoincom/badger-buttons';
+import { BadgerButton } from 'badger-components-react';
 
-class MyClass extends React.Component {
-	successFn() {
-		console.log('Ack! You got me!');
-	}
-	failFn(err) {
-		console.err('Transaction failed or cancelled');
-	}
+class MyClass extends React.PureComponent {
 	render() {
-		// const { paymentAddress, amount, currency} = this.props
 
 		const paymentAddress = 'qInsettCashAddrHere'; // CashAddr funds sent to
 		const amount = 0.1; // Amount of target currency to convert for payment
@@ -28,11 +21,10 @@ class MyClass extends React.Component {
 					to={paymentAddress}
 					amount={amount}
 					currency={currency}
-					successFn={this.successFn}
-					failFn={this.failFn}
-				>
-					Get me!
-				</BadgerButton>
+					successFn={(tx) => console.log(tx)}
+					failFn={(err) => console.log(err)}
+					text="Donate with BCH"
+				/>
 			</section>
 		);
 	}

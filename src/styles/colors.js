@@ -8,6 +8,8 @@ const colors = {
   pending700: '#0070AA',
   success500: '#00C571',
   succcess700: '#007328',
+  warning500: '#FF7AE2',
+  warning700: '#977AFF',
   bg: '#ffffff',
   fg100: '#ccc',
 }
