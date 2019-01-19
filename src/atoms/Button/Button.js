@@ -123,7 +123,7 @@ class Button extends React.PureComponent<Props> {
 				{isLogin && <LoginCover>Login to Badger</LoginCover>}
 				{isInstall && (
 					<WarningCover>
-						<A href="https://badger.bitcoin.com" target="_blank">Install Badger</A>
+						<A href="https://badger.bitcoin.com" target="_blank">Install Badger & refresh page</A>
 					</WarningCover>
 				)}
 			</ButtonElement>

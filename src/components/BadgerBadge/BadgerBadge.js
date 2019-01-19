@@ -184,9 +184,23 @@ class BadgerButton extends React.Component<Props, State> {
 			});
 		} else {
 			this.setState({state: 'install'});
-			// window.open('https://badger.bitcoin.com');
+			window.open('https://badger.bitcoin.com');
 		}
 	};
+
+
+	gotoLoginState = () => {
+		this.setState({step: 'login'});
+		this.intervalLogin = setInterval(() => {
+			const { web4bch } = window;
+			const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
+			const {defaultAccount} = web4bch2.bch;
+			if(defaultAccount){
+				clearInterval(this.intervalLogin)
+				this.setState({step: 'fresh'});
+			}
+		}, 1000)
+	}
 
 	componentDidMount() {
 		const currency = this.props.currency;
@@ -197,6 +211,19 @@ class BadgerButton extends React.Component<Props, State> {
 			() => this.updateBCHPrice(currency),
 			PRICE_UPDATE_INTERVAL
 		);
+
+		// Determine Button initial state
+		if (window && typeof window.Web4Bch === 'undefined') {
+			this.setState({step: 'install'});
+		} else {
+			const { web4bch } = window;
+			const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
+			const {defaultAccount} = web4bch2.bch;
+			if(!defaultAccount){
+				this.gotoLoginState();
+			}
+		}
+
 	}
 
 	componentWillUnmount() {
