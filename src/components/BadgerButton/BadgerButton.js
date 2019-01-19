@@ -67,7 +67,7 @@ type Props = {
 	failFn?: Function,
 };
 type State = {
-	step: 'fresh' | 'pending' | 'complete',
+	step: 'fresh' | 'pending' | 'complete' | 'login' | 'install',
 	BCHPrice: {
 		[currency: CurrencyCode]: {
 			price: ?number,
@@ -113,11 +113,19 @@ class BadgerButton extends React.Component<Props, State> {
 
 		if (window && typeof window.Web4Bch !== 'undefined') {
 			const { web4bch } = window;
+
+
 			const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
+			const {defaultAccount} = web4bch2.bch;
+
+			if(!defaultAccount){
+				this.setState({step: 'login'});
+				return;
+			}
 
 			const txParams = {
 				to,
-				from: web4bch2.bch.defaultAccount,
+				from: defaultAccount,
 				value: satoshis,
 			};
 
@@ -130,17 +138,31 @@ class BadgerButton extends React.Component<Props, State> {
 					this.setState({ step: 'fresh' });
 				} else {
 					console.log('BadgerButton send success:', res);
-					this.setState({ step: 'complete' });
 					successFn(res);
+					this.setState({ step: 'complete' });
 				}
 			});
 		} else {
+			this.setState({state: 'install'});
 			window.open('https://badger.bitcoin.com');
 		}
 	};
 
+	gotoLoginState = () => {
+		this.setState({step: 'login'});
+		this.intervalLogin = setInterval(() => {
+			const { web4bch } = window;
+			const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
+			const {defaultAccount} = web4bch2.bch;
+			if(defaultAccount){
+				clearInterval(this.intervalLogin)
+				this.setState({step: 'fresh'});
+			}
+		}, 1000)
+	}
+
 	componentDidMount() {
-		const { currency } = this.props;
+		const currency = this.props.currency;
 
 		// Get price on load, and update price every minute
 		this.updateBCHPrice(currency);
@@ -148,10 +170,24 @@ class BadgerButton extends React.Component<Props, State> {
 			() => this.updateBCHPrice(currency),
 			PRICE_UPDATE_INTERVAL
 		);
+
+		// Determine Button initial state
+		if (window && typeof window.Web4Bch === 'undefined') {
+			this.setState({step: 'install'});
+		} else {
+			const { web4bch } = window;
+			const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
+			const {defaultAccount} = web4bch2.bch;
+			if(!defaultAccount){
+				this.gotoLoginState();
+			}
+		}
+
 	}
 
 	componentWillUnmount() {
 		this.priceInterval && clearInterval(this.priceInterval);
+		this.intervalLogin && clearInterval(this.intervalLogin)
 	}
 
 	componentDidUpdate(prevProps: Props) {

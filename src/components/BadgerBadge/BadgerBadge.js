@@ -3,7 +3,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { FontAwesomeIcon, faCheck } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import {
 	type CurrencyCode,
@@ -228,6 +228,7 @@ class BadgerButton extends React.Component<Props, State> {
 
 	componentWillUnmount() {
 		this.priceInterval && clearInterval(this.priceInterval);
+		this.intervalLogin && clearInterval(this.intervalLogin)
 	}
 
 	componentDidUpdate(prevProps: Props) {
