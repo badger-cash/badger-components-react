@@ -18,25 +18,21 @@ import BitcoinCashImage from '../../images/bitcoin-cash.svg';
 import colors from '../../styles/colors';
 
 import Button from '../../atoms/Button';
+import Small from '../../atoms/Small';
+import Text from '../../atoms/Text';
 
 const PRICE_UPDATE_INTERVAL = 60 * 1000;
 
 const Main = styled.div`
 	font-family: sans-serif;
 	display: grid;
-	grid-gap: 24px;
+	grid-gap: 20px;
 	padding: 12px 12px 6px;
 	border: 1px dashed
 		${(props) => (props.color3 ? props.color3 : colors.bchGrey)};
 	border-radius: 4px;
 	background-color: ${(props) => (props.color2 ? props.color2 : 'inherit')};
 	color: ${(props) => (props.color3 ? props.color3 : 'inherit')};
-`;
-
-const ButtonText = styled.p`
-	font-size: 20px;
-	line-height: 1em;
-	margin: 0;
 `;
 
 const Prices = styled.div`
@@ -46,9 +42,10 @@ const Prices = styled.div`
 	align-items: end;
 	justify-content: end;
 `;
+
 const PriceText = styled.p`
 	font-family: monospace;
-	font-size: 18px;
+	font-size: 16px;
 	line-height: 1em;
 	margin: 0;
 `;
@@ -59,11 +56,6 @@ const HeaderText = styled.h3`
 	line-height: 1em;
 	margin: 0;
 	font-weight: 400;
-`;
-
-const Small = styled.span`
-	font-size: 12px;
-	font-weight: 700;
 `;
 
 const ButtonContainer = styled.div`
@@ -98,13 +90,12 @@ type Props = {
 	tag?: string,
 	showSatoshis?: boolean,
 	showBrand?: boolean,
-	
 
 	successFn: Function,
 	failFn?: Function,
 };
 type State = {
-	step: 'fresh' | 'pending' | 'complete',
+	step: 'fresh' | 'pending' | 'complete' | 'login' | 'install',
 	BCHPrice: {
 		[currency: CurrencyCode]: {
 			price: ?number,
@@ -119,7 +110,7 @@ class BadgerButton extends React.Component<Props, State> {
 		showSatoshis: true,
 		tag: 'Badger Pay',
 		showBrand: true,
-		text: 'Payment Total'
+		text: 'Payment Total',
 	};
 
 	state = {
@@ -154,12 +145,11 @@ class BadgerButton extends React.Component<Props, State> {
 		if (window && typeof window.Web4Bch !== 'undefined') {
 			const { web4bch } = window;
 
-
 			const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
-			const {defaultAccount} = web4bch2.bch;
+			const { defaultAccount } = web4bch2.bch;
 
-			if(!defaultAccount){
-				this.setState({step: 'login'});
+			if (!defaultAccount) {
+				this.setState({ step: 'login' });
 				return;
 			}
 
@@ -183,24 +173,23 @@ class BadgerButton extends React.Component<Props, State> {
 				}
 			});
 		} else {
-			this.setState({state: 'install'});
+			this.setState({ step: 'install' });
 			window.open('https://badger.bitcoin.com');
 		}
 	};
 
-
 	gotoLoginState = () => {
-		this.setState({step: 'login'});
+		this.setState({ step: 'login' });
 		this.intervalLogin = setInterval(() => {
 			const { web4bch } = window;
 			const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
-			const {defaultAccount} = web4bch2.bch;
-			if(defaultAccount){
-				clearInterval(this.intervalLogin)
-				this.setState({step: 'fresh'});
+			const { defaultAccount } = web4bch2.bch;
+			if (defaultAccount) {
+				clearInterval(this.intervalLogin);
+				this.setState({ step: 'fresh' });
 			}
-		}, 1000)
-	}
+		}, 1000);
+	};
 
 	componentDidMount() {
 		const currency = this.props.currency;
@@ -214,21 +203,20 @@ class BadgerButton extends React.Component<Props, State> {
 
 		// Determine Button initial state
 		if (window && typeof window.Web4Bch === 'undefined') {
-			this.setState({step: 'install'});
+			this.setState({ step: 'install' });
 		} else {
 			const { web4bch } = window;
 			const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
-			const {defaultAccount} = web4bch2.bch;
-			if(!defaultAccount){
+			const { defaultAccount } = web4bch2.bch;
+			if (!defaultAccount) {
 				this.gotoLoginState();
 			}
 		}
-
 	}
 
 	componentWillUnmount() {
 		this.priceInterval && clearInterval(this.priceInterval);
-		this.intervalLogin && clearInterval(this.intervalLogin)
+		this.intervalLogin && clearInterval(this.intervalLogin);
 	}
 
 	componentDidUpdate(prevProps: Props) {
@@ -248,14 +236,7 @@ class BadgerButton extends React.Component<Props, State> {
 
 	render() {
 		const { step, BCHPrice } = this.state;
-		const {
-			text,
-			price,
-			currency,
-			showSatoshis,
-			tag,
-			showBrand,
-		} = this.props;
+		const { text, price, currency, showSatoshis, tag, showBrand } = this.props;
 
 		const priceInCurrency = BCHPrice[currency] && BCHPrice[currency].price;
 
@@ -279,20 +260,14 @@ class BadgerButton extends React.Component<Props, State> {
 					)}
 				</Prices>
 				<ButtonContainer>
-					<Button
-						onClick={this.handleClick}
-						step={step}
-					>
-						<ButtonText>{tag}</ButtonText>
+					<Button onClick={this.handleClick} step={step}>
+						<Text>{tag}</Text>
 					</Button>
 
 					{showBrand && (
 						<BrandBottom>
 							<Small>
-								<A
-									href="badger.bitcoin.com"
-									target="_blank"
-								>
+								<A href="badger.bitcoin.com" target="_blank">
 									What is Badger
 								</A>
 							</Small>
