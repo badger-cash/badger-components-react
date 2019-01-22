@@ -28,11 +28,8 @@ const Main = styled.div`
 	display: grid;
 	grid-gap: 20px;
 	padding: 12px 12px 6px;
-	border: 1px dashed
-		${(props) => (props.color3 ? props.color3 : colors.bchGrey)};
+	border: 1px dashed ${colors.bchGrey};
 	border-radius: 4px;
-	background-color: ${(props) => (props.color2 ? props.color2 : 'inherit')};
-	color: ${(props) => (props.color3 ? props.color3 : 'inherit')};
 `;
 
 const Prices = styled.div`
@@ -80,7 +77,6 @@ const A = styled.a`
 	}
 `;
 
-// Badger Badge Props
 type Props = {
 	to: string,
 	price: number,
