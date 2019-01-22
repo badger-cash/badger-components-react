@@ -18,7 +18,7 @@ import colors from '../../styles/colors';
 import BitcoinCashLogoImage from '../../images/bitcoin-cash-logo.svg';
 import BitcoinCashImage from '../../images/bitcoin-cash.svg';
 
-import BadgerBase from '../../hoc/BadgerBase';
+import BadgerBase, {type ButtonStates } from '../../hoc/BadgerBase';
 
 import Button from '../../atoms/Button';
 import Small from '../../atoms/Small';
@@ -43,7 +43,7 @@ const Wrapper = styled.div`
 	color: ${colors.bchGrey};
 `;
 
-// Badger Badge Props
+// Badger Button Props
 type Props = {
 	to: string,
 	price: number,
@@ -51,12 +51,11 @@ type Props = {
 
 	text?: string,
 	showSatoshis?: boolean,
-	showBrand?: boolean,
 	children: React.Node,
 
 	handleClick: Function,
 
-	step: 'fresh' | 'pending' | 'complete' | 'login' | 'install',
+	step: ButtonStates,
 	BCHPrice: {
 		[currency: CurrencyCode]: {
 			price: ?number,
