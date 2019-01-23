@@ -1,7 +1,14 @@
 const path = require('path');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+	.BundleAnalyzerPlugin;
 
- module.exports = {
+module.exports = {
 	entry: './src/index.js',
+	plugins: [new BundleAnalyzerPlugin()],
+	externals: {
+		react: 'React',
+		'react-dom': 'ReactDOM',
+	},
 	module: {
 		rules: [
 			{
@@ -34,10 +41,10 @@ const path = require('path');
 			{
 				test: /\.svg/,
 				use: {
-						loader: 'svg-url-loader',
-						options: {}
-				}
-		}
+					loader: 'svg-url-loader',
+					options: {},
+				},
+			},
 		],
 	},
 	resolve: {
