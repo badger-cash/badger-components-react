@@ -1,3 +1,3 @@
 // @flow
 
-export { default as BadgerBase } from './BadgerBase'
+export { default as BadgerBase } from './BadgerBase';

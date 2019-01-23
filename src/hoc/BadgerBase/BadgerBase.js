@@ -176,10 +176,6 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 	};
 };
 
-
-export type {
-	BadgerBaseProps,
-	ButtonStates
-}
+export type { BadgerBaseProps, ButtonStates };
 
 export default BadgerBase;

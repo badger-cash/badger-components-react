@@ -1,5 +1,5 @@
 // @flow
 
-import BadgerBadge from './BadgerBadge'
+import BadgerBadge from './BadgerBadge';
 
 export default BadgerBadge;
