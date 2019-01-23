@@ -7,18 +7,19 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
 import {
 	type CurrencyCode,
-	buildPriceEndpoint,
 	getCurrencyPreSymbol,
+	formatPriceDisplay,
 	getCurrencyPostSymbol,
 	getSatoshiDisplayValue,
-	formatPriceDisplay,
 } from '../../utils/badger-helpers';
 
 import colors from '../../styles/colors';
-import BitcoinCashLogoImage from '../../images/bitcoin-cash-logo.svg';
 import BitcoinCashImage from '../../images/bitcoin-cash.svg';
 
-import BadgerBase, {type ButtonStates } from '../../hoc/BadgerBase';
+import BadgerBase, {
+	type ButtonStates,
+	type BadgerBaseProps,
+} from '../../hoc/BadgerBase';
 
 import Button from '../../atoms/Button';
 import Small from '../../atoms/Small';
@@ -40,18 +41,13 @@ const Wrapper = styled.div`
 	font-family: sans-serif;
 	grid-template-columns: max-content;
 	grid-template-rows: max-content max-content max-content;
-	color: ${colors.bchGrey};
+	color: ${colors.fg500};
 `;
 
 // Badger Button Props
-type Props = {
-	to: string,
-	price: number,
-	currency: CurrencyCode,
-
+type Props = BadgerBaseProps & {
 	text?: string,
 	showSatoshis?: boolean,
-	children: React.Node,
 
 	handleClick: Function,
 
@@ -62,7 +58,6 @@ type Props = {
 			stamp: ?number,
 		},
 	},
-
 };
 
 class BadgerButton extends React.PureComponent<Props> {
@@ -72,7 +67,15 @@ class BadgerButton extends React.PureComponent<Props> {
 	};
 
 	render() {
-		const { text, price, currency, showSatoshis, children, step, BCHPrice, handleClick } = this.props;
+		const {
+			text,
+			price,
+			currency,
+			showSatoshis,
+			step,
+			BCHPrice,
+			handleClick,
+		} = this.props;
 
 		const priceInCurrency = BCHPrice[currency] && BCHPrice[currency].price;
 

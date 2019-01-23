@@ -35,6 +35,10 @@ const Example = (props) => {
 
 To develop additions to this project, run the local storybook development server with
 
+#### Setup
+* Install `flow-bin`
+  * `npm install -g flow-bin`
+
  ```bash
   $ npm i
   $ npm run storybook

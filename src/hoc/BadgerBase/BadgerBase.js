@@ -9,11 +9,12 @@ import {
 	getCurrencyPostSymbol,
 	getSatoshiDisplayValue,
 	formatPriceDisplay,
+	priceToSatoshis,
 } from '../../utils/badger-helpers';
 
 const PRICE_UPDATE_INTERVAL = 60 * 1000;
 
-type Props = {
+type BadgerBaseProps = {
 	to: string,
 	price: number,
 	currency: CurrencyCode,
@@ -22,8 +23,7 @@ type Props = {
 	failFn?: Function,
 };
 
-
-export type ButtonStates = 'fresh' | 'pending' | 'complete' | 'login' | 'install';
+type ButtonStates = 'fresh' | 'pending' | 'complete' | 'login' | 'install';
 
 type State = {
 	step: ButtonStates,
@@ -35,8 +35,8 @@ type State = {
 	},
 };
 
-const BadgerBase = (Wrapped: React.AbstractComponent) => {
-	return class extends React.Component<Props, State> {
+const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
+	return class extends React.Component<BadgerBaseProps, State> {
 		static defaultProps = {
 			currency: 'USD',
 		};
@@ -60,15 +60,13 @@ const BadgerBase = (Wrapped: React.AbstractComponent) => {
 			const { to, successFn, failFn, currency, price } = this.props;
 			const { BCHPrice } = this.state;
 
-			const priceInCurrency = BCHPrice[currency].price;
-			if (!priceInCurrency) {
+			const currencyPriceBCH = BCHPrice[currency].price;
+			if (!currencyPriceBCH) {
 				this.updateBCHPrice(currency);
 				return;
 			}
 
-			const singleDollarValue = priceInCurrency / 100;
-			const singleDollarSatoshis = 100000000 / singleDollarValue;
-			const satoshis = price * singleDollarSatoshis;
+			const satoshis = priceToSatoshis(currencyPriceBCH, price);
 
 			if (window && typeof window.Web4Bch !== 'undefined') {
 				const { web4bch } = window;
@@ -177,5 +175,11 @@ const BadgerBase = (Wrapped: React.AbstractComponent) => {
 		}
 	};
 };
+
+
+export type {
+	BadgerBaseProps,
+	ButtonStates
+}
 
 export default BadgerBase;

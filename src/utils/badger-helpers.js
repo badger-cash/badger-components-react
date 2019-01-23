@@ -1,14 +1,13 @@
 // @flow
-
 // Currency endpoints, logic, and formatters
-type CurrencyCode = 'USD' | 'CAD' | 'HKD' | 'JPY' | 'GBP' | 'EUR' | 'CNY'
 
+type CurrencyCode = 'USD' | 'CAD' | 'HKD' | 'JPY' | 'GBP' | 'EUR' | 'CNY';
 
-const buildPriceEndpoint = (currency:CurrencyCode) => {
+const buildPriceEndpoint = (currency: CurrencyCode) => {
 	return `https://index-api.bitcoin.com/api/v0/cash/price/${currency}`;
 };
 
-const getCurrencyPreSymbol = (currency:CurrencyCode) => {
+const getCurrencyPreSymbol = (currency: CurrencyCode) => {
 	switch (currency) {
 		case 'USD':
 		case 'CAD':
@@ -26,7 +25,7 @@ const getCurrencyPreSymbol = (currency:CurrencyCode) => {
 	}
 };
 
-const getCurrencyPostSymbol = (currency:CurrencyCode) => {
+const getCurrencyPostSymbol = (currency: CurrencyCode) => {
 	switch (currency) {
 		case 'CNY':
 			return '元';
@@ -59,12 +58,19 @@ const getSatoshiDisplayValue = (priceInCurrency?: number, price: number) => {
 	return (Math.trunc(price * singleDollarSatoshis) / 100000000).toFixed(8);
 };
 
-export type  { CurrencyCode }
+const priceToSatoshis = (BCHRate: number, price: number) => {
+	const singleDollarValue = BCHRate / 100;
+	const singleDollarSatoshis = 100000000 / singleDollarValue;
+	return price * singleDollarSatoshis;
+};
+
+export type { CurrencyCode };
 
 export {
 	buildPriceEndpoint,
 	getCurrencyPreSymbol,
-  getCurrencyPostSymbol,
-  getSatoshiDisplayValue,
+	getCurrencyPostSymbol,
+	getSatoshiDisplayValue,
 	formatPriceDisplay,
+	priceToSatoshis,
 };

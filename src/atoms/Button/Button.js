@@ -2,10 +2,11 @@
 import * as React from 'react';
 import styled, { css } from 'styled-components';
 
-import colors from '../../styles/colors';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner, faCheck } from '@fortawesome/free-solid-svg-icons';
+
+import { type ButtonStates } from '../../hoc/BadgerBase';
+import colors from '../../styles/colors';
 
 const A = styled.a`
 	color: inherit;
@@ -18,7 +19,7 @@ const ButtonElement = styled.button`
 	padding: 12px 20px;
 	outline: none;
 	position: relative;
-	color: ${colors.bg};
+	color: ${colors.bg100};
 	background-color: transparent;
 
 	${(props) =>
@@ -29,13 +30,13 @@ const ButtonElement = styled.button`
 			background-color: ${colors.brand500};
 			border: 1px solid ${colors.brand700};
 
-			box-shadow: 1px 1px 1px ${colors.bchGrey};
+			box-shadow: 1px 1px 1px ${colors.fg500};
 
 			transform: translateY(0px);
 			&:hover {
 				background-color: ${colors.brand700};
-				color: ${colors.bg};
-				box-shadow: 0px 0px 0px ${colors.bchGrey};
+				color: ${colors.bg100};
+				box-shadow: 0px 0px 0px ${colors.fg500};
 				transform: translateY(2px);
 			}
 		`}
@@ -81,19 +82,19 @@ const WarningCover = styled.div`
 	background-color: ${colors.brand500};
 	cursor: pointer;
 
-	box-shadow: 1px 1px 1px ${colors.bchGrey};
+	box-shadow: 1px 1px 1px ${colors.fg500};
 
 	transform: translateY(0px);
 	&:hover {
 		background-color: ${colors.brand700};
-		color: ${colors.bg};
-		box-shadow: 0px 0px 0px ${colors.bchGrey};
+		color: ${colors.bg100};
+		box-shadow: 0px 0px 0px ${colors.fg500};
 		transform: translateY(2px);
 	}
 `;
 
 type Props = {
-	step: 'fresh' | 'pending' | 'complete' | 'login' | 'install',
+	step: ButtonStates,
 	children: React.Node,
 };
 
@@ -123,7 +124,9 @@ class Button extends React.PureComponent<Props> {
 				{isLogin && <LoginCover>Login to Badger</LoginCover>}
 				{isInstall && (
 					<WarningCover>
-						<A href="https://badger.bitcoin.com" target="_blank">Install Badger & refresh page</A>
+						<A href="https://badger.bitcoin.com" target="_blank">
+							Install Badger & refresh page
+						</A>
 					</WarningCover>
 				)}
 			</ButtonElement>
