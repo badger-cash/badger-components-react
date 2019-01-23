@@ -26,10 +26,29 @@ const Example = (props) => {
       <BadgerBadge to={toAddress}
     </>
   )
-}
+};
 
+export default Example
 ```
 
+### Create a custom Badger Button
+
+```js
+import React from 'react'
+import { BadgerBase } from 'badger-react-components'
+
+const MyButton extends React.Component {
+  render() {
+    // Props from higher order component
+    const {handleClick, to, price, currency, BCHPrice, step} = this.props;
+    return (
+      <button onClick={handleClick}>Custom looking button and render</button>
+    )
+  }
+}
+// Wrap with BadgerBase higher order component
+export default BadgerBase(MyButton);
+```
 
 ## Development w/ Storybook
 
