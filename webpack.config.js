@@ -27,7 +27,7 @@ const config = {
 		rules: [
 			{
 				test: /\.js$/,
-				exclude: /node_modules/,
+				exclude: [/node_modules/, '/**/stories.js/'],
 				use: {
 					loader: 'babel-loader',
 					options: {
@@ -44,13 +44,6 @@ const config = {
 					},
 				},
 			},
-			// {
-			// 	test: /\.svg/,
-			// 	use: {
-			// 		loader: 'svg-url-loader',
-			// 		options: {},
-			// 	},
-			// },
 		],
 	},
 	resolve: {
@@ -59,7 +52,8 @@ const config = {
 	output: {
 		path: path.resolve(__dirname, 'dist/'),
 		publicPath: '',
-		filename: 'badgerComponents.js',
+		filename: 'badger-components.js',
+		library: "badgerComponents",
 		libraryTarget: 'umd',
 	},
 };
@@ -68,7 +62,7 @@ if (env === 'analyse') {
 	config.plugins.push(new BundleAnalyzerPlugin());
 }
 if (env === 'production') {
-  config.mode = 'production';
+  config.mode = 'development';
 }
 
 module.exports = config;

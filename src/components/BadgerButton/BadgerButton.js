@@ -103,7 +103,7 @@ class BadgerButton extends React.PureComponent<Props> {
 								style={{ height: 14, margin: 0 }}
 								alt="BCH"
 							/>{' '}
-							BCH{' '}
+							BCH!{' '}
 							<span style={{ fontFamily: 'monospace' }}>
 								{getSatoshiDisplayValue(priceInCurrency, price)}
 							</span>

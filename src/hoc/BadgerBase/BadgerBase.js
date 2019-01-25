@@ -68,7 +68,10 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 			const satoshis = priceToSatoshis(currencyPriceBCH, price);
 
-			if (typeof window !== 'undefined' && typeof window.Web4Bch !== 'undefined') {
+			if (
+				typeof window !== `undefined` &&
+				typeof window.Web4Bch !== 'undefined'
+			) {
 				const { web4bch } = window;
 
 				const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
@@ -101,19 +104,23 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			} else {
 				this.setState({ step: 'install' });
 
-				typeof window !== 'undefined' && window.open('https://badger.bitcoin.com');
+				if(typeof window !== 'undefined') {
+					window.open('https://badger.bitcoin.com');
+				}
 			}
 		};
 
 		gotoLoginState = () => {
 			this.setState({ step: 'login' });
 			this.intervalLogin = setInterval(() => {
-				const { web4bch } = window;
-				const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
-				const { defaultAccount } = web4bch2.bch;
-				if (defaultAccount) {
-					clearInterval(this.intervalLogin);
-					this.setState({ step: 'fresh' });
+				if (typeof window !== 'undefined') {
+					const { web4bch } = window;
+					const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
+					const { defaultAccount } = web4bch2.bch;
+					if (defaultAccount) {
+						clearInterval(this.intervalLogin);
+						this.setState({ step: 'fresh' });
+					}
 				}
 			}, 1000);
 		};
@@ -129,10 +136,13 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			);
 
 			// Determine Button initial state
-			if (typeof window !== 'undefined' && typeof window.Web4Bch === 'undefined') {
+			if (
+				typeof window !== 'undefined' &&
+				typeof window.Web4Bch === 'undefined'
+			) {
 				this.setState({ step: 'install' });
 			} else {
-				if(typeof window !== 'undefined') {
+				if (typeof window !== 'undefined') {
 					const { web4bch } = window;
 					const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
 					const { defaultAccount } = web4bch2.bch;
@@ -140,8 +150,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 						this.gotoLoginState();
 					}
 				}
-				}
-			
+			}
 		}
 
 		componentWillUnmount() {
