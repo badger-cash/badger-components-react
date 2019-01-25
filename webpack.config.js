@@ -6,7 +6,7 @@ const env = process.env.NODE_ENV;
 
 const config = {
 	entry: {
-		main: ['@babel/polyfill','./src/index.js']
+		main: ['./src/index.js']
 	},
 	plugins: [],
 	externals: {
