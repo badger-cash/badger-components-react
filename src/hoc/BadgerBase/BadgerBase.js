@@ -131,13 +131,16 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			if (window && typeof window.Web4Bch === 'undefined') {
 				this.setState({ step: 'install' });
 			} else {
-				const { web4bch } = window;
-				const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
-				const { defaultAccount } = web4bch2.bch;
-				if (!defaultAccount) {
-					this.gotoLoginState();
+				if(window) {
+					const { web4bch } = window;
+					const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
+					const { defaultAccount } = web4bch2.bch;
+					if (!defaultAccount) {
+						this.gotoLoginState();
+					}
 				}
-			}
+				}
+			
 		}
 
 		componentWillUnmount() {
