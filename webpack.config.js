@@ -2,12 +2,24 @@ const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 	.BundleAnalyzerPlugin;
 
-module.exports = {
+const env = process.env.NODE_ENV;
+
+const config = {
 	entry: './src/index.js',
-	plugins: [new BundleAnalyzerPlugin()],
+	plugins: [],
 	externals: {
-		react: 'React',
-		'react-dom': 'ReactDOM',
+		react: {
+			root: 'React',
+			commonjs2: 'react',
+			commonjs: 'react',
+			amd: 'react',
+		},
+		'react-dom': {
+			root: 'ReactDOM',
+			commonjs2: 'react-dom',
+			commonjs: 'react-dom',
+			amd: 'react-dom',
+		},
 	},
 	module: {
 		rules: [
@@ -57,3 +69,9 @@ module.exports = {
 		libraryTarget: 'umd',
 	},
 };
+
+if (env === 'analyse') {
+	config.plugins.push(new BundleAnalyzerPlugin());
+}
+
+module.exports = config;
