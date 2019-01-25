@@ -27,6 +27,11 @@ import Text from '../../atoms/Text';
 
 const PRICE_UPDATE_INTERVAL = 60 * 1000;
 
+const Outter = styled.div`
+	display: grid;
+	grid-template-columns: max-content;
+`;
+
 const Main = styled.div`
 	font-family: sans-serif;
 	display: grid;
@@ -129,40 +134,46 @@ class BadgerBadge extends React.PureComponent<Props> {
 		const priceInCurrency = BCHPrice[currency] && BCHPrice[currency].price;
 
 		return (
-			<Main>
-				<HeaderText>{text}</HeaderText>
-				<Prices>
-					<PriceText style={{ textAlign: 'right' }}>
-						{getCurrencyPreSymbol(currency)}
-						{formatPriceDisplay(price)} {getCurrencyPostSymbol(currency)}{' '}
-					</PriceText>
-					<Small>{currency}</Small>
-					{showSatoshis && (
-						<>
-							<PriceText>
-								<img src={BitcoinCashImage} style={{ height: 14 }} alt="BCH" />{' '}
-								{getSatoshiDisplayValue(priceInCurrency, price)}
-							</PriceText>
-							<Small>BCH</Small>
-						</>
-					)}
-				</Prices>
-				<ButtonContainer>
-					<Button onClick={handleClick} step={step}>
-						<Text>{tag}</Text>
-					</Button>
+			<Outter>
+				<Main>
+					<HeaderText>{text}</HeaderText>
+					<Prices>
+						<PriceText style={{ textAlign: 'right' }}>
+							{getCurrencyPreSymbol(currency)}
+							{formatPriceDisplay(price)} {getCurrencyPostSymbol(currency)}{' '}
+						</PriceText>
+						<Small>{currency}</Small>
+						{showSatoshis && (
+							<>
+								<PriceText>
+									<img
+										src={BitcoinCashImage}
+										style={{ height: 14 }}
+										alt="BCH"
+									/>{' '}
+									{getSatoshiDisplayValue(priceInCurrency, price)}
+								</PriceText>
+								<Small>BCH</Small>
+							</>
+						)}
+					</Prices>
+					<ButtonContainer>
+						<Button onClick={handleClick} step={step}>
+							<Text>{tag}</Text>
+						</Button>
 
-					{showBrand && (
-						<BrandBottom>
-							<Small>
-								<A href="badger.bitcoin.com" target="_blank">
-									What is Badger
-								</A>
-							</Small>
-						</BrandBottom>
-					)}
-				</ButtonContainer>
-			</Main>
+						{showBrand && (
+							<BrandBottom>
+								<Small>
+									<A href="badger.bitcoin.com" target="_blank">
+										What is Badger
+									</A>
+								</Small>
+							</BrandBottom>
+						)}
+					</ButtonContainer>
+				</Main>
+			</Outter>
 		);
 	}
 }

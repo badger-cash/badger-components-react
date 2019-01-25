@@ -35,6 +35,10 @@ const SatoshiText = styled.p`
 	align-items: center;
 `;
 
+const Outter = styled.div`
+	display: grid;
+	grid-template-columns: max-content;
+`;
 const Wrapper = styled.div`
 	display: grid;
 	grid-gap: 5px;
@@ -83,23 +87,30 @@ class BadgerButton extends React.PureComponent<Props> {
 		const priceInCurrency = BCHPrice[currency] && BCHPrice[currency].price;
 
 		return (
-			<Wrapper>
-				<Text style={{ textAlign: 'center' }}>{text}</Text>
-				<Button onClick={handleClick} step={step}>
-					<Text>
-						{getCurrencyPreSymbol(currency)} {formatPriceDisplay(price)}
-						{getCurrencyPostSymbol(currency)} <Small> {currency}</Small>
-					</Text>
-				</Button>
-				{showSatoshis && (
-					<SatoshiText>
-						<img src={BitcoinCashImage} style={{ height: 14 }} alt="BCH" /> BCH{' '}
-						<span style={{ fontFamily: 'monospace' }}>
-							{getSatoshiDisplayValue(priceInCurrency, price)}
-						</span>
-					</SatoshiText>
-				)}
-			</Wrapper>
+			<Outter>
+				<Wrapper>
+					<Text style={{ textAlign: 'center' }}>{text}</Text>
+					<Button onClick={handleClick} step={step}>
+						<Text>
+							{getCurrencyPreSymbol(currency)} {formatPriceDisplay(price)}
+							{getCurrencyPostSymbol(currency)} <Small> {currency}</Small>
+						</Text>
+					</Button>
+					{showSatoshis && (
+						<SatoshiText>
+							<img
+								src={BitcoinCashImage}
+								style={{ height: 14, margin: 0 }}
+								alt="BCH"
+							/>{' '}
+							BCH{' '}
+							<span style={{ fontFamily: 'monospace' }}>
+								{getSatoshiDisplayValue(priceInCurrency, price)}
+							</span>
+						</SatoshiText>
+					)}
+				</Wrapper>
+			</Outter>
 		);
 	}
 }

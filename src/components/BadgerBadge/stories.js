@@ -13,22 +13,20 @@ storiesOf('BadgerBadge', module)
 	.add(
 		'default',
 		() => (
-			<div style={{ display: 'flex' }}>
-				<BadgerBadge
-					price={number('Price', 0.01)}
-					currency={select('Currency', currencyOptions, 'USD')}
-					to={text(
-						'To Address',
-						'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
-					)}
-					tag={text('Button Text', 'Badger Pay')}
-					text={text('Top Text', 'Payment Total')}
-					showBrand={boolean('Show Brand', true)}
-					showSatoshis={boolean('Show Satoshis', true)}
-					successFn={() => console.log('success')}
-					failFn={() => console.log('fail')}
-				/>
-			</div>
+			<BadgerBadge
+				price={number('Price', 0.01)}
+				currency={select('Currency', currencyOptions, 'USD')}
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				tag={text('Button Text', 'Badger Pay')}
+				text={text('Top Text', 'Payment Total')}
+				showBrand={boolean('Show Brand', true)}
+				showSatoshis={boolean('Show Satoshis', true)}
+				successFn={() => console.log('success')}
+				failFn={() => console.log('fail')}
+			/>
 		),
 		{
 			notes:
@@ -38,20 +36,18 @@ storiesOf('BadgerBadge', module)
 	.add(
 		'custom text',
 		() => (
-			<div style={{ display: 'flex' }}>
-				<BadgerBadge
-					price={0.01}
-					currency={'USD'}
-					to={text(
-						'To Address',
-						'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
-					)}
-					tag={text('Button Text', 'And the CTA')}
-					text={text('Top Text', 'Customize the Title')}
-					successFn={() => console.log('success')}
-					failFn={() => console.log('fail')}
-				/>
-			</div>
+			<BadgerBadge
+				price={0.01}
+				currency={'USD'}
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				tag={text('Button Text', 'And the CTA')}
+				text={text('Top Text', 'Customize the Title')}
+				successFn={() => console.log('success')}
+				failFn={() => console.log('fail')}
+			/>
 		),
 		{
 			notes: 'Customize the title and button text',
@@ -60,18 +56,16 @@ storiesOf('BadgerBadge', module)
 	.add(
 		'currency variety',
 		() => (
-			<div style={{ display: 'flex' }}>
-				<BadgerBadge
-					price={number('Price', 0.01)}
-					currency={select('Currency', currencyOptions, 'USD')}
-					to={text(
-						'To Address',
-						'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
-					)}
-					successFn={() => console.log('success')}
-					failFn={() => console.log('fail')}
-				/>
-			</div>
+			<BadgerBadge
+				price={number('Price', 0.01)}
+				currency={select('Currency', currencyOptions, 'USD')}
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				successFn={() => console.log('success')}
+				failFn={() => console.log('fail')}
+			/>
 		),
 		{
 			notes: 'Pay in any currency, and automagically convert the amount to BCH',
@@ -80,18 +74,16 @@ storiesOf('BadgerBadge', module)
 	.add(
 		'optionally satoshis',
 		() => (
-			<div style={{ display: 'flex' }}>
-				<BadgerBadge
-					price={0.01}
-					to={text(
-						'To Address',
-						'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
-					)}
-					showSatoshis={boolean('Show Satoshis', false)}
-					successFn={() => console.log('success')}
-					failFn={() => console.log('fail')}
-				/>
-			</div>
+			<BadgerBadge
+				price={0.01}
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				showSatoshis={boolean('Show Satoshis', false)}
+				successFn={() => console.log('success')}
+				failFn={() => console.log('fail')}
+			/>
 		),
 		{
 			notes: 'Choose to show the Satoshi amount alongside the currency amount',
@@ -100,18 +92,16 @@ storiesOf('BadgerBadge', module)
 	.add(
 		'optionally badger info',
 		() => (
-			<div style={{ display: 'flex' }}>
-				<BadgerBadge
-					price={0.01}
-					to={text(
-						'To Address',
-						'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
-					)}
-					showBrand={boolean('Badger info', false)}
-					successFn={() => console.log('success')}
-					failFn={() => console.log('fail')}
-				/>
-			</div>
+			<BadgerBadge
+				price={0.01}
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				showBrand={boolean('Badger info', false)}
+				successFn={() => console.log('success')}
+				failFn={() => console.log('fail')}
+			/>
 		),
 		{
 			notes: 'Choose to display a link to the Badger homepage',
@@ -120,17 +110,15 @@ storiesOf('BadgerBadge', module)
 	.add(
 		'payment functions',
 		() => (
-			<div style={{ display: 'flex' }}>
-				<BadgerBadge
-					price={0.001}
-					to={text(
-						'To Address',
-						'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
-					)}
-					successFn={() => alert('Custom Success function called')}
-					failFn={() => alert('Custom Fail / Cancel function called ')}
-				/>
-			</div>
+			<BadgerBadge
+				price={0.001}
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				successFn={() => alert('Custom Success function called')}
+				failFn={() => alert('Custom Fail / Cancel function called ')}
+			/>
 		),
 		{
 			notes: 'Custom functions called on Successfull and Failed payments',
