@@ -125,7 +125,7 @@ class Button extends React.PureComponent<Props> {
 				{isInstall && (
 					<WarningCover>
 						<A href="https://badger.bitcoin.com" target="_blank">
-							Install Badger & refresh page
+							Install Badger & refresh
 						</A>
 					</WarningCover>
 				)}
