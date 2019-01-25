@@ -68,7 +68,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 			const satoshis = priceToSatoshis(currencyPriceBCH, price);
 
-			if (window && typeof window.Web4Bch !== 'undefined') {
+			if (typeof window !== 'undefined' && typeof window.Web4Bch !== 'undefined') {
 				const { web4bch } = window;
 
 				const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
@@ -101,7 +101,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			} else {
 				this.setState({ step: 'install' });
 
-				window && window.open('https://badger.bitcoin.com');
+				typeof window !== 'undefined' && window.open('https://badger.bitcoin.com');
 			}
 		};
 
@@ -129,10 +129,10 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			);
 
 			// Determine Button initial state
-			if (window && typeof window.Web4Bch === 'undefined') {
+			if (typeof window !== 'undefined' && typeof window.Web4Bch === 'undefined') {
 				this.setState({ step: 'install' });
 			} else {
-				if(window) {
+				if(typeof window !== 'undefined') {
 					const { web4bch } = window;
 					const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
 					const { defaultAccount } = web4bch2.bch;
