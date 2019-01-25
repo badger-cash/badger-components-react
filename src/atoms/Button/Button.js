@@ -1,12 +1,12 @@
 // @flow
 import * as React from 'react';
-import styled, { css } from 'styled-components';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner, faCheck } from '@fortawesome/free-solid-svg-icons';
+import styled, { css, keyframes } from 'styled-components';
 
 import { type ButtonStates } from '../../hoc/BadgerBase';
 import colors from '../../styles/colors';
+
+import CheckSVG from '../../images/CheckSVG';
+import LoadSVG from '../../images/LoadSVG';
 
 const A = styled.a`
 	color: inherit;
@@ -93,6 +93,20 @@ const WarningCover = styled.div`
 	}
 `;
 
+const spinAnimation = keyframes`
+    from {transform:rotate(0deg);}
+    to {transform:rotate(360deg);}
+}
+`;
+const CheckContainer = styled.div``;
+
+const PendingSpinner = styled.div`
+	animation: ${spinAnimation} 3s linear infinite;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+`;
+
 type Props = {
 	step: ButtonStates,
 	children: React.Node,
@@ -113,12 +127,14 @@ class Button extends React.PureComponent<Props> {
 				{children}
 				{isPending && (
 					<PendingCover>
-						<FontAwesomeIcon icon={faSpinner} spin />
+						<PendingSpinner>
+							<LoadSVG />
+						</PendingSpinner>
 					</PendingCover>
 				)}
 				{isComplete && (
 					<CompleteCover>
-						<FontAwesomeIcon icon={faCheck} />
+						<CheckSVG />
 					</CompleteCover>
 				)}
 				{isLogin && <LoginCover>Login to Badger</LoginCover>}

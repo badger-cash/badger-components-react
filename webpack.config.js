@@ -56,6 +56,9 @@ const config = {
 		library: "badgerComponents",
 		libraryTarget: 'umd',
 	},
+	optimization: {
+		minimize: true,
+	}
 };
 
 if (env === 'analyse') {
