@@ -42,6 +42,9 @@ const Wrapper = styled.div`
 	grid-template-columns: max-content;
 	grid-template-rows: max-content max-content max-content;
 	color: ${colors.fg500};
+	padding: 6px;
+	border: 1px dashed ${colors.brand700};
+	border-radius: 4px;
 `;
 
 // Badger Button Props

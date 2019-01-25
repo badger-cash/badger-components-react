@@ -21,9 +21,12 @@ import { BadgerButton, BadgerBadge} from 'badger-components-react'
 
 const Example = (props) => {
   const toAddress = 'Put in some address here' // TODO: Determine which address should be the default send address, and where the funds go.
+
+  // TODO: Fill this out properly
   return (
     <>
-      <BadgerBadge to={toAddress}
+      <BadgerBadge to={toAddress} />
+      <BadgerButton to={toAddress} />
     </>
   )
 };

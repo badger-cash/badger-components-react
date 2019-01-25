@@ -12,6 +12,7 @@ storiesOf('BadgerButton', module)
 	.add(
 		'default',
 		() => (
+			<div style={{ display: 'flex' }}>
 			<BadgerButton
 				price={number('Price', 0.001)}
 				currency={select('Currency', currencyOptions, 'USD')}
@@ -24,6 +25,7 @@ storiesOf('BadgerButton', module)
 				successFn={() => console.log('success')}
 				failFn={() => console.log('fail')}
 			/>
+			</div>
 		),
 		{
 			notes:
@@ -33,6 +35,7 @@ storiesOf('BadgerButton', module)
 	.add(
 		'without text',
 		() => (
+			<div style={{ display: 'flex' }}>
 			<BadgerButton
 				price={0.01}
 				currency={'USD'}
@@ -41,6 +44,7 @@ storiesOf('BadgerButton', module)
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
 			/>
+			</div>
 		),
 		{
 			notes: 'Without a text prop, it only shows the price',
@@ -49,6 +53,7 @@ storiesOf('BadgerButton', module)
 	.add(
 		'currencies',
 		() => (
+			<div style={{ display: 'flex' }}>
 			<BadgerButton
 				price={number('Price', 0.01)}
 				currency={select('Currency', currencyOptions, 'USD')}
@@ -58,6 +63,7 @@ storiesOf('BadgerButton', module)
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
 			/>
+		</div>
 		),
 		{
 			notes: 'Change the currency and price',
@@ -66,6 +72,7 @@ storiesOf('BadgerButton', module)
 	.add(
 		'hide the satoshi amount',
 		() => (
+			<div style={{ display: 'flex' }}>
 			<BadgerButton
 				showSatoshis={boolean('Show Satoshis', false)}
 				price={0.01}
@@ -76,6 +83,7 @@ storiesOf('BadgerButton', module)
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
 			/>
+			</div>
 		),
 		{
 			notes: 'Change the currency and price',

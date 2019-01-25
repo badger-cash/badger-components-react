@@ -32,7 +32,7 @@ const Main = styled.div`
 	display: grid;
 	grid-gap: 20px;
 	padding: 12px 12px 6px;
-	border: 1px dashed ${colors.fg500};
+	border: 1px dashed ${colors.brand500};
 	border-radius: 4px;
 `;
 
