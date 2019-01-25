@@ -100,7 +100,8 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				});
 			} else {
 				this.setState({ step: 'install' });
-				window.open('https://badger.bitcoin.com');
+
+				window && window.open('https://badger.bitcoin.com');
 			}
 		};
 
