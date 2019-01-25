@@ -46,6 +46,12 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			BCHPrice: {},
 		};
 
+		constructor(props) {
+			super(props);
+			this.priceInterval = null;
+			this.intervalLogin = null;
+		}
+
 		updateBCHPrice = async (currency: CurrencyCode) => {
 			const priceRequest = await fetch(buildPriceEndpoint(currency));
 			const result = await priceRequest.json();
@@ -112,8 +118,8 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 		gotoLoginState = () => {
 			this.setState({ step: 'login' });
-			this.intervalLogin = setInterval(() => {
-				if (typeof window !== 'undefined') {
+			if (typeof window !== 'undefined') {
+				this.intervalLogin = setInterval(() => {
 					const { web4bch } = window;
 					const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
 					const { defaultAccount } = web4bch2.bch;
@@ -121,15 +127,14 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 						clearInterval(this.intervalLogin);
 						this.setState({ step: 'fresh' });
 					}
-				}
-			}, 1000);
+				}, 1000);
+			}
 		};
 
 		componentDidMount() {
-			const currency = this.props.currency;
-
 			// Get price on load, and update price every minute
 			if (typeof window !== 'undefined') {
+				const currency = this.props.currency;
 				this.updateBCHPrice(currency);
 				this.priceInterval = setInterval(
 					() => this.updateBCHPrice(currency),
@@ -157,15 +162,17 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		componentDidUpdate(prevProps: Props) {
 			const { currency } = this.props;
 			const prevCurrency = prevProps.currency;
+			if (typeof window !== 'undefined') {
+				// Clear previous price interval, set a new one, and immediately update price
+				if (currency !== prevCurrency) {
+					this.priceInterval && clearInterval(this.priceInterval);
 
-			// Clear previous price interval, set a new one, and immediately update price
-			if (currency !== prevCurrency) {
-				this.priceInterval && clearInterval(this.priceInterval);
-				this.priceInterval = setInterval(
-					() => this.updateBCHPrice(currency),
-					PRICE_UPDATE_INTERVAL
-				);
-				this.updateBCHPrice(currency);
+					this.priceInterval = setInterval(
+						() => this.updateBCHPrice(currency),
+						PRICE_UPDATE_INTERVAL
+					);
+					this.updateBCHPrice(currency);
+				}
 			}
 		}
 

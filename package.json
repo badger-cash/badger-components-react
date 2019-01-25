@@ -1,6 +1,6 @@
 {
   "name": "badger-components-react",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Integrate the Badger wallet into your React app with ease.",
   "main": "dist/badger-components.js",
   "scripts": {
@@ -53,17 +53,19 @@
     "url-loader": "^1.1.2",
     "webpack": "^4.28.4",
     "webpack-bundle-analyzer": "^3.0.3",
-    "webpack-cli": "^3.2.0"
+    "webpack-cli": "^3.2.0",
+    "styled-components": "^4.1.3"
   },
   "peerDependencies": {
     "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "react-dom": "^16.0.0",
+    "styled-components": "^4.0.0"
   },
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
     "@fortawesome/fontawesome-svg-core": "^1.2.12",
     "@fortawesome/free-solid-svg-icons": "^5.6.3",
-    "@fortawesome/react-fontawesome": "^0.1.4",
-    "styled-components": "^4.1.3"
+    "@fortawesome/react-fontawesome": "^0.1.4"
+    
   }
 }
