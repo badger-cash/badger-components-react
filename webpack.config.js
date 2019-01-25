@@ -36,7 +36,7 @@ const config = {
 				},
 			},
 			{
-				test: /\.(png|gif|jpg)$/,
+				test: /\.(png|gif|jpg|svg)$/,
 				use: {
 					loader: 'url-loader',
 					options: {
@@ -44,13 +44,13 @@ const config = {
 					},
 				},
 			},
-			{
-				test: /\.svg/,
-				use: {
-					loader: 'svg-url-loader',
-					options: {},
-				},
-			},
+			// {
+			// 	test: /\.svg/,
+			// 	use: {
+			// 		loader: 'svg-url-loader',
+			// 		options: {},
+			// 	},
+			// },
 		],
 	},
 	resolve: {
