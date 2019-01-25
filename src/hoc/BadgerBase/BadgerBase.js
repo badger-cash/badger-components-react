@@ -104,7 +104,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			} else {
 				this.setState({ step: 'install' });
 
-				if(typeof window !== 'undefined') {
+				if (typeof window !== 'undefined') {
 					window.open('https://badger.bitcoin.com');
 				}
 			}
@@ -129,26 +129,22 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			const currency = this.props.currency;
 
 			// Get price on load, and update price every minute
-			this.updateBCHPrice(currency);
-			this.priceInterval = setInterval(
-				() => this.updateBCHPrice(currency),
-				PRICE_UPDATE_INTERVAL
-			);
+			if (typeof window !== 'undefined') {
+				this.updateBCHPrice(currency);
+				this.priceInterval = setInterval(
+					() => this.updateBCHPrice(currency),
+					PRICE_UPDATE_INTERVAL
+				);
 
-			// Determine Button initial state
-			if (
-				typeof window !== 'undefined' &&
-				typeof window.Web4Bch === 'undefined'
-			) {
-				this.setState({ step: 'install' });
-			} else {
-				if (typeof window !== 'undefined') {
+				if (window.Web4Bch) {
 					const { web4bch } = window;
 					const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
 					const { defaultAccount } = web4bch2.bch;
 					if (!defaultAccount) {
 						this.gotoLoginState();
 					}
+				} else {
+					this.setState({ step: 'install' });
 				}
 			}
 		}
