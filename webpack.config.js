@@ -5,7 +5,9 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 const env = process.env.NODE_ENV;
 
 const config = {
-	entry: './src/index.js',
+	entry: {
+		main: ['@babel/polyfill','./src/index.js']
+	},
 	plugins: [],
 	externals: {
 		react: {
@@ -34,14 +36,6 @@ const config = {
 				},
 			},
 			{
-				test: /\.scss$/,
-				use: [
-					{ loader: 'style-loader' },
-					{ loader: 'css-loader' },
-					{ loader: 'sass-loader' },
-				],
-			},
-			{
 				test: /\.(png|gif|jpg)$/,
 				use: {
 					loader: 'url-loader',
@@ -60,7 +54,7 @@ const config = {
 		],
 	},
 	resolve: {
-		extensions: ['.scss', '.js', '.json', '.png', '.gif', '.jpg', '.svg'],
+		extensions: ['.js', '.json', '.png', '.gif', '.jpg', '.svg'],
 	},
 	output: {
 		path: path.resolve(__dirname, 'dist/'),
@@ -72,6 +66,9 @@ const config = {
 
 if (env === 'analyse') {
 	config.plugins.push(new BundleAnalyzerPlugin());
+}
+if (env === 'production') {
+  config.mode = 'production';
 }
 
 module.exports = config;
