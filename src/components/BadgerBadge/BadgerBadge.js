@@ -49,6 +49,11 @@ const PriceText = styled.p`
 	font-size: 16px;
 	line-height: 1em;
 	margin: 0;
+	display: grid;
+	grid-gap: 5px;
+	grid-auto-flow: column;
+	justify-content: flex-end;
+	align-items: center;
 `;
 
 const HeaderText = styled.h3`
