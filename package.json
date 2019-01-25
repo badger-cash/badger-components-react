@@ -1,6 +1,6 @@
 {
   "name": "badger-components-react",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Integrate the Badger wallet into your React app with ease.",
   "main": "dist/badger-components.js",
   "scripts": {
