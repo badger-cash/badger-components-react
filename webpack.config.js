@@ -1,19 +1,16 @@
 const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 	.BundleAnalyzerPlugin;
+const nodeExternals = require('webpack-node-externals');
 
 const env = process.env.NODE_ENV;
 
 const config = {
 	entry: {
-		main: ['./src/index.js']
+		main: ['./src/index.js'],
 	},
 	plugins: [],
-	externals: {
-		react: 'React',
-		'react-dom': 'ReactDOM',
-		'styled-components': 'styled-components'
-	},
+	externals: [nodeExternals()],
 	module: {
 		rules: [
 			{
@@ -44,17 +41,19 @@ const config = {
 		path: path.resolve(__dirname, 'dist/'),
 		publicPath: '',
 		filename: 'badger-components.js',
+		library: '',
+    libraryTarget: 'commonjs'
 	},
 	optimization: {
 		minimize: true,
-	}
+	},
 };
 
 if (env === 'analyse') {
 	config.plugins.push(new BundleAnalyzerPlugin());
 }
 if (env === 'production') {
-  config.mode = 'production';
+	config.mode = 'production';
 }
 
 module.exports = config;
