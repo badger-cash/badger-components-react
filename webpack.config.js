@@ -54,7 +54,7 @@ const config = {
 		publicPath: '',
 		filename: 'badger-components.js',
 		library: "badgerComponents",
-		libraryTarget: 'umd',
+		libraryTarget: 'commonJS',
 	},
 	optimization: {
 		minimize: true,
@@ -65,7 +65,7 @@ if (env === 'analyse') {
 	config.plugins.push(new BundleAnalyzerPlugin());
 }
 if (env === 'production') {
-  config.mode = 'development';
+  config.mode = 'production';
 }
 
 module.exports = config;
