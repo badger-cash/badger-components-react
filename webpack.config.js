@@ -10,16 +10,9 @@ const config = {
 	},
 	plugins: [],
 	externals: {
-		react: {
-			commonjs: 'react',
-			commonjs2: 'react-dom',
-			amd: 'react',
-		},
-		'react-dom': {
-			commonjs: 'react-dom',
-			commonjs2: 'react-dom',
-			amd: 'react-dom',
-		},
+		react: 'react',
+		'react-dom': 'react-dom',
+		'styled-components': 'styled-components'
 	},
 	module: {
 		rules: [
@@ -51,8 +44,6 @@ const config = {
 		path: path.resolve(__dirname, 'dist/'),
 		publicPath: '',
 		filename: 'badger-components.js',
-		library: "badgerComponents",
-		libraryTarget: 'umd',
 	},
 	optimization: {
 		minimize: true,
