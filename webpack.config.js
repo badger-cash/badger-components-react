@@ -11,7 +11,7 @@ const config = {
 	plugins: [],
 	externals: {
 		react: 'React',
-		'react-dom': 'ReactDom',
+		'react-dom': 'ReactDOM',
 		'styled-components': 'styled-components'
 	},
 	module: {
