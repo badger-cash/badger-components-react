@@ -1,6 +1,6 @@
 {
   "name": "badger-components-react",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "Integrate the Badger wallet into your React app with ease.",
   "main": "dist/badger-components.js",
   "scripts": {
@@ -33,6 +33,7 @@
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/plugin-proposal-class-properties": "^7.2.3",
+    "@babel/plugin-transform-runtime": "^7.2.0",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
