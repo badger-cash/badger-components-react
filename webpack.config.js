@@ -10,8 +10,8 @@ const config = {
 	},
 	plugins: [],
 	externals: {
-		react: 'react',
-		'react-dom': 'react-dom',
+		react: 'React',
+		'react-dom': 'ReactDom',
 		'styled-components': 'styled-components'
 	},
 	module: {
