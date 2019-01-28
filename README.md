@@ -21,19 +21,45 @@ import { BadgerButton, BadgerBadge} from 'badger-components-react'
 
 const Example = (props) => {
   const toAddress = 'Put in some address here' // TODO: Determine which address should be the default send address, and where the funds go.
+
+  // TODO: Fill this out properly
   return (
     <>
-      <BadgerBadge to={toAddress}
+      <BadgerBadge to={toAddress} />
+      <BadgerButton to={toAddress} />
     </>
   )
-}
+};
 
+export default Example
 ```
 
+### Create a custom Badger Button
+
+```js
+import React from 'react'
+import { BadgerBase } from 'badger-react-components'
+
+const MyButton extends React.Component {
+  render() {
+    // Props from higher order component
+    const {handleClick, to, price, currency, BCHPrice, step} = this.props;
+    return (
+      <button onClick={handleClick}>Custom looking button and render</button>
+    )
+  }
+}
+// Wrap with BadgerBase higher order component
+export default BadgerBase(MyButton);
+```
 
 ## Development w/ Storybook
 
 To develop additions to this project, run the local storybook development server with
+
+#### Setup
+* Install `flow-bin`
+  * `npm install -g flow-bin`
 
  ```bash
   $ npm i
