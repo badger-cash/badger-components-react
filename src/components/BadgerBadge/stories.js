@@ -123,4 +123,22 @@ storiesOf('BadgerBadge', module)
 		{
 			notes: 'Custom functions called on Successfull and Failed payments',
 		}
+	)
+	.add(
+		'OP_RETURN',
+		() => (
+			<BadgerBadge
+				price={0.01}
+				currency={'USD'}
+				opReturn={text('OP_RETURN', 'OP_RETURN 621 54657374206d6573736167652e')}
+				text="With OP_RETURN"
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+			/>
+		),
+		{
+			notes: 'Change the currency and price',
+		}
 	);

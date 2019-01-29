@@ -17,7 +17,6 @@ class MyClass extends React.Component {
 		console.err('Transaction failed or cancelled');
 	}
 	render() {
-		// const { paymentAddress, amount, currency} = this.props
 
 		const paymentAddress = 'qInseetCashAddrHere'; // CashAddr funds sent to
 		const amount = 0.1; // Amount of target currency to convert for payment

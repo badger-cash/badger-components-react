@@ -6,6 +6,9 @@
 
 ## Get Started
 
+* [Homepage](https://badger.bitcoin.com)
+* [component showcase](http://badger-storybook.surge.sh)
+
 ### Install Components
 
  ```bash
