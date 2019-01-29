@@ -8,7 +8,6 @@ import { select, text, boolean, number } from '@storybook/addon-knobs';
 import BadgerButton from './BadgerButton';
 import {currencyOptions} from '../../utils/badger-helpers';
 
-
 storiesOf('BadgerButton', module)
 	.add(
 		'default',

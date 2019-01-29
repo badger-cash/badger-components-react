@@ -7,7 +7,7 @@ import { select, text, boolean, number } from '@storybook/addon-knobs';
 
 import BadgerBadge from './BadgerBadge';
 
-const currencyOptions = ['USD', 'CAD', 'HKD', 'JPY', 'GBP', 'EUR', 'CNY'];
+import { currencyOptions } from '../../utils/badger-helpers';
 
 storiesOf('BadgerBadge', module)
 	.add(
