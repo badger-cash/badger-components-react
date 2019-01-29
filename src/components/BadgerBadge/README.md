@@ -18,7 +18,8 @@ class MyClass extends React.Component {
 	}
 	render() {
 
-		const paymentAddress = 'qInseetCashAddrHere'; // CashAddr funds sent to
+	// EatBCH address for example purposes.
+		const paymentAddress = 'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 		const amount = 0.1; // Amount of target currency to convert for payment
 		const currency = 'CAD'; // Target currency to convert to relative BCH amount
 		const opReturn = 'OP_RETURN 621 54657374206d6573736167652e'
