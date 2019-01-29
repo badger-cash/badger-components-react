@@ -6,8 +6,9 @@ import { storiesOf } from '@storybook/react/dist/client/preview';
 import { select, text, boolean, number } from '@storybook/addon-knobs';
 
 import BadgerButton from './BadgerButton';
+import {currencyOptions} from '../../utils/badger-helpers';
 
-const currencyOptions = ['USD', 'CAD', 'HKD', 'JPY', 'GBP', 'EUR', 'CNY'];
+
 storiesOf('BadgerButton', module)
 	.add(
 		'default',
@@ -19,10 +20,11 @@ storiesOf('BadgerButton', module)
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
+				successFn={() => console.log('success example function called')}
+				failFn={() => console.log('fail example function called')}
 				text={text('Top Text', 'Badger Pay')}
 				showSatoshis={boolean('Show Satoshis', true)}
-				successFn={() => console.log('success')}
-				failFn={() => console.log('fail')}
+				opReturn={text('OP_RETURN', 'OP_RETURN 621 54657374206d6573736167652e')}
 			/>
 		),
 		{
@@ -40,6 +42,8 @@ storiesOf('BadgerButton', module)
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
+				successFn={() => console.log('success example function called')}
+				failFn={() => console.log('fail example function called')}
 			/>
 		),
 		{
@@ -71,6 +75,23 @@ storiesOf('BadgerButton', module)
 				price={0.01}
 				currency={'USD'}
 				text="Pay now"
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+			/>
+		),
+		{
+			notes: 'Change the currency and price',
+		}
+	).add(
+		'OP_RETURN',
+		() => (
+			<BadgerButton
+				 price={0.01}
+				currency={'USD'}
+				opReturn={text('OP_RETURN', 'OP_RETURN 621 54657374206d6573736167652e')}
+				text="With OP_RETURN"
 				to={text(
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
