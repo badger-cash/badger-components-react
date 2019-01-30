@@ -1,6 +1,6 @@
 # Changelog - Badger Components React
 
-## 0.1.0 (EST February 2019)
+## 0.1.0 (January 30, 2019)
 
 ### BadgerBase
 
@@ -15,8 +15,9 @@
 ### BadgerButton
 
 * Simple button to drop into your React application
-* Change text above
-* Toggle showing the satoshi amopunt
+* Change text above button
+* Toggle showing the satoshi amount
+* Toggle Border around button
   
 ### BadgerBadge
 

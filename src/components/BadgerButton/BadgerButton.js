@@ -1,14 +1,17 @@
 // @flow
+
 import * as React from 'react';
 import styled from 'styled-components';
 
 import {
-	type CurrencyCode,
 	getCurrencyPreSymbol,
 	formatPriceDisplay,
-	getCurrencyPostSymbol,
 	getSatoshiDisplayValue,
 } from '../../utils/badger-helpers';
+
+import {
+	type CurrencyCode
+} from '../../utils/currency-helpers';
 
 import colors from '../../styles/colors';
 import BitcoinCashImage from '../../images/bitcoin-cash.svg';
@@ -44,7 +47,8 @@ const Wrapper = styled.div`
 	grid-template-rows: max-content max-content max-content;
 	color: ${colors.fg500};
 	padding: 6px;
-	border: ${props => props.hasBorder ? `1px dashed ${colors.brand700}` : 'none'};
+	border: ${(props) =>
+		props.hasBorder ? `1px dashed ${colors.brand700}` : 'none'};
 	border-radius: 4px;
 `;
 
@@ -81,19 +85,19 @@ class BadgerButton extends React.PureComponent<Props> {
 			step,
 			BCHPrice,
 			handleClick,
-			border
+			border,
 		} = this.props;
 
 		const priceInCurrency = BCHPrice[currency] && BCHPrice[currency].price;
 
 		return (
-			<Outter >
+			<Outter>
 				<Wrapper hasBorder={border}>
 					<Text style={{ textAlign: 'center' }}>{text}</Text>
 					<Button onClick={handleClick} step={step}>
 						<Text>
 							{getCurrencyPreSymbol(currency)} {formatPriceDisplay(price)}
-							{getCurrencyPostSymbol(currency)} <Small> {currency}</Small>
+							<Small> {currency}</Small>
 						</Text>
 					</Button>
 					{showSatoshis && (

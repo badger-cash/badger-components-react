@@ -4,12 +4,14 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import {
-	type CurrencyCode,
 	getCurrencyPreSymbol,
 	formatPriceDisplay,
-	getCurrencyPostSymbol,
 	getSatoshiDisplayValue,
 } from '../../utils/badger-helpers';
+
+import {
+	type CurrencyCode
+} from '../../utils/currency-helpers';
 
 import BadgerBase, {
 	type ButtonStates,
@@ -138,7 +140,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 					<Prices>
 						<PriceText style={{ textAlign: 'right' }}>
 							{getCurrencyPreSymbol(currency)}
-							{formatPriceDisplay(price)} {getCurrencyPostSymbol(currency)}{' '}
+							{formatPriceDisplay(price)}{' '}
 						</PriceText>
 						<Small>{currency}</Small>
 						{showSatoshis && (

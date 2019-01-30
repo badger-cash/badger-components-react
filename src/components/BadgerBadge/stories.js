@@ -7,7 +7,7 @@ import { select, text, boolean, number } from '@storybook/addon-knobs';
 
 import BadgerBadge from './BadgerBadge';
 
-import { currencyOptions } from '../../utils/badger-helpers';
+import { currencyOptions } from '../../utils/currency-helpers';
 
 storiesOf('BadgerBadge', module)
 	.add(

@@ -3,14 +3,13 @@
 import * as React from 'react';
 
 import {
-	type CurrencyCode,
 	buildPriceEndpoint,
-	getCurrencyPreSymbol,
-	getCurrencyPostSymbol,
-	getSatoshiDisplayValue,
-	formatPriceDisplay,
 	priceToSatoshis,
 } from '../../utils/badger-helpers';
+
+import {
+	type CurrencyCode
+} from '../../utils/currency-helpers';
 
 const PRICE_UPDATE_INTERVAL = 60 * 1000;
 
@@ -94,7 +93,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					to,
 					from: defaultAccount,
 					value: satoshis,
-					opreturn: opReturn
+					opreturn: opReturn,
 				};
 
 				this.setState({ step: 'pending' });

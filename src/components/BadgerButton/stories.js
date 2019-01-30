@@ -6,7 +6,7 @@ import { storiesOf } from '@storybook/react/dist/client/preview';
 import { select, text, boolean, number } from '@storybook/addon-knobs';
 
 import BadgerButton from './BadgerButton';
-import {currencyOptions} from '../../utils/badger-helpers';
+import { currencyOptions } from '../../utils/currency-helpers';
 
 storiesOf('BadgerButton', module)
 	.add(
@@ -84,7 +84,8 @@ storiesOf('BadgerButton', module)
 		{
 			notes: 'Change the currency and price',
 		}
-	).add(
+	)
+	.add(
 		'Toggle border',
 		() => (
 			<BadgerButton
@@ -100,11 +101,12 @@ storiesOf('BadgerButton', module)
 		{
 			notes: 'Change the currency and price',
 		}
-	).add(
+	)
+	.add(
 		'OP_RETURN',
 		() => (
 			<BadgerButton
-				 price={0.01}
+				price={0.01}
 				currency={'USD'}
 				opReturn={text('OP_RETURN', 'OP_RETURN 621 54657374206d6573736167652e')}
 				text="With OP_RETURN"
