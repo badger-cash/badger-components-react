@@ -1,6 +1,7 @@
 # BadgerButton
 
-This component renders a basic BadgerButton to integrate with the Badger wallet
+Renders a basic BadgerButton to integrate with the Badger wallet.  
+This is a very basic button, ideal for a minimal payment/donation, or if your application wants to control the majority of the payment layout.
 
 ## Example Usage
 
@@ -11,7 +12,8 @@ import { BadgerButton } from 'badger-components-react';
 class MyClass extends React.PureComponent {
 	render() {
 
-		const paymentAddress = 'qInsettCashAddrHere'; // CashAddr funds sent to
+		// EatBCH address for example purposes.
+		const paymentAddress = 'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 		const amount = 0.1; // Amount of target currency to convert for payment
 		const currency = 'CAD'; // Target currency to convert to relative BCH amount
 

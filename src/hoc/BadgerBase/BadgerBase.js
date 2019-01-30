@@ -3,14 +3,14 @@
 import * as React from 'react';
 
 import {
-	type CurrencyCode,
 	buildPriceEndpoint,
-	getCurrencyPreSymbol,
-	getCurrencyPostSymbol,
-	getSatoshiDisplayValue,
-	formatPriceDisplay,
 	priceToSatoshis,
+	getSatoshiDisplayValue,
 } from '../../utils/badger-helpers';
+
+import {
+	type CurrencyCode
+} from '../../utils/currency-helpers';
 
 const PRICE_UPDATE_INTERVAL = 60 * 1000;
 
@@ -18,6 +18,8 @@ type BadgerBaseProps = {
 	to: string,
 	price: number,
 	currency: CurrencyCode,
+
+	opReturn?: string,
 
 	successFn?: Function,
 	failFn?: Function,
@@ -63,7 +65,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		};
 
 		handleClick = () => {
-			const { to, successFn, failFn, currency, price } = this.props;
+			const { to, successFn, failFn, currency, price, opReturn } = this.props;
 			const { BCHPrice } = this.state;
 
 			const currencyPriceBCH = BCHPrice[currency].price;
@@ -92,10 +94,12 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					to,
 					from: defaultAccount,
 					value: satoshis,
+					opreturn: opReturn,
 				};
 
 				this.setState({ step: 'pending' });
 
+				console.log(txParams);
 				web4bch2.bch.sendTransaction(txParams, (err, res) => {
 					if (err) {
 						console.log('BadgerButton send cancel', err);
@@ -177,15 +181,22 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		}
 
 		render() {
-			const { ...passThrough } = this.props;
+			const { currency, price, ...passThrough  } = this.props;
 			const { step, BCHPrice } = this.state;
+
+			const priceInCurrency = BCHPrice[currency] && BCHPrice[currency].price;
+			const satoshiDisplay = getSatoshiDisplayValue(priceInCurrency, price)
 
 			return (
 				<Wrapped
 					{...passThrough}
+					currency={currency}
+					price={price}
+
 					handleClick={this.handleClick}
 					step={step}
 					BCHPrice={BCHPrice}
+					satoshiDisplay={satoshiDisplay}
 				/>
 			);
 		}

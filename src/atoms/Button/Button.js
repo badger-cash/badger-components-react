@@ -1,4 +1,5 @@
 // @flow
+
 import * as React from 'react';
 import styled, { css, keyframes } from 'styled-components';
 
@@ -33,7 +34,7 @@ const ButtonElement = styled.button`
 			box-shadow: 1px 1px 1px ${colors.fg500};
 
 			transform: translateY(0px);
-			&:hover {
+			&:active {
 				background-color: ${colors.brand700};
 				color: ${colors.bg100};
 				box-shadow: 0px 0px 0px ${colors.fg500};
@@ -85,7 +86,7 @@ const WarningCover = styled.div`
 	box-shadow: 1px 1px 1px ${colors.fg500};
 
 	transform: translateY(0px);
-	&:hover {
+	&:active {
 		background-color: ${colors.brand700};
 		color: ${colors.bg100};
 		box-shadow: 0px 0px 0px ${colors.fg500};

@@ -1,14 +1,16 @@
 // @flow
+
 import * as React from 'react';
 import styled from 'styled-components';
 
 import {
-	type CurrencyCode,
 	getCurrencyPreSymbol,
 	formatPriceDisplay,
-	getCurrencyPostSymbol,
-	getSatoshiDisplayValue,
 } from '../../utils/badger-helpers';
+
+import {
+	type CurrencyCode
+} from '../../utils/currency-helpers';
 
 import colors from '../../styles/colors';
 import BitcoinCashImage from '../../images/bitcoin-cash.svg';
@@ -44,7 +46,8 @@ const Wrapper = styled.div`
 	grid-template-rows: max-content max-content max-content;
 	color: ${colors.fg500};
 	padding: 6px;
-	border: 1px dashed ${colors.brand700};
+	border: ${(props) =>
+		props.hasBorder ? `1px dashed ${colors.brand700}` : 'none'};
 	border-radius: 4px;
 `;
 
@@ -52,6 +55,8 @@ const Wrapper = styled.div`
 type Props = BadgerBaseProps & {
 	text?: string,
 	showSatoshis?: boolean,
+	satoshiDisplay: string,
+	border?: boolean,
 
 	handleClick: Function,
 
@@ -68,6 +73,7 @@ class BadgerButton extends React.PureComponent<Props> {
 	static defaultProps = {
 		currency: 'USD',
 		showSatoshis: true,
+		border: true,
 	};
 
 	render() {
@@ -76,21 +82,21 @@ class BadgerButton extends React.PureComponent<Props> {
 			price,
 			currency,
 			showSatoshis,
+			satoshiDisplay,
 			step,
 			BCHPrice,
 			handleClick,
+			border,
 		} = this.props;
-
-		const priceInCurrency = BCHPrice[currency] && BCHPrice[currency].price;
 
 		return (
 			<Outter>
-				<Wrapper>
+				<Wrapper hasBorder={border}>
 					<Text style={{ textAlign: 'center' }}>{text}</Text>
 					<Button onClick={handleClick} step={step}>
 						<Text>
 							{getCurrencyPreSymbol(currency)} {formatPriceDisplay(price)}
-							{getCurrencyPostSymbol(currency)} <Small> {currency}</Small>
+							<Small> {currency}</Small>
 						</Text>
 					</Button>
 					{showSatoshis && (
@@ -102,7 +108,7 @@ class BadgerButton extends React.PureComponent<Props> {
 							/>{' '}
 							BCH{' '}
 							<span style={{ fontFamily: 'monospace' }}>
-								{getSatoshiDisplayValue(priceInCurrency, price)}
+								{satoshiDisplay}
 							</span>
 						</SatoshiText>
 					)}
