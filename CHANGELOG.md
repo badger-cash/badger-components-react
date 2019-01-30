@@ -33,6 +33,6 @@
 * Prompts users to download or login to badger if required.
 * Indicates the process of the badger payment as it goes along, fresh, pending, complete
 
-## 0.0.x (January 28, 2019)
+## 0.0.x (January xx, 2019)
 
-* Initial beta releases.  Features changing quickly, not recommended yet for use.
+* Initial beta releases and early development work.  Features changing quickly, not recommended for use
