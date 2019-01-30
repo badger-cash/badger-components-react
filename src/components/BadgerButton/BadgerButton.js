@@ -44,7 +44,7 @@ const Wrapper = styled.div`
 	grid-template-rows: max-content max-content max-content;
 	color: ${colors.fg500};
 	padding: 6px;
-	border: 1px dashed ${colors.brand700};
+	border: ${props => props.hasBorder ? `1px dashed ${colors.brand700}` : 'none'};
 	border-radius: 4px;
 `;
 
@@ -52,6 +52,7 @@ const Wrapper = styled.div`
 type Props = BadgerBaseProps & {
 	text?: string,
 	showSatoshis?: boolean,
+	border?: boolean,
 
 	handleClick: Function,
 
@@ -68,6 +69,7 @@ class BadgerButton extends React.PureComponent<Props> {
 	static defaultProps = {
 		currency: 'USD',
 		showSatoshis: true,
+		border: true,
 	};
 
 	render() {
@@ -79,13 +81,14 @@ class BadgerButton extends React.PureComponent<Props> {
 			step,
 			BCHPrice,
 			handleClick,
+			border
 		} = this.props;
 
 		const priceInCurrency = BCHPrice[currency] && BCHPrice[currency].price;
 
 		return (
-			<Outter>
-				<Wrapper>
+			<Outter >
+				<Wrapper hasBorder={border}>
 					<Text style={{ textAlign: 'center' }}>{text}</Text>
 					<Button onClick={handleClick} step={step}>
 						<Text>
