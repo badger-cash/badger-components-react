@@ -35,8 +35,33 @@ const Example = (props) => {
 
   return (
     <>
+      {/* Minimal Examples */}
       <BadgerBadge to={toAddress} price={0.5} currency={'USD'} />
       <BadgerButton to={toAddress} price={1} currency={'JPY'} />
+
+      {/* More Complex Examples */}
+      <BadgerBadge
+        price={0.01} // Price in currency
+        currency={'CAD'} // Currency to convert from
+        to={'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'} // Payment address
+        tag={'Badger Pay'} // Text on button
+        text={'Payment Total'} // Text at top of badge
+        showBrand={true} // Show link to badger website
+        showSatoshis={true} // Show BCH satoshi amount
+        successFn={() => console.log('Payment success callback')}
+        failFn={() => console.warn('Payment failed or cancelled callback')}
+      />
+
+      <BadgerButton
+        price={0.003}
+        currency={'USD'}
+        to={'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'}
+        text={'Badger Pay'}
+        showSatoshis={true}
+        border={true}
+        successFn={() => console.log('success example function called')}
+        failFn={() => console.log('fail example function called')}
+      />
     </>
   )
 };

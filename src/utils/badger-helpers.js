@@ -18,7 +18,7 @@ const formatPriceDisplay = (price?: number) => {
 	return +price.toFixed(5);
 };
 
-const getSatoshiDisplayValue = (priceInCurrency?: number, price: number) => {
+const getSatoshiDisplayValue = (priceInCurrency: ?number, price: number) => {
 	if (!priceInCurrency) {
 		return '-.--------';
 	}

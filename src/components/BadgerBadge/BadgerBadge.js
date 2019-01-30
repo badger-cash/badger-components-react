@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import {
 	getCurrencyPreSymbol,
 	formatPriceDisplay,
-	getSatoshiDisplayValue,
 } from '../../utils/badger-helpers';
 
 import {
@@ -96,6 +95,7 @@ type Props = BadgerBaseProps & {
 	text?: string,
 	tag?: string,
 	showSatoshis?: boolean,
+	satoshiDisplay: string,
 	showBrand?: boolean,
 
 	handleClick: Function,
@@ -127,11 +127,10 @@ class BadgerBadge extends React.PureComponent<Props> {
 			step,
 			BCHPrice,
 			showSatoshis,
+			satoshiDisplay,
 			showBrand,
 			handleClick,
 		} = this.props;
-
-		const priceInCurrency = BCHPrice[currency] && BCHPrice[currency].price;
 
 		return (
 			<Outter>
@@ -151,7 +150,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 										style={{ height: 14 }}
 										alt="BCH"
 									/>{' '}
-									{getSatoshiDisplayValue(priceInCurrency, price)}
+									{satoshiDisplay}
 								</PriceText>
 								<Small>BCH</Small>
 							</>

@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import {
 	getCurrencyPreSymbol,
 	formatPriceDisplay,
-	getSatoshiDisplayValue,
 } from '../../utils/badger-helpers';
 
 import {
@@ -56,6 +55,7 @@ const Wrapper = styled.div`
 type Props = BadgerBaseProps & {
 	text?: string,
 	showSatoshis?: boolean,
+	satoshiDisplay: string,
 	border?: boolean,
 
 	handleClick: Function,
@@ -82,13 +82,12 @@ class BadgerButton extends React.PureComponent<Props> {
 			price,
 			currency,
 			showSatoshis,
+			satoshiDisplay,
 			step,
 			BCHPrice,
 			handleClick,
 			border,
 		} = this.props;
-
-		const priceInCurrency = BCHPrice[currency] && BCHPrice[currency].price;
 
 		return (
 			<Outter>
@@ -109,7 +108,7 @@ class BadgerButton extends React.PureComponent<Props> {
 							/>{' '}
 							BCH{' '}
 							<span style={{ fontFamily: 'monospace' }}>
-								{getSatoshiDisplayValue(priceInCurrency, price)}
+								{satoshiDisplay}
 							</span>
 						</SatoshiText>
 					)}

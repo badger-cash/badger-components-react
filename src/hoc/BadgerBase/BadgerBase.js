@@ -5,6 +5,7 @@ import * as React from 'react';
 import {
 	buildPriceEndpoint,
 	priceToSatoshis,
+	getSatoshiDisplayValue,
 } from '../../utils/badger-helpers';
 
 import {
@@ -180,15 +181,22 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		}
 
 		render() {
-			const { ...passThrough } = this.props;
+			const { currency, price, ...passThrough  } = this.props;
 			const { step, BCHPrice } = this.state;
+
+			const priceInCurrency = BCHPrice[currency] && BCHPrice[currency].price;
+			const satoshiDisplay = getSatoshiDisplayValue(priceInCurrency, price)
 
 			return (
 				<Wrapped
 					{...passThrough}
+					currency={currency}
+					price={price}
+
 					handleClick={this.handleClick}
 					step={step}
 					BCHPrice={BCHPrice}
+					satoshiDisplay={satoshiDisplay}
 				/>
 			);
 		}
