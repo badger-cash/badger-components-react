@@ -15,17 +15,7 @@ const getCurrencyPreSymbol = (currency: CurrencyCode) => {
 
 const formatPriceDisplay = (price?: number) => {
 	if (!price) return null;
-
-	if (price >= 1) {
-		if (price % 1 === 0) {
-			// Over 1 no decimal, use whole number
-			return price.toFixed(0);
-		}
-		// Over 1 decimal, show 2 decimals
-		return price.toFixed(2);
-	}
-	// Under 1 show first 2 largest occupied decimals
-	return price.toPrecision(2);
+	return +price.toFixed(5);
 };
 
 const getSatoshiDisplayValue = (priceInCurrency?: number, price: number) => {
