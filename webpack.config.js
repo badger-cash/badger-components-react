@@ -69,8 +69,8 @@ const config = {
 		path: path.resolve(__dirname, 'dist/'),
 		publicPath: '',
 		filename: 'badger-components.js',
-		library: '',
-		libraryTarget: 'commonjs',
+		library: 'badgerComponents',
+		libraryTarget: 'umd',
 	},
 	optimization: {
 		minimize: true,
