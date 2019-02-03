@@ -8,7 +8,6 @@
     "build": "webpack --mode=production",
     "storybook": "start-storybook -p 9001",
     "build-storybook": "build-storybook",
-    "prepublish": "npm run build",
     "format": "prettier --write \"src/**/*.js\"",
     "analyse": "NODE_ENV=analyse webpack --mode=production"
   },
@@ -55,8 +54,7 @@
     "url-loader": "^1.1.2",
     "webpack": "^4.28.4",
     "webpack-bundle-analyzer": "^3.0.3",
-    "webpack-cli": "^3.2.0",
-    "webpack-node-externals": "^1.7.2"
+    "webpack-cli": "^3.2.0"
   },
   "peerDependencies": {
     "react": "^16.0.0",

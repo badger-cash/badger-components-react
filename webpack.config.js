@@ -1,7 +1,6 @@
 const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 	.BundleAnalyzerPlugin;
-const nodeExternals = require('webpack-node-externals');
 
 const env = process.env.NODE_ENV;
 
@@ -10,7 +9,23 @@ const config = {
 		main: ['./src/index.js'],
 	},
 	plugins: [],
-	externals: [nodeExternals()],
+	externals: {
+		react: {
+			commonjs2: 'react',
+			commonjs: 'react',
+			amd: 'react',
+		},
+		'react-dom': {
+			commonjs2: 'react-dom',
+			commonjs: 'react-dom',
+			amd: 'react-dom',
+		},
+		'styled-components': {
+			commonjs2: 'styled-components',
+			commonjs: 'styled-components',
+			amd: 'styled-components',
+		},
+	},
 	module: {
 		rules: [
 			{
@@ -19,7 +34,20 @@ const config = {
 				use: {
 					loader: 'babel-loader',
 					options: {
-						presets: ['@babel/preset-env'],
+						presets: [
+							'@babel/preset-env',
+							'@babel/preset-react',
+							'@babel/preset-flow',
+						],
+						plugins: [
+							'@babel/plugin-proposal-class-properties',
+							[
+								'@babel/plugin-transform-runtime',
+								{
+									regenerator: true,
+								},
+							],
+						],
 					},
 				},
 			},
@@ -42,7 +70,7 @@ const config = {
 		publicPath: '',
 		filename: 'badger-components.js',
 		library: '',
-    libraryTarget: 'commonjs'
+		libraryTarget: 'commonjs',
 	},
 	optimization: {
 		minimize: true,
