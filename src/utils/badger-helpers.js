@@ -1,16 +1,14 @@
 // @flow
 // Currency endpoints, logic, and formatters
 
-import getSymbolFromCurrency from 'currency-symbol-map';
-
-import { type CurrencyCode } from './currency-helpers';
+import { currencySymbolMap, type CurrencyCode } from './currency-helpers';
 
 const buildPriceEndpoint = (currency: CurrencyCode) => {
 	return `https://index-api.bitcoin.com/api/v0/cash/price/${currency}`;
 };
 
 const getCurrencyPreSymbol = (currency: CurrencyCode) => {
-	return getSymbolFromCurrency(currency);
+	return currencySymbolMap[currency];
 };
 
 const formatPriceDisplay = (price?: number) => {
