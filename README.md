@@ -5,7 +5,7 @@
 ## Get Started
 
 * [Homepage](https://badger.bitcoin.com)
-* [component showcase](http://badger-storybook.surge.sh)
+* [Component Showcase](http://badger-storybook.surge.sh)
 
 ### Install Components
 
@@ -17,7 +17,7 @@ $ npm install --save badger-components-react
 
 * `styled-components` ^4.0.0
   * `npm install --save styled-components`
-* `react` && `react-dom` ^16.0.0
+* `react` && `react-dom` ^16.3.0
   * `npm install --save react react-dom`
 
 ### Add to React project
@@ -104,10 +104,9 @@ export default BadgerBase(MyButton);
 To develop additions to this project, run the local storybook development server with
 
 #### Setup
-* Install `flow-bin`
-  * `npm install -g flow-bin`
 
  ```bash
+  $ npm install -g flow-bin
   $ npm i
   $ npm run storybook
 ```
