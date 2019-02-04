@@ -121,6 +121,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		};
 
 		gotoLoginState = () => {
+			// Setup login state, and check if the user is logged in every second
 			this.setState({ step: 'login' });
 			if (typeof window !== 'undefined') {
 				this.intervalLogin = setInterval(() => {
@@ -145,6 +146,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					PRICE_UPDATE_INTERVAL
 				);
 
+				// Determine if button should show login or install CTA
 				if (window.Web4Bch) {
 					const { web4bch } = window;
 					const web4bch2 = new window.Web4Bch(web4bch.currentProvider);

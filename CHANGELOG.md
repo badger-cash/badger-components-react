@@ -1,5 +1,16 @@
 # Changelog - Badger Components React
 
+
+## 0.1.2 (February 3, 2019)
+
+
+## 0.1.1 (February 2, 2019)
+
+### Build
+
+* Changing library target to UMD
+* Including basic babel runtim in library build
+
 ## 0.1.0 (January 30, 2019)
 
 ### BadgerBase
