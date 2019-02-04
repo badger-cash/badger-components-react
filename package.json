@@ -1,14 +1,14 @@
 {
   "name": "badger-components-react",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Integrate the Badger wallet into your React app with ease.",
   "main": "dist/badger-components.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode=production",
     "storybook": "start-storybook -p 9001",
-    "build-storybook": "build-storybook",
     "prepublish": "npm run build",
+    "build-storybook": "build-storybook",
     "format": "prettier --write \"src/**/*.js\"",
     "analyse": "NODE_ENV=analyse webpack --mode=production"
   },
@@ -55,15 +55,11 @@
     "url-loader": "^1.1.2",
     "webpack": "^4.28.4",
     "webpack-bundle-analyzer": "^3.0.3",
-    "webpack-cli": "^3.2.0",
-    "webpack-node-externals": "^1.7.2"
+    "webpack-cli": "^3.2.0"
   },
   "peerDependencies": {
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "styled-components": "^4.0.0"
-  },
-  "dependencies": {
-    "currency-symbol-map": "^4.0.4"
   }
 }

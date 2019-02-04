@@ -1,6 +1,4 @@
-<h1 align="center">
-  Build on Bitcoin Cash (BCH)
-</h1>
+# Build on Bitcoin Cash (BCH)
 
  > A set of React components and helpers to integrate Bitcoin Cash (BCH) and the Badger wallet into your app with ease.
 
@@ -20,7 +18,7 @@ $ npm install --save badger-components-react
 * `styled-components` ^4.0.0
   * `npm install --save styled-components`
 * `react` && `react-dom` ^16.0.0
-  * `npm install --save react react-dom
+  * `npm install --save react react-dom`
 
 ### Add to React project
 
@@ -86,10 +84,11 @@ const CoolButton = styled.button`
 const MyButton extends React.Component {
   render() {
     // Props from higher order component
-    const {handleClick, to, price, currency, BCHPrice, step} = this.props;
+    const {handleClick, to, price, currency, satoshiDisplay, step} = this.props;
     return (
       <div>
         <h3>Donate {price}{currency} to {to}</h3>
+        <h4>Satoshis: {satoshiDisplay}</h4>
         <CoolButton onClick={handleClick}>Custom looking button with render</CoolButton>
       </div>
     )
