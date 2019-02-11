@@ -1,12 +1,12 @@
 # Changelog - Badger Components React
 
-
-## 0.1.2 (February 4, 2019)
+## 0.1.3 (February 4, 2019)
 
 ### Build
 
 * library targets `commonjs` again, static rendering should be working.
 * Removing  one external dependency
+* peerDepencies `react` and `react-dom` set to ^16.3.0
 
 ## 0.1.1 (February 2, 2019)
 
