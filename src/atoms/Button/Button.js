@@ -22,6 +22,7 @@ const ButtonElement = styled.button`
 	position: relative;
 	color: ${colors.bg100};
 	background-color: transparent;
+	min-width: 150px;
 
 	${(props) =>
 		props.isFresh &&

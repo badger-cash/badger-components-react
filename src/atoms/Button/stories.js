@@ -12,7 +12,7 @@ const Text = styled.div`
 	font-size: 24px;
 `;
 
-const ButtonText = 'Button Text';
+const ButtonText = 'Pay';
 
 storiesOf('Internal - Button', module)
 	.add(
