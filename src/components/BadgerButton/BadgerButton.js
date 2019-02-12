@@ -55,11 +55,10 @@ const Wrapper = styled.div`
 type Props = BadgerBaseProps & {
 	text?: string,
 	showSatoshis?: boolean,
-	satoshiDisplay: string,
 	border?: boolean,
 
+	satoshiDisplay: string,
 	handleClick: Function,
-
 	step: ButtonStates,
 	BCHPrice: {
 		[currency: CurrencyCode]: {

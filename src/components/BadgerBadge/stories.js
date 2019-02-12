@@ -20,7 +20,7 @@ storiesOf('BadgerBadge', module)
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
-				tag={text('Button Text', 'Badger Pay')}
+				tag={text('Button Text', 'Pay')}
 				text={text('Top Text', 'Payment Total')}
 				showBrand={boolean('Show Brand', true)}
 				showSatoshis={boolean('Show Satoshis', true)}

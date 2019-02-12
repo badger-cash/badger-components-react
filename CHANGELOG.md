@@ -1,5 +1,11 @@
 # Changelog - Badger Components React
 
+## 0.1.4 (February 11, 2019)
+
+### Button
+
+* Enforce minimum width on Button so there's always enough room for the various State text.
+
 ## 0.1.3 (February 4, 2019)
 
 ### Build
