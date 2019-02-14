@@ -19,7 +19,7 @@ type BadgerBaseProps = {
 	price: number,
 	currency: CurrencyCode,
 
-	opReturn?: string,
+	opReturn?: string[],
 
 	successFn?: Function,
 	failFn?: Function,
@@ -35,6 +35,9 @@ type State = {
 			stamp: ?number,
 		},
 	},
+
+	intervalPrice: ?IntervalID,
+	intervalLogin: ?IntervalID,
 };
 
 const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
@@ -46,13 +49,10 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		state = {
 			step: 'fresh',
 			BCHPrice: {},
-		};
 
-		constructor(props) {
-			super(props);
-			this.priceInterval = null;
-			this.intervalLogin = null;
-		}
+			intervalPrice: null,
+			intervalLogin: null,
+		};
 
 		updateBCHPrice = async (currency: CurrencyCode) => {
 			const priceRequest = await fetch(buildPriceEndpoint(currency));
@@ -90,12 +90,15 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					return;
 				}
 
-				const txParams = {
+				const txParamsBase = {
 					to,
 					from: defaultAccount,
-					value: satoshis,
-					opreturn: opReturn,
+					value: satoshis
 				};
+
+				const txParams = opReturn 
+					? {...txParamsBase, opReturn: {data: opReturn}}
+					: {...txParamsBase}
 
 				this.setState({ step: 'pending' });
 
@@ -124,15 +127,17 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			// Setup login state, and check if the user is logged in every second
 			this.setState({ step: 'login' });
 			if (typeof window !== 'undefined') {
-				this.intervalLogin = setInterval(() => {
+				const intervalLogin = setInterval(() => {
 					const { web4bch } = window;
 					const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
 					const { defaultAccount } = web4bch2.bch;
 					if (defaultAccount) {
-						clearInterval(this.intervalLogin);
+						clearInterval(intervalLogin);
 						this.setState({ step: 'fresh' });
 					}
 				}, 1000);
+
+				this.setState({intervalLogin});
 			}
 		};
 
@@ -141,10 +146,12 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			if (typeof window !== 'undefined') {
 				const currency = this.props.currency;
 				this.updateBCHPrice(currency);
-				this.priceInterval = setInterval(
+				const intervalPrice = setInterval(
 					() => this.updateBCHPrice(currency),
 					PRICE_UPDATE_INTERVAL
 				);
+
+				this.setState({intervalPrice});
 
 				// Determine if button should show login or install CTA
 				if (window.Web4Bch) {
@@ -161,22 +168,26 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		}
 
 		componentWillUnmount() {
-			this.priceInterval && clearInterval(this.priceInterval);
-			this.intervalLogin && clearInterval(this.intervalLogin);
+			const { intervalPrice, intervalLogin } = this.state;
+			intervalPrice && clearInterval(intervalPrice);
+			intervalLogin && clearInterval(intervalLogin);
 		}
 
-		componentDidUpdate(prevProps: Props) {
+		componentDidUpdate(prevProps: BadgerBaseProps) {
 			const { currency } = this.props;
+			const { intervalPrice } = this.state;
 			const prevCurrency = prevProps.currency;
 			if (typeof window !== 'undefined') {
 				// Clear previous price interval, set a new one, and immediately update price
 				if (currency !== prevCurrency) {
-					this.priceInterval && clearInterval(this.priceInterval);
+					intervalPrice && clearInterval(intervalPrice);
 
-					this.priceInterval = setInterval(
+					const intervalPriceNext = setInterval(
 						() => this.updateBCHPrice(currency),
 						PRICE_UPDATE_INTERVAL
 					);
+
+					this.setState({intervalPrice: intervalPriceNext})
 					this.updateBCHPrice(currency);
 				}
 			}

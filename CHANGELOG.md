@@ -1,5 +1,11 @@
 # Changelog - Badger Components React
 
+## 0.1.5 (February 14, 2019)
+
+### Badger Base / Button / Badge
+
+* OP_RETURN support added
+
 ## 0.1.4 (February 11, 2019)
 
 ### Button

@@ -3,29 +3,33 @@
 import React from 'react';
 
 import { storiesOf } from '@storybook/react/dist/client/preview';
-import { select, text, boolean, number } from '@storybook/addon-knobs';
+import { array, boolean, number, select, text } from '@storybook/addon-knobs';
 
 import BadgerBadge from './BadgerBadge';
 
 import { currencyOptions } from '../../utils/currency-helpers';
+
+const defaultOpReturn = ['0x6d02', 'Hello BadgerBadge']
 
 storiesOf('BadgerBadge', module)
 	.add(
 		'default',
 		() => (
 			<BadgerBadge
-				price={number('Price', 0.01)}
+				price={number('Price', 0.001)}
 				currency={select('Currency', currencyOptions, 'USD')}
 				to={text(
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
+				opReturn={array('OP_RETURN', defaultOpReturn)}
 				tag={text('Button Text', 'Pay')}
 				text={text('Top Text', 'Payment Total')}
 				showBrand={boolean('Show Brand', true)}
 				showSatoshis={boolean('Show Satoshis', true)}
 				successFn={() => console.log('success')}
 				failFn={() => console.log('fail')}
+				
 			/>
 		),
 		{
@@ -37,7 +41,7 @@ storiesOf('BadgerBadge', module)
 		'custom text',
 		() => (
 			<BadgerBadge
-				price={0.01}
+				price={0.001}
 				currency={'USD'}
 				to={text(
 					'To Address',
@@ -57,7 +61,7 @@ storiesOf('BadgerBadge', module)
 		'currency variety',
 		() => (
 			<BadgerBadge
-				price={number('Price', 0.01)}
+				price={number('Price', 0.001)}
 				currency={select('Currency', currencyOptions, 'USD')}
 				to={text(
 					'To Address',
@@ -75,7 +79,7 @@ storiesOf('BadgerBadge', module)
 		'optionally satoshis',
 		() => (
 			<BadgerBadge
-				price={0.01}
+				price={0.001}
 				to={text(
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
@@ -93,7 +97,7 @@ storiesOf('BadgerBadge', module)
 		'optionally badger info',
 		() => (
 			<BadgerBadge
-				price={0.01}
+				price={0.001}
 				to={text(
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
@@ -128,9 +132,9 @@ storiesOf('BadgerBadge', module)
 		'OP_RETURN',
 		() => (
 			<BadgerBadge
-				price={0.01}
+				price={0.001}
 				currency={'USD'}
-				opReturn={text('OP_RETURN', 'OP_RETURN 621 54657374206d6573736167652e')}
+				opReturn={array('OP_RETURN', defaultOpReturn)}
 				text="With OP_RETURN"
 				to={text(
 					'To Address',
