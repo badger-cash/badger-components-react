@@ -26,6 +26,7 @@ class MyClass extends React.PureComponent {
 					successFn={(tx) => console.log(tx)}
 					failFn={(err) => console.log(err)}
 					text="Donate with BCH"
+					opReturn={["0x6d02", "Hello BadgerButton"]}
 				/>
 			</section>
 		);

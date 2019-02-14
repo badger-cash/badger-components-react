@@ -7,7 +7,7 @@
 * [Homepage](https://badger.bitcoin.com)
 * [Component Showcase](http://badger-storybook.surge.sh)
 
-### Install Components
+### Install Component
 
  ```bash
 $ npm install --save badger-components-react
@@ -15,12 +15,17 @@ $ npm install --save badger-components-react
 
 ### Install Peer Dependencies
 
-* `styled-components` ^4.0.0
-  * `npm install --save styled-components`
-* `react` && `react-dom` ^16.3.0
-  * `npm install --save react react-dom`
+This library depends on the following three peer dependencies
 
-### Add to React project
+* `styled-components` ^4.0.0
+* `react` ^16.3.0
+* `react-dom` ^16.3.0
+
+```bash
+$ npm install --save styled-components react react-dom
+```
+
+### Add to React Project
 
 ```js
 import React from 'react'
@@ -39,9 +44,10 @@ const Example = (props) => {
 
       {/* More Complex Examples */}
       <BadgerBadge
-        price={0.01} // Price in currency
+        price={0.001} // Price in currency
         currency={'CAD'} // Currency to convert from
         to={'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'} // Payment address
+        opReturn={["0x6d02", "Hello badger-components-react"]}}
         tag={'Badger Pay'} // Text on button
         text={'Payment Total'} // Text at top of badge
         showBrand={true} // Show link to badger website
@@ -54,6 +60,7 @@ const Example = (props) => {
         price={0.003}
         currency={'USD'}
         to={'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'}
+        opReturn={["0x6d02", "Hello badger-components-react"]}}
         text={'Badger Pay'}
         showSatoshis={true}
         border={true}
@@ -67,7 +74,7 @@ const Example = (props) => {
 export default Example
 ```
 
-### Create a custom Badger Button
+### Create a Custom Badger Button / Integration
 
 ```js
 import React from 'react'
@@ -99,11 +106,11 @@ const MyButton extends React.Component {
 export default BadgerBase(MyButton);
 ```
 
-## Development w/ Storybook
+## Development with Storybook
 
 To develop additions to this project, run the local storybook development server with
 
-#### Setup
+### Setup
 
  ```bash
   $ npm install -g flow-bin

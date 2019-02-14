@@ -96,12 +96,15 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					return;
 				}
 
-				const txParams = {
+				const txParamsBase = {
 					to,
 					from: defaultAccount,
-					value: satoshis,
-					opreturn: opReturn,
+					value: satoshis
 				};
+
+				const txParams = opReturn 
+					? {...txParamsBase, opReturn: {data: opReturn}}
+					: {...txParamsBase}
 
 				this.setState({ step: 'pending' });
 
