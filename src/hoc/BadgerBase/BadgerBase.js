@@ -54,12 +54,6 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			intervalLogin: null,
 		};
 
-		// constructor(props: BadgerBaseProps) {
-		// 	super(props);
-		// 	this.priceInterval = null;
-		// 	this.intervalLogin = null;
-		// }
-
 		updateBCHPrice = async (currency: CurrencyCode) => {
 			const priceRequest = await fetch(buildPriceEndpoint(currency));
 			const result = await priceRequest.json();
