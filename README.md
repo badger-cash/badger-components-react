@@ -47,7 +47,7 @@ const Example = (props) => {
         price={0.001} // Price in currency
         currency={'CAD'} // Currency to convert from
         to={'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'} // Payment address
-        opReturn={["0x6d02", "Hello badger-components-react"]}}
+        opReturn={["0x6d02", "Hello badger-components-react"]}
         tag={'Badger Pay'} // Text on button
         text={'Payment Total'} // Text at top of badge
         showBrand={true} // Show link to badger website
@@ -60,7 +60,7 @@ const Example = (props) => {
         price={0.003}
         currency={'USD'}
         to={'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'}
-        opReturn={["0x6d02", "Hello badger-components-react"]}}
+        opReturn={["0x6d02", "Hello badger-components-react"]}
         text={'Badger Pay'}
         showSatoshis={true}
         border={true}
