@@ -18,7 +18,7 @@ const props = {
 
 storiesOf('ButtonQR', module)
 	.add(
-		'default',
+		'default - all knobs',
 		() => (
 			<ButtonQR {...props} step={'fresh'}>
 				<Text>{ButtonText}</Text>

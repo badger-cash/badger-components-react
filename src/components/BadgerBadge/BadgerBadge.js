@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 
 import {
 	getCurrencyPreSymbol,
@@ -35,8 +35,11 @@ const Main = styled.div`
 	display: grid;
 	grid-gap: 20px;
 	padding: 12px 12px 6px;
-	border: 1px dashed ${colors.brand500};
-	border-radius: 4px;
+	
+	${props => props.showBorder && css`
+		border: 1px dashed ${colors.brand500};
+		border-radius: 4px;
+	`}
 `;
 
 const Prices = styled.div`
@@ -117,6 +120,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 		showSatoshis: true,
 		showBrand: false,
 		showQR: true,
+		showBorder: true,
 	};
 
 	render() {
@@ -130,6 +134,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 			showQR,
 			showSatoshis,
 			satoshiDisplay,
+			showBorder,
 			showBrand,
 			handleClick,
 			to,
@@ -137,7 +142,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 
 		return (
 			<Outter>
-				<Main>
+				<Main showBorder={showBorder}>
 					<HeaderText>{text}</HeaderText>
 					<Prices>
 						<PriceText style={{ textAlign: 'right' }}>

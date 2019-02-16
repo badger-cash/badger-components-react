@@ -10,7 +10,7 @@ import Button from './Button';
 import Text from '../Text'
 
 
-const ButtonText = 'Pay';
+const ButtonText = 'Badger Pay';
 
 storiesOf('Button', module)
 	.add(

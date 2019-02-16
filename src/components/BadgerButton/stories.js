@@ -12,7 +12,7 @@ const defaultOpReturn = ['0x6d02', 'Hello BadgerButton']
 
 storiesOf('BadgerButton', module)
 	.add(
-		'default',
+		'default - all knobs',
 		() => (
 			<BadgerButton
 				price={number('Price', 0.001)}
@@ -25,8 +25,8 @@ storiesOf('BadgerButton', module)
 				successFn={() => console.log('success example function called')}
 				failFn={() => console.log('fail example function called')}
 				text={text('Top Text', 'Badger Pay')}
-				showSatoshis={boolean('Show Satoshis', true)}
-				showBorder={boolean('Show Border', true)}
+				showSatoshis={boolean('Toggle Satoshis', true)}
+				showBorder={boolean('Toggle Border', true)}
 			/>
 		),
 		{
@@ -73,7 +73,7 @@ storiesOf('BadgerButton', module)
 		'hide the satoshi amount',
 		() => (
 			<BadgerButton
-				showSatoshis={boolean('Show Satoshis', false)}
+				showSatoshis={boolean('Toggle Satoshis', false)}
 				price={0.001}
 				currency={'USD'}
 				text="Pay now"
@@ -92,7 +92,7 @@ storiesOf('BadgerButton', module)
 		() => (
 			<BadgerButton
 				price={0.001}
-				showBorder={boolean('Show Border', true)}
+				showBorder={boolean('Toggle Border', true)}
 				currency={'USD'}
 				to={text(
 					'To Address',

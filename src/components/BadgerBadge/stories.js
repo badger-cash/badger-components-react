@@ -13,7 +13,7 @@ const defaultOpReturn = ['0x6d02', 'Hello BadgerBadge']
 
 storiesOf('BadgerBadge', module)
 	.add(
-		'default',
+		'default - all knobs',
 		() => (
 			<BadgerBadge
 				price={number('Price', 0.001)}
@@ -23,10 +23,34 @@ storiesOf('BadgerBadge', module)
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
 				opReturn={array('OP_RETURN', defaultOpReturn)}
-				tag={text('Button Text', 'Pay')}
+				tag={text('Button Text', 'Badger Pay')}
 				text={text('Top Text', 'Payment Total')}
-				showBrand={boolean('Show Brand', true)}
-				showSatoshis={boolean('Show Satoshis', true)}
+				showBrand={boolean('Toggle Brand', false)}
+				showSatoshis={boolean('Toggle Satoshis', true)}
+				showQR={boolean('Toggle QR', true)}
+				showBorder={boolean('Toggle Border', true)}
+				successFn={() => console.log('success')}
+				failFn={() => console.log('fail')}
+				
+			/>
+		),
+		{
+			notes:
+				'Badger Badges are perfect for showing the price and Satoshis in a simple clean all in one component.  Default has knobs to experiment with all settings',
+		}
+	)
+	.add(
+		'toggle QR code',
+		() => (
+			<BadgerBadge
+				price={number('Price', 0.001)}
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				opReturn={array('OP_RETURN', defaultOpReturn)}
+			
+				showQR={boolean('Toggle QR', false)}
 				successFn={() => console.log('success')}
 				failFn={() => console.log('fail')}
 				
