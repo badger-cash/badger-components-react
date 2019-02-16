@@ -24,7 +24,7 @@ const Main = styled.div`
 `;
 
 const QRCodeWrapper = styled.div`
-	padding: 12px;
+	padding: 12px 12px 9px;
 	border: 1px solid ${colors.fg500};
 	border-radius: 5px 5px 0 0;
 	border-bottom: none;
@@ -134,11 +134,8 @@ class ButtonQR extends React.PureComponent<Props> {
 	render() {
     const { children, step, toAddress, amountSatoshis, sizeQR } = this.props;
     
-    const widthQR = sizeQR >= 125 ? sizeQR : 125; // Minimum width 150
-
-    console.log('size QR')
-    console.log(sizeQR)
-
+		const widthQR = sizeQR >= 125 ? sizeQR : 125; // Minimum width 150
+		
 		const uri = `${toAddress}?amount=${amountSatoshis}`;
 
 		const isFresh = step === 'fresh';

@@ -9,7 +9,7 @@ import BadgerBadge from './BadgerBadge';
 
 import { currencyOptions } from '../../utils/currency-helpers';
 
-const defaultOpReturn = ['0x6d02', 'Hello BadgerBadge']
+const defaultOpReturn = ['0x6d02', 'Hello BadgerBadge'];
 
 storiesOf('BadgerBadge', module)
 	.add(
@@ -28,32 +28,9 @@ storiesOf('BadgerBadge', module)
 				showBrand={boolean('Toggle Brand', false)}
 				showSatoshis={boolean('Toggle Satoshis', true)}
 				showQR={boolean('Toggle QR', true)}
-				showBorder={boolean('Toggle Border', true)}
+				showBorder={boolean('Toggle Border', false)}
 				successFn={() => console.log('success')}
 				failFn={() => console.log('fail')}
-				
-			/>
-		),
-		{
-			notes:
-				'Badger Badges are perfect for showing the price and Satoshis in a simple clean all in one component.  Default has knobs to experiment with all settings',
-		}
-	)
-	.add(
-		'toggle QR code',
-		() => (
-			<BadgerBadge
-				price={number('Price', 0.001)}
-				to={text(
-					'To Address',
-					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
-				)}
-				opReturn={array('OP_RETURN', defaultOpReturn)}
-			
-				showQR={boolean('Toggle QR', false)}
-				successFn={() => console.log('success')}
-				failFn={() => console.log('fail')}
-				
 			/>
 		),
 		{
@@ -100,7 +77,27 @@ storiesOf('BadgerBadge', module)
 		}
 	)
 	.add(
-		'optional satoshis',
+		'toggle QR code',
+		() => (
+			<BadgerBadge
+				price={number('Price', 0.001)}
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				opReturn={array('OP_RETURN', defaultOpReturn)}
+				showQR={boolean('Toggle QR', false)}
+				successFn={() => console.log('success')}
+				failFn={() => console.log('fail')}
+			/>
+		),
+		{
+			notes:
+				'Badger Badges are perfect for showing the price and Satoshis in a simple clean all in one component.  Default has knobs to experiment with all settings',
+		}
+	)
+	.add(
+		'toggle satoshis',
 		() => (
 			<BadgerBadge
 				price={0.001}
@@ -118,7 +115,7 @@ storiesOf('BadgerBadge', module)
 		}
 	)
 	.add(
-		'optional badger info',
+		'toggle badger info',
 		() => (
 			<BadgerBadge
 				price={0.001}
@@ -133,6 +130,22 @@ storiesOf('BadgerBadge', module)
 		),
 		{
 			notes: 'Choose to display a link to the Badger homepage',
+		}
+	)
+	.add(
+		'toggle border',
+		() => (
+			<BadgerBadge
+				price={0.001}
+				showBorder={boolean('Toggle Border', true)}
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+			/>
+		),
+		{
+			notes: 'Toggle border',
 		}
 	)
 	.add(

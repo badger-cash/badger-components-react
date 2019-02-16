@@ -55,7 +55,7 @@ storiesOf('BadgerButton', module)
 		}
 	)
 	.add(
-		'without text',
+		'optional text',
 		() => (
 			<BadgerButton
 				price={0.001}
@@ -90,7 +90,7 @@ storiesOf('BadgerButton', module)
 		}
 	)
 	.add(
-		'hide the satoshi amount',
+		'toggle Satoshis',
 		() => (
 			<BadgerButton
 				showSatoshis={boolean('Toggle Satoshis', false)}
@@ -108,7 +108,7 @@ storiesOf('BadgerButton', module)
 		}
 	)
 	.add(
-		'Toggle border',
+		'toggle border',
 		() => (
 			<BadgerButton
 				price={0.001}

@@ -120,7 +120,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 		showSatoshis: true,
 		showBrand: false,
 		showQR: true,
-		showBorder: true,
+		showBorder: false,
 	};
 
 	render() {
