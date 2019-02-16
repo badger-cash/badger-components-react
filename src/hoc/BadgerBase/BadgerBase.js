@@ -8,12 +8,10 @@ import {
 	getSatoshiDisplayValue,
 } from '../../utils/badger-helpers';
 
-import {
-	type CurrencyCode
-} from '../../utils/currency-helpers';
+import { type CurrencyCode } from '../../utils/currency-helpers';
 
 const PRICE_UPDATE_INTERVAL = 60 * 1000;
-
+const REPEAT_TIMEOUT = 3 * 1000
 
 type ValidTickers = 'BCH';
 
@@ -29,7 +27,7 @@ type BadgerBaseProps = {
 	amount: number,
 
 	isRepeatable: boolean,
-	
+
 	opReturn?: string[],
 
 	successFn?: Function,
@@ -39,7 +37,6 @@ type BadgerBaseProps = {
 type ButtonStates = 'fresh' | 'pending' | 'complete' | 'login' | 'install';
 
 // White list of valid tickers
-
 
 type State = {
 	step: ButtonStates,
@@ -72,7 +69,6 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 			intervalPrice: null,
 			intervalLogin: null,
-
 		};
 
 		updateBCHPrice = async (currency: CurrencyCode) => {
@@ -86,7 +82,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		};
 
 		handleClick = () => {
-			const { to, successFn, failFn, currency, price, opReturn } = this.props;
+			const { to, successFn, failFn, currency, price, opReturn, isRepeatable } = this.props;
 			const { BCHPrice } = this.state;
 
 			const currencyPriceBCH = BCHPrice[currency].price;
@@ -114,12 +110,12 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				const txParamsBase = {
 					to,
 					from: defaultAccount,
-					value: satoshis
+					value: satoshis,
 				};
 
-				const txParams = opReturn 
-					? {...txParamsBase, opReturn: {data: opReturn}}
-					: {...txParamsBase}
+				const txParams = opReturn
+					? { ...txParamsBase, opReturn: { data: opReturn } }
+					: { ...txParamsBase };
 
 				this.setState({ step: 'pending' });
 
@@ -133,6 +129,9 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 						console.info('Badger send success:', res);
 						successFn && successFn(res);
 						this.setState({ step: 'complete' });
+						if(isRepeatable) {
+							setTimeout(() => this.setState({ step: 'fresh' }), REPEAT_TIMEOUT)
+						}
 					}
 				});
 			} else {
@@ -158,21 +157,21 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					}
 				}, 1000);
 
-				this.setState({intervalLogin});
+				this.setState({ intervalLogin });
 			}
 		};
 
 		componentDidMount() {
 			// Get price on load, and update price every minute
 			if (typeof window !== 'undefined') {
-				const currency = this.props.currency;
+				const { currency } = this.props;
 				this.updateBCHPrice(currency);
 				const intervalPrice = setInterval(
 					() => this.updateBCHPrice(currency),
 					PRICE_UPDATE_INTERVAL
 				);
 
-				this.setState({intervalPrice});
+				this.setState({ intervalPrice });
 
 				// Determine if button should show login or install CTA
 				if (window.Web4Bch) {
@@ -208,25 +207,24 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 						PRICE_UPDATE_INTERVAL
 					);
 
-					this.setState({intervalPrice: intervalPriceNext})
+					this.setState({ intervalPrice: intervalPriceNext });
 					this.updateBCHPrice(currency);
 				}
 			}
 		}
 
 		render() {
-			const { currency, price, ...passThrough  } = this.props;
+			const { currency, price, ...passThrough } = this.props;
 			const { step, BCHPrice } = this.state;
 
 			const priceInCurrency = BCHPrice[currency] && BCHPrice[currency].price;
-			const satoshiDisplay = getSatoshiDisplayValue(priceInCurrency, price)
+			const satoshiDisplay = getSatoshiDisplayValue(priceInCurrency, price);
 
 			return (
 				<Wrapped
 					{...passThrough}
 					currency={currency}
 					price={price}
-
 					handleClick={this.handleClick}
 					step={step}
 					BCHPrice={BCHPrice}

@@ -25,6 +25,7 @@ storiesOf('BadgerBadge', module)
 				opReturn={array('OP_RETURN', defaultOpReturn)}
 				tag={text('Button Text', 'Badger Pay')}
 				text={text('Top Text', 'Payment Total')}
+				isRepeatable={boolean('Repeatable payment', true)}
 				showBrand={boolean('Toggle Brand', false)}
 				showSatoshis={boolean('Toggle Satoshis', true)}
 				showQR={boolean('Toggle QR', true)}
