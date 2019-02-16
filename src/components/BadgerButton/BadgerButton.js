@@ -73,7 +73,7 @@ class BadgerButton extends React.PureComponent<Props> {
 	static defaultProps = {
 		currency: 'USD',
 		showSatoshis: true,
-		showBorder: true,
+		showBorder: false,
 
 		showQR: true,
 	};

@@ -100,7 +100,7 @@ storiesOf('BadgerBadge', module)
 		}
 	)
 	.add(
-		'optionally satoshis',
+		'optional satoshis',
 		() => (
 			<BadgerBadge
 				price={0.001}
@@ -118,7 +118,7 @@ storiesOf('BadgerBadge', module)
 		}
 	)
 	.add(
-		'optionally badger info',
+		'optional badger info',
 		() => (
 			<BadgerBadge
 				price={0.001}
@@ -126,7 +126,7 @@ storiesOf('BadgerBadge', module)
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
-				showBrand={boolean('Badger info', false)}
+				showBrand={boolean('Badger info', true)}
 				successFn={() => console.log('success')}
 				failFn={() => console.log('fail')}
 			/>
@@ -149,7 +149,7 @@ storiesOf('BadgerBadge', module)
 			/>
 		),
 		{
-			notes: 'Custom functions called on Successfull and Failed payments',
+			notes: 'Custom functions called on Successful and Failed payments',
 		}
 	)
 	.add(

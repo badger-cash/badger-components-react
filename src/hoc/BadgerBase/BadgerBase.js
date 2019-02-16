@@ -19,7 +19,6 @@ type BadgerBaseProps = {
 	price: number,
 	currency: CurrencyCode,
 	
-
 	opReturn?: string[],
 
 	successFn?: Function,
@@ -27,6 +26,9 @@ type BadgerBaseProps = {
 };
 
 type ButtonStates = 'fresh' | 'pending' | 'complete' | 'login' | 'install';
+
+// White list of valid tickers
+type ValidTickers = 'BCH';
 
 type State = {
 	step: ButtonStates,
@@ -36,6 +38,9 @@ type State = {
 			stamp: ?number,
 		},
 	},
+
+	satoshis: ?number,
+	ticker: ?ValidTickers,
 
 	intervalPrice: ?IntervalID,
 	intervalLogin: ?IntervalID,
@@ -51,8 +56,12 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			step: 'fresh',
 			BCHPrice: {},
 
+			satoshis: null,
+			ticker: null,
+
 			intervalPrice: null,
 			intervalLogin: null,
+
 		};
 
 		updateBCHPrice = async (currency: CurrencyCode) => {

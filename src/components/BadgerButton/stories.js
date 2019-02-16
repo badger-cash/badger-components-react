@@ -11,8 +11,28 @@ import { currencyOptions } from '../../utils/currency-helpers';
 const defaultOpReturn = ['0x6d02', 'Hello BadgerButton']
 
 storiesOf('BadgerButton', module)
+.add(
+	'default',
+	() => (
+		<BadgerButton
+			price={number('Price', 0.001)}
+			currency={select('Currency', currencyOptions, 'USD')}
+			to={text(
+				'To Address',
+				'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+			)}
+			opReturn={array('OP_RETURN', defaultOpReturn)}
+			successFn={() => console.log('success example function called')}
+			failFn={() => console.log('fail example function called')}
+		/>
+	),
+	{
+		notes:
+			'Basic Badger Button.  Perfect for adding Badger integration to an existing flow, or in a minimal way.  Default has all the knobs to play with',
+	}
+)
 	.add(
-		'default - all knobs',
+		'all knobs',
 		() => (
 			<BadgerButton
 				price={number('Price', 0.001)}
@@ -31,7 +51,7 @@ storiesOf('BadgerButton', module)
 		),
 		{
 			notes:
-				'Basic Badger Button.  Perfect for adding Badger integration to an existing flow, or in a minimal way.  Default has all the knobs to play with',
+				'Play with all the props in the knobs tab to try out what BadgerButtons can do',
 		}
 	)
 	.add(

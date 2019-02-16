@@ -7,20 +7,27 @@ import { storiesOf } from '@storybook/react/dist/client/preview';
 import { select, text, boolean, number } from '@storybook/addon-knobs';
 
 import ButtonQR from './ButtonQR';
-import Text from '../Text'
-
+import Text from '../Text';
 
 const ButtonText = 'Badger Pay';
 const props = {
-  toAddress: 'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
-  amountSatoshis: 550,
-}
+	toAddress: 'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
+	amountSatoshis: 550,
+};
 
 storiesOf('ButtonQR', module)
 	.add(
 		'default - all knobs',
 		() => (
-			<ButtonQR {...props} step={'fresh'}>
+			<ButtonQR
+				toAddress={text(
+					'To address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				amountSatoshis={number('Satoshis', 550)}
+				sizeQR={number('QR size', 125)}
+				step={'fresh'}
+			>
 				<Text>{ButtonText}</Text>
 			</ButtonQR>
 		),

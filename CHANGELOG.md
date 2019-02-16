@@ -1,12 +1,27 @@
 # Changelog - Badger Components React
 
+
+***
+  Continue work
+  * Pass satoshi amount to buttons
+  * Update story with Badge QR
+  * Update stories for `default` to include everything with cleanest settings
+***
+
 ## 0.2.0 (February xx, 2019)
+
+### Main
+
+
 
 ### BadgerBase
 
-* Enable repeat payments, return to `fresh` state after a second with a # times paid indicator added.
-  * todo - prop `isRepeat`
-  * todo - indicator
+* Enabling crypto pricing.  Can enter an absolute amount of BCH, not just fiat conversions
+  * use props `ticker` and `amount` to price in BCH.
+    * example: `<BadgerButton ticker='BCH' amount={0.00000550} to=...`
+* Repeatable payments, `step` refreshes to `fresh` after 3 seconds.
+  * prop `isRepeat`
+* 
 
 ### BadgerButton
 

@@ -136,6 +136,9 @@ class ButtonQR extends React.PureComponent<Props> {
     
     const widthQR = sizeQR >= 125 ? sizeQR : 125; // Minimum width 150
 
+    console.log('size QR')
+    console.log(sizeQR)
+
 		const uri = `${toAddress}?amount=${amountSatoshis}`;
 
 		const isFresh = step === 'fresh';
