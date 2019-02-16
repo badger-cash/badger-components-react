@@ -18,6 +18,7 @@ type BadgerBaseProps = {
 	to: string,
 	price: number,
 	currency: CurrencyCode,
+	
 
 	opReturn?: string[],
 
@@ -102,14 +103,14 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 				this.setState({ step: 'pending' });
 
-				console.log(txParams);
+				console.info('Badger send begin', txParams);
 				web4bch2.bch.sendTransaction(txParams, (err, res) => {
 					if (err) {
-						console.log('BadgerButton send cancel', err);
+						console.info('Badger send cancel', err);
 						failFn && failFn(err);
 						this.setState({ step: 'fresh' });
 					} else {
-						console.log('BadgerButton send success:', res);
+						console.info('Badger send success:', res);
 						successFn && successFn(res);
 						this.setState({ step: 'complete' });
 					}

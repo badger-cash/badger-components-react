@@ -1,5 +1,29 @@
 # Changelog - Badger Components React
 
+## 0.2.0 (February xx, 2019)
+
+### BadgerBase
+
+* Enable repeat payments, return to `fresh` state after a second with a # times paid indicator added.
+  * todo - prop `isRepeat`
+  * todo - indicator
+
+### BadgerButton
+
+* Rename prop `border` => `showBorder`
+
+### BadgerBadge
+
+* Adding QR Code and Payment URI
+  *  prop `showQR` default `true`
+  *  Uses `ButtonQR` instead of `Button`
+*  watch payments to address as well as QR
+
+### ButtonQR
+
+* Allow people to pay who don't install Badger.  Now Badger handles  all the payment methods with ease.
+* New component to show a QR code as a URI link, and button
+
 ## 0.1.5 (February 14, 2019)
 
 ### Badger Base / Button / Badge

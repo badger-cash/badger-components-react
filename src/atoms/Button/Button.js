@@ -66,7 +66,7 @@ const PendingCover = styled.div`
 
 const CompleteCover = styled.div`
 	${cover};
-	border-color: ${colors.succcess700};
+	border-color: ${colors.success700};
 	background-color: ${colors.success500};
 `;
 
@@ -108,6 +108,7 @@ const PendingSpinner = styled.div`
 	align-items: center;
 	justify-content: center;
 `;
+
 
 type Props = {
 	step: ButtonStates,

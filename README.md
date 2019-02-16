@@ -63,7 +63,7 @@ const Example = (props) => {
         opReturn={["0x6d02", "Hello badger-components-react"]}
         text={'Badger Pay'}
         showSatoshis={true}
-        border={true}
+        showBorder={true}
         successFn={() => console.log('success example function called')}
         failFn={() => console.log('fail example function called')}
       />

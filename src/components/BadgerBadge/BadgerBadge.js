@@ -8,9 +8,7 @@ import {
 	formatPriceDisplay,
 } from '../../utils/badger-helpers';
 
-import {
-	type CurrencyCode
-} from '../../utils/currency-helpers';
+import { type CurrencyCode } from '../../utils/currency-helpers';
 
 import BadgerBase, {
 	type ButtonStates,
@@ -21,6 +19,7 @@ import BitcoinCashImage from '../../images/bitcoin-cash.svg';
 import colors from '../../styles/colors';
 
 import Button from '../../atoms/Button';
+import ButtonQR from '../../atoms/ButtonQR';
 import Small from '../../atoms/Small';
 import Text from '../../atoms/Text';
 
@@ -97,9 +96,10 @@ type Props = BadgerBaseProps & {
 	showSatoshis?: boolean,
 	satoshiDisplay: string,
 	showBrand?: boolean,
+	showQR?: boolean,
+	showBorder?: boolean,
 
 	handleClick: Function,
-
 	step: ButtonStates,
 	BCHPrice: {
 		[currency: CurrencyCode]: {
@@ -113,9 +113,10 @@ class BadgerBadge extends React.PureComponent<Props> {
 	static defaultProps = {
 		currency: 'USD',
 		tag: 'Badger Pay',
-		showSatoshis: true,
-		showBrand: true,
 		text: 'Payment Total',
+		showSatoshis: true,
+		showBrand: false,
+		showQR: true,
 	};
 
 	render() {
@@ -126,10 +127,12 @@ class BadgerBadge extends React.PureComponent<Props> {
 			tag,
 			step,
 			BCHPrice,
+			showQR,
 			showSatoshis,
 			satoshiDisplay,
 			showBrand,
 			handleClick,
+			to,
 		} = this.props;
 
 		return (
@@ -157,11 +160,22 @@ class BadgerBadge extends React.PureComponent<Props> {
 						)}
 					</Prices>
 					<ButtonContainer>
-						<Button onClick={handleClick} step={step}>
-							<Text>{tag}</Text>
-						</Button>
+						{showQR ? (
+							<ButtonQR
+								onClick={handleClick}
+								step={step}
+								amountSatoshis={550}
+								toAddress={to}
+							>
+								<Text>{tag}</Text>
+							</ButtonQR>
+						) : (
+							<Button onClick={handleClick} step={step}>
+								<Text>{tag}</Text>
+							</Button>
+						)}
 
-						{showBrand && (
+						{(step === 'install' || showBrand) && (
 							<BrandBottom>
 								<Small>
 									<A href="badger.bitcoin.com" target="_blank">

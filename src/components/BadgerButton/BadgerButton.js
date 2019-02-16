@@ -55,7 +55,8 @@ const Wrapper = styled.div`
 type Props = BadgerBaseProps & {
 	text?: string,
 	showSatoshis?: boolean,
-	border?: boolean,
+	showBorder?: boolean,
+	showQR?: boolean,
 
 	satoshiDisplay: string,
 	handleClick: Function,
@@ -72,7 +73,9 @@ class BadgerButton extends React.PureComponent<Props> {
 	static defaultProps = {
 		currency: 'USD',
 		showSatoshis: true,
-		border: true,
+		showBorder: true,
+
+		showQR: true,
 	};
 
 	render() {
@@ -80,17 +83,18 @@ class BadgerButton extends React.PureComponent<Props> {
 			text,
 			price,
 			currency,
-			showSatoshis,
-			satoshiDisplay,
 			step,
 			BCHPrice,
 			handleClick,
-			border,
+			showSatoshis,
+			satoshiDisplay,
+			showBorder,
+			showQR
 		} = this.props;
 
 		return (
 			<Outter>
-				<Wrapper hasBorder={border}>
+				<Wrapper hasBorder={showBorder}>
 					<Text style={{ textAlign: 'center' }}>{text}</Text>
 					<Button onClick={handleClick} step={step}>
 						<Text>

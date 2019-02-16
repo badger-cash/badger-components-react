@@ -26,7 +26,7 @@ storiesOf('BadgerButton', module)
 				failFn={() => console.log('fail example function called')}
 				text={text('Top Text', 'Badger Pay')}
 				showSatoshis={boolean('Show Satoshis', true)}
-				border={boolean('Show Border', true)}
+				showBorder={boolean('Show Border', true)}
 			/>
 		),
 		{
@@ -92,7 +92,7 @@ storiesOf('BadgerButton', module)
 		() => (
 			<BadgerButton
 				price={0.001}
-				border={boolean('Show Border', true)}
+				showBorder={boolean('Show Border', true)}
 				currency={'USD'}
 				to={text(
 					'To Address',

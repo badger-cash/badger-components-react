@@ -6,19 +6,23 @@ import styled from 'styled-components';
 import { storiesOf } from '@storybook/react/dist/client/preview';
 import { select, text, boolean, number } from '@storybook/addon-knobs';
 
-import Button from './Button';
+import ButtonQR from './ButtonQR';
 import Text from '../Text'
 
 
-const ButtonText = 'Pay';
+const ButtonText = 'Badger Pay';
+const props = {
+  toAddress: 'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
+  amountSatoshis: 550,
+}
 
-storiesOf('Button', module)
+storiesOf('ButtonQR', module)
 	.add(
 		'default',
 		() => (
-			<Button step={'fresh'}>
+			<ButtonQR {...props} step={'fresh'}>
 				<Text>{ButtonText}</Text>
-			</Button>
+			</ButtonQR>
 		),
 		{
 			notes:
@@ -28,9 +32,9 @@ storiesOf('Button', module)
 	.add(
 		'payment pending',
 		() => (
-			<Button step={'pending'}>
+			<ButtonQR {...props} step={'pending'}>
 				<Text>{ButtonText}</Text>
-			</Button>
+			</ButtonQR>
 		),
 		{
 			notes: 'Awaitng a confirmation or cancellation of Badger popup',
@@ -39,9 +43,9 @@ storiesOf('Button', module)
 	.add(
 		'payment complete',
 		() => (
-			<Button step={'complete'}>
+			<ButtonQR {...props} step={'complete'}>
 				<Text>{ButtonText}</Text>
-			</Button>
+			</ButtonQR>
 		),
 		{
 			notes: 'Awaitng a confirmation or cancellation of Badger popup',
@@ -50,9 +54,9 @@ storiesOf('Button', module)
 	.add(
 		'login prompt',
 		() => (
-			<Button step={'login'}>
+			<ButtonQR {...props} step={'login'}>
 				<Text>{ButtonText}</Text>
-			</Button>
+			</ButtonQR>
 		),
 		{
 			notes: 'user not logged in, prompt to login',
@@ -61,9 +65,9 @@ storiesOf('Button', module)
 	.add(
 		'install prompt',
 		() => (
-			<Button step={'install'}>
+			<ButtonQR {...props} step={'install'}>
 				<Text>{ButtonText}</Text>
-			</Button>
+			</ButtonQR>
 		),
 		{
 			notes: 'Badger plugin not installed, prompt user to install Badger',

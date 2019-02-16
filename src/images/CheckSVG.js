@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import colors from '../styles/colors';
 
 const Svg = styled.svg`
-	fill: ${colors.succcess700};
+	fill: ${colors.success700};
 `;
 
 const CheckSVG = () => (
