@@ -14,10 +14,21 @@ import {
 
 const PRICE_UPDATE_INTERVAL = 60 * 1000;
 
+
+type ValidTickers = 'BCH';
+
 type BadgerBaseProps = {
 	to: string,
+
+	// Both present to price in fiat equivalent
 	price: number,
 	currency: CurrencyCode,
+
+	// Both present to price in ticker absolute amount
+	ticker: ?ValidTickers,
+	amount: number,
+
+	isRepeatable: boolean,
 	
 	opReturn?: string[],
 
@@ -28,7 +39,7 @@ type BadgerBaseProps = {
 type ButtonStates = 'fresh' | 'pending' | 'complete' | 'login' | 'install';
 
 // White list of valid tickers
-type ValidTickers = 'BCH';
+
 
 type State = {
 	step: ButtonStates,
@@ -40,7 +51,6 @@ type State = {
 	},
 
 	satoshis: ?number,
-	ticker: ?ValidTickers,
 
 	intervalPrice: ?IntervalID,
 	intervalLogin: ?IntervalID,
@@ -50,6 +60,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 	return class extends React.Component<BadgerBaseProps, State> {
 		static defaultProps = {
 			currency: 'USD',
+			isRepeatable: false,
 		};
 
 		state = {

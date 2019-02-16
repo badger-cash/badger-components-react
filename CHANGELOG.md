@@ -10,17 +10,13 @@
 
 ## 0.2.0 (February xx, 2019)
 
-### Main
-
-
-
 ### BadgerBase
 
 * Enabling crypto pricing.  Can enter an absolute amount of BCH, not just fiat conversions
   * use props `ticker` and `amount` to price in BCH.
     * example: `<BadgerButton ticker='BCH' amount={0.00000550} to=...`
 * Repeatable payments, `step` refreshes to `fresh` after 3 seconds.
-  * prop `isRepeat`
+  * prop `isRepeatable`
 * 
 
 ### BadgerButton
