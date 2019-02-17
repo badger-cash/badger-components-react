@@ -37,7 +37,7 @@ const getSatoshiDisplayValue = (priceInCurrency: ?number, price: number): string
 const priceToSatoshis = (BCHRate: number, price: number): number => {
 	const singleDollarValue = BCHRate / 100;
 	const singleDollarSatoshis = 100000000 / singleDollarValue;
-	return price * singleDollarSatoshis;
+	return Math.floor(price * singleDollarSatoshis);
 };
 
 const fiatToSatoshis = async (currency: CurrencyCode, price: number) => {

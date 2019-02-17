@@ -167,7 +167,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 							<ButtonQR
 								onClick={handleClick}
 								step={step}
-								amountSatoshis={550}
+								amountSatoshis={satoshis}
 								toAddress={to}
 							>
 								<Text>{tag}</Text>

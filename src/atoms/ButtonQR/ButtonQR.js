@@ -134,10 +134,12 @@ class ButtonQR extends React.PureComponent<Props> {
 	render() {
     const { children, step, toAddress, amountSatoshis, sizeQR } = this.props;
     
-		const widthQR = sizeQR >= 125 ? sizeQR : 125; // Minimum width 150
+		const widthQR = sizeQR >= 125 ? sizeQR : 125; // Minimum width 125
 		
+		// QR code source
 		const uri = `${toAddress}?amount=${amountSatoshis}`;
 
+		// State booleans
 		const isFresh = step === 'fresh';
 		const isPending = step === 'pending';
 		const isComplete = step === 'complete';
