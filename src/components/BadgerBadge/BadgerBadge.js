@@ -104,12 +104,7 @@ type Props = BadgerBaseProps & {
 
 	handleClick: Function,
 	step: ButtonStates,
-	BCHPrice: {
-		[currency: CurrencyCode]: {
-			price: ?number,
-			stamp: ?number,
-		},
-	},
+	
 };
 
 class BadgerBadge extends React.PureComponent<Props> {
@@ -130,7 +125,6 @@ class BadgerBadge extends React.PureComponent<Props> {
 			currency,
 			tag,
 			step,
-			BCHPrice,
 			showQR,
 			showSatoshis,
 			satoshiDisplay,

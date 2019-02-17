@@ -6,12 +6,15 @@ import {
 	buildPriceEndpoint,
 	priceToSatoshis,
 	getSatoshiDisplayValue,
+	fiatToSatoshis,
+	formatSatoshis,
 } from '../../utils/badger-helpers';
 
 import { type CurrencyCode } from '../../utils/currency-helpers';
 
 const PRICE_UPDATE_INTERVAL = 60 * 1000;
-const REPEAT_TIMEOUT = 3 * 1000
+const INTERVAL_LOGIN = 1000;
+const REPEAT_TIMEOUT = 3 * 1000;
 
 type ValidTickers = 'BCH';
 
@@ -40,12 +43,7 @@ type ButtonStates = 'fresh' | 'pending' | 'complete' | 'login' | 'install';
 
 type State = {
 	step: ButtonStates,
-	BCHPrice: {
-		[currency: CurrencyCode]: {
-			price: ?number,
-			stamp: ?number,
-		},
-	},
+	errors: string[],
 
 	satoshis: ?number,
 
@@ -64,39 +62,28 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 		state = {
 			step: 'fresh',
-			BCHPrice: {},
 
 			satoshis: null,
 			ticker: null,
 
 			intervalPrice: null,
 			intervalLogin: null,
+			errors: [],
 		};
 
-		// re-think this, perhaps compute and set the satoshi price in state directly here.
-		updateBCHPrice = async (currency: CurrencyCode) => {
-			
-			const priceRequest = await fetch(buildPriceEndpoint(currency));
-			const result = await priceRequest.json();
-
-			const { price, stamp } = result;
-			this.setState({
-				BCHPrice: { [currency]: { price, stamp } },
-			});
+		addError = (error: string) => {
+			const { errors } = this.state;
+			this.setState({ errors: [...errors, error] });
 		};
 
 		handleClick = () => {
-			const { to, successFn, failFn, currency, price, opReturn, isRepeatable } = this.props;
-			const { BCHPrice } = this.state;
+			const { to, successFn, failFn, opReturn, isRepeatable } = this.props;
+			const { satoshis } = this.state;
 
-			const currencyPriceBCH = BCHPrice[currency].price;
-			if (!currencyPriceBCH) {
-				this.updateBCHPrice(currency);
+			// Satoshis might not set be set during server rendering
+			if (!satoshis) {
 				return;
 			}
-
-			// Update such that satoshis is pulled directly from the state.  This conversion can happen when the price is pulled
-			const satoshis = priceToSatoshis(currencyPriceBCH, price);
 
 			if (
 				typeof window !== `undefined` &&
@@ -124,7 +111,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 				this.setState({ step: 'pending' });
 
-				console.info('Badger send begin', txParams);
+				// console.info('Badger send begin', txParams);
 				web4bch2.bch.sendTransaction(txParams, (err, res) => {
 					if (err) {
 						console.info('Badger send cancel', err);
@@ -134,8 +121,11 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 						console.info('Badger send success:', res);
 						successFn && successFn(res);
 						this.setState({ step: 'complete' });
-						if(isRepeatable) {
-							setTimeout(() => this.setState({ step: 'fresh' }), REPEAT_TIMEOUT)
+						if (isRepeatable) {
+							setTimeout(
+								() => this.setState({ step: 'fresh' }),
+								REPEAT_TIMEOUT
+							);
 						}
 					}
 				});
@@ -160,30 +150,40 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 						clearInterval(intervalLogin);
 						this.setState({ step: 'fresh' });
 					}
-				}, 1000);
+				}, INTERVAL_LOGIN);
 
 				this.setState({ intervalLogin });
 			}
 		};
 
-		// WHAT DO
-		// * If currency + price, compute satoshi amount and pass that forward
-		// * If ticker + amount, pass in satoshi amount as we get them
+		updateSatoshisFiat = async () => {
+			const { price, currency } = this.props;
 
+			if (!price) return;
+			const satoshis = await fiatToSatoshis(currency, price);
+			this.setState({ satoshis });
+		};
 
-		componentDidMount() {
-			// Get price on load, and update price every minute
+		async componentDidMount() {
 			if (typeof window !== 'undefined') {
 				const { currency, price, ticker, amount } = this.props;
 
-				// currency + price = compute conversion rate
-				this.updateBCHPrice(currency);
-				const intervalPrice = setInterval(
-					() => this.updateBCHPrice(currency),
-					PRICE_UPDATE_INTERVAL
-				);
-
-				this.setState({ intervalPrice });
+				if (price) {
+					await this.updateSatoshisFiat();
+					const intervalPrice = setInterval(
+						async () => await this.updateSatoshisFiat(),
+						PRICE_UPDATE_INTERVAL
+					);
+					this.setState({ intervalPrice });
+				} else if (amount) {
+					if (ticker === 'BCH') {
+						this.setState({ satoshis: amount });
+					} else {
+						this.addError(
+							`Ticker ${ticker} not supported by this version of badger-react-components`
+						);
+					}
+				}
 
 				// Determine if button should show login or install CTA
 				if (window.Web4Bch) {
@@ -206,33 +206,34 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		}
 
 		componentDidUpdate(prevProps: BadgerBaseProps) {
-			const { currency } = this.props;
-			const { intervalPrice } = this.state;
-			const prevCurrency = prevProps.currency;
-
-			// If currency changes AND price is set- reset the conversion checking.
 			if (typeof window !== 'undefined') {
-				// Clear previous price interval, set a new one, and immediately update price
+				const { currency, ticker, price, amount } = this.props;
+				const { intervalPrice } = this.state;
+
+				const prevCurrency = prevProps.currency;
+				const prevTicker = prevProps.ticker;
+				const prevPrice = prevProps.price;
+				const prevAmount = prevProps.amount;
+
 				if (currency !== prevCurrency) {
 					intervalPrice && clearInterval(intervalPrice);
 
 					const intervalPriceNext = setInterval(
-						() => this.updateBCHPrice(currency),
+						() => this.updateSatoshisFiat(),
 						PRICE_UPDATE_INTERVAL
 					);
 
 					this.setState({ intervalPrice: intervalPriceNext });
-					this.updateBCHPrice(currency);
+					this.updateSatoshisFiat();
 				}
 			}
 		}
 
 		render() {
 			const { currency, price, ...passThrough } = this.props;
-			const { step, BCHPrice } = this.state;
+			const { step, satoshis } = this.state;
 
-			const priceInCurrency = BCHPrice[currency] && BCHPrice[currency].price;
-			const satoshiDisplay = getSatoshiDisplayValue(priceInCurrency, price);
+			const satoshiDisplay = formatSatoshis(satoshis);
 
 			return (
 				<Wrapped
@@ -241,7 +242,6 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					price={price}
 					handleClick={this.handleClick}
 					step={step}
-					BCHPrice={BCHPrice}
 					satoshiDisplay={satoshiDisplay}
 				/>
 			);

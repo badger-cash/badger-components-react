@@ -16,7 +16,15 @@ const formatPriceDisplay = (price?: number) => {
 	return +price.toFixed(5);
 };
 
-const getSatoshiDisplayValue = (priceInCurrency: ?number, price: number) => {
+const formatSatoshis = (satoshis: ? number): string => {
+	if (!satoshis) {
+		return '-.--------';
+	}
+	return (satoshis / 100000000).toFixed(8);
+	// return satoshis.toFixed(8);
+}
+
+const getSatoshiDisplayValue = (priceInCurrency: ?number, price: number): string => {
 	if (!priceInCurrency) {
 		return '-.--------';
 	}
@@ -25,16 +33,27 @@ const getSatoshiDisplayValue = (priceInCurrency: ?number, price: number) => {
 	return (Math.trunc(price * singleDollarSatoshis) / 100000000).toFixed(8);
 };
 
-const priceToSatoshis = (BCHRate: number, price: number) => {
+
+const priceToSatoshis = (BCHRate: number, price: number): number => {
 	const singleDollarValue = BCHRate / 100;
 	const singleDollarSatoshis = 100000000 / singleDollarValue;
 	return price * singleDollarSatoshis;
+};
+
+const fiatToSatoshis = async (currency: CurrencyCode, price: number) => {
+	const priceRequest = await fetch(buildPriceEndpoint(currency));
+	const result = await priceRequest.json();
+	const fiatPrice = result.price;
+	const satoshis = priceToSatoshis(fiatPrice, price);
+	return satoshis
 };
 
 export {
 	buildPriceEndpoint,
 	getCurrencyPreSymbol,
 	getSatoshiDisplayValue,
+	fiatToSatoshis,
 	formatPriceDisplay,
+	formatSatoshis,
 	priceToSatoshis,
 };
