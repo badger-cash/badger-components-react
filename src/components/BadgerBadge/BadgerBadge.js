@@ -143,11 +143,15 @@ class BadgerBadge extends React.PureComponent<Props> {
 				<Main showBorder={showBorder}>
 					<HeaderText>{text}</HeaderText>
 					<Prices>
-						<PriceText style={{ textAlign: 'right' }}>
-							{getCurrencyPreSymbol(currency)}
-							{formatPriceDisplay(price)}{' '}
-						</PriceText>
-						<Small>{currency}</Small>
+						{price && (
+							<>
+								<PriceText style={{ textAlign: 'right' }}>
+									{getCurrencyPreSymbol(currency)}
+									{formatPriceDisplay(price)}{' '}
+								</PriceText>
+								<Small>{currency}</Small>
+							</>
+						)}
 						{showSatoshis && (
 							<>
 								<PriceText>

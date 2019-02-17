@@ -16,7 +16,7 @@ const defaultOpReturn = [
 
 storiesOf('BadgerBadge', module)
 	.add(
-		'default - all knobs',
+		'default',
 		() => (
 			<BadgerBadge
 				price={number('Price', 0.001)}
@@ -35,6 +35,23 @@ storiesOf('BadgerBadge', module)
 				showBorder={boolean('Toggle Border', false)}
 				successFn={() => console.log('success')}
 				failFn={() => console.log('fail')}
+			/>
+		),
+		{
+			notes:
+				'Badger Badges are perfect for showing the price and Satoshis in a simple clean all in one component.  Default has knobs to experiment with all settings',
+		}
+	)
+	.add(
+		'price in BCH',
+		() => (
+			<BadgerBadge
+				ticker='BCH'
+				amount={number('BCH Amount', 0.0001)}
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
 			/>
 		),
 		{

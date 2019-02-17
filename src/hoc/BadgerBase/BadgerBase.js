@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import debounce from 'lodash/debounce';
 
-import { fiatToSatoshis } from '../../utils/badger-helpers';
+import { fiatToSatoshis, bchToSatoshis } from '../../utils/badger-helpers';
 
 import { type CurrencyCode } from '../../utils/currency-helpers';
 
@@ -177,7 +177,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					this.setState({ intervalPrice });
 				} else if (amount) {
 					if (ticker === 'BCH') {
-						this.setState({ satoshis: amount });
+						this.setState({ satoshis: bchToSatoshis(amount)});
 					} else {
 						this.addError(
 							`Ticker ${ticker} not supported by this version of badger-react-components`
@@ -226,8 +226,12 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					this.setState({ intervalPrice: intervalPriceNext });
 					this.updateSatoshisFiat();
 				}
-
-				// TODO - handle update if amount or ticker changes.
+				if(ticker !== prevTicker || amount !== prevAmount) {
+					// Currently BCH only ticker supported
+					if(ticker === 'BCH') {
+						this.setState({satoshis: bchToSatoshis(amount)});
+					}
+				}
 			}
 		}
 

@@ -59,6 +59,22 @@ storiesOf('BadgerButton', module)
 		}
 	)
 	.add(
+		'price in BCH',
+		() => (
+			<BadgerButton
+				ticker={'BCH'}
+				amount={number('BCH amount', 0.001)}
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+			/>
+		),
+		{
+			notes: 'Without a text prop, it only shows the price',
+		}
+	)
+	.add(
 		'optional text',
 		() => (
 			<BadgerButton

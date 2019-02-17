@@ -1,5 +1,5 @@
 // @flow
-// Currency endpoints, logic, and formatters
+// Currency endpoints, logic, converters and formatters
 
 import { currencySymbolMap, type CurrencyCode } from './currency-helpers';
 
@@ -21,7 +21,6 @@ const formatSatoshis = (satoshis: ?number): string => {
 		return '-.--------';
 	}
 	return (satoshis / 100000000).toFixed(8);
-	// return satoshis.toFixed(8);
 };
 
 const getSatoshiDisplayValue = (
@@ -50,7 +49,12 @@ const fiatToSatoshis = async (currency: CurrencyCode, price: number) => {
 	return satoshis;
 };
 
+const bchToSatoshis = (bchAmount: number) => {
+	return bchAmount * 1e8;
+}
+
 export {
+	bchToSatoshis,
 	buildPriceEndpoint,
 	getCurrencyPreSymbol,
 	getSatoshiDisplayValue,
