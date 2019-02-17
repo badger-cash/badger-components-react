@@ -6,11 +6,10 @@ import styled from 'styled-components';
 import {
 	getCurrencyPreSymbol,
 	formatPriceDisplay,
+	formatSatoshis,
 } from '../../utils/badger-helpers';
 
-import {
-	type CurrencyCode
-} from '../../utils/currency-helpers';
+import { type CurrencyCode } from '../../utils/currency-helpers';
 
 import colors from '../../styles/colors';
 import BitcoinCashImage from '../../images/bitcoin-cash.svg';
@@ -58,7 +57,7 @@ type Props = BadgerBaseProps & {
 	showBorder?: boolean,
 	showQR?: boolean,
 
-	satoshiDisplay: string,
+	satoshis: number,
 	handleClick: Function,
 	step: ButtonStates,
 };
@@ -80,9 +79,9 @@ class BadgerButton extends React.PureComponent<Props> {
 			step,
 			handleClick,
 			showSatoshis,
-			satoshiDisplay,
+			satoshis,
 			showBorder,
-			showQR
+			showQR,
 		} = this.props;
 
 		return (
@@ -104,7 +103,7 @@ class BadgerButton extends React.PureComponent<Props> {
 							/>{' '}
 							BCH{' '}
 							<span style={{ fontFamily: 'monospace' }}>
-								{satoshiDisplay}
+								{formatSatoshis(satoshis)}
 							</span>
 						</SatoshiText>
 					)}

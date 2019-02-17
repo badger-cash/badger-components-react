@@ -228,20 +228,23 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					this.setState({ intervalPrice: intervalPriceNext });
 					this.updateSatoshisFiat();
 				}
+
+				// TODO - handle update if amount or ticker changes.
 			}
 		}
 
 		render() {
 			const { step, satoshis } = this.state;
 
-			const satoshiDisplay = formatSatoshis(satoshis);
+			// const satoshiDisplay = formatSatoshis(satoshis);
 
 			return (
 				<Wrapped
 					{...this.props}
 					handleClick={this.handleClick}
 					step={step}
-					satoshiDisplay={satoshiDisplay}
+					satoshis={satoshis}
+					// satoshiDisplay={satoshiDisplay}
 				/>
 			);
 		}

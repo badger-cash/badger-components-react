@@ -1,11 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import styled, {css} from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import {
 	getCurrencyPreSymbol,
 	formatPriceDisplay,
+	formatSatoshis,
 } from '../../utils/badger-helpers';
 
 import { type CurrencyCode } from '../../utils/currency-helpers';
@@ -35,11 +36,13 @@ const Main = styled.div`
 	display: grid;
 	grid-gap: 20px;
 	padding: 12px 12px 6px;
-	
-	${props => props.showBorder && css`
-		border: 1px dashed ${colors.brand500};
-		border-radius: 4px;
-	`}
+
+	${(props) =>
+		props.showBorder &&
+		css`
+			border: 1px dashed ${colors.brand500};
+			border-radius: 4px;
+		`}
 `;
 
 const Prices = styled.div`
@@ -96,15 +99,16 @@ const A = styled.a`
 type Props = BadgerBaseProps & {
 	text?: string,
 	tag?: string,
+	step: ButtonStates,
+
 	showSatoshis?: boolean,
-	satoshiDisplay: string,
+	satoshis: number,
+
 	showBrand?: boolean,
 	showQR?: boolean,
 	showBorder?: boolean,
 
 	handleClick: Function,
-	step: ButtonStates,
-	
 };
 
 class BadgerBadge extends React.PureComponent<Props> {
@@ -125,9 +129,9 @@ class BadgerBadge extends React.PureComponent<Props> {
 			currency,
 			tag,
 			step,
-			showQR,
+			satoshis,
 			showSatoshis,
-			satoshiDisplay,
+			showQR,
 			showBorder,
 			showBrand,
 			handleClick,
@@ -152,7 +156,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 										style={{ height: 14 }}
 										alt="BCH"
 									/>{' '}
-									{satoshiDisplay}
+									{formatSatoshis(satoshis)}
 								</PriceText>
 								<Small>BCH</Small>
 							</>

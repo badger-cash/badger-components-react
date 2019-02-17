@@ -91,7 +91,7 @@ const CoolButton = styled.button`
 const MyButton extends React.Component {
   render() {
     // Props from higher order component
-    const {handleClick, to, price, currency, satoshiDisplay, step} = this.props;
+    const {handleClick, to, price, currency, satoshiDisplay, satoshis, step} = this.props;
     return (
       <div>
         <h3>Donate {price}{currency} to {to}</h3>
