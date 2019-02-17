@@ -8,7 +8,7 @@ import { array, select, text, boolean, number } from '@storybook/addon-knobs';
 import BadgerButton from './BadgerButton';
 import { currencyOptions } from '../../utils/currency-helpers';
 
-const defaultOpReturn = ['0x6d02', 'Hello BadgerButton']
+const defaultOpReturn = ['0x6d02', 'Learn to build on BCH at https://developer.bitcoin.com']
 
 storiesOf('BadgerButton', module)
 .add(

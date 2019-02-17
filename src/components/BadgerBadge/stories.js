@@ -9,7 +9,7 @@ import BadgerBadge from './BadgerBadge';
 
 import { currencyOptions } from '../../utils/currency-helpers';
 
-const defaultOpReturn = ['0x6d02', 'Hello BadgerBadge'];
+const defaultOpReturn = ['0x6d02', 'Try out Badger at https://badger.bitcoin.com'];
 
 storiesOf('BadgerBadge', module)
 	.add(
