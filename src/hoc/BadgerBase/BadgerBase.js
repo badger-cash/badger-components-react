@@ -19,12 +19,12 @@ type BadgerBaseProps = {
 	to: string,
 
 	// Both present to price in fiat equivalent
-	price: number,
 	currency: CurrencyCode,
+	price?: number,
 
 	// Both present to price in ticker absolute amount
-	ticker: ?ValidTickers,
-	amount: number,
+	ticker: ValidTickers,
+	amount?: number,
 
 	isRepeatable: boolean,
 
@@ -57,6 +57,8 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 	return class extends React.Component<BadgerBaseProps, State> {
 		static defaultProps = {
 			currency: 'USD',
+			ticker: 'BCH',
+
 			isRepeatable: false,
 		};
 
@@ -71,7 +73,9 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			intervalLogin: null,
 		};
 
+		// re-think this, perhaps compute and set the satoshi price in state directly here.
 		updateBCHPrice = async (currency: CurrencyCode) => {
+			
 			const priceRequest = await fetch(buildPriceEndpoint(currency));
 			const result = await priceRequest.json();
 
@@ -91,6 +95,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				return;
 			}
 
+			// Update such that satoshis is pulled directly from the state.  This conversion can happen when the price is pulled
 			const satoshis = priceToSatoshis(currencyPriceBCH, price);
 
 			if (
@@ -161,10 +166,17 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			}
 		};
 
+		// WHAT DO
+		// * If currency + price, compute satoshi amount and pass that forward
+		// * If ticker + amount, pass in satoshi amount as we get them
+
+
 		componentDidMount() {
 			// Get price on load, and update price every minute
 			if (typeof window !== 'undefined') {
-				const { currency } = this.props;
+				const { currency, price, ticker, amount } = this.props;
+
+				// currency + price = compute conversion rate
 				this.updateBCHPrice(currency);
 				const intervalPrice = setInterval(
 					() => this.updateBCHPrice(currency),
@@ -197,6 +209,8 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			const { currency } = this.props;
 			const { intervalPrice } = this.state;
 			const prevCurrency = prevProps.currency;
+
+			// If currency changes AND price is set- reset the conversion checking.
 			if (typeof window !== 'undefined') {
 				// Clear previous price interval, set a new one, and immediately update price
 				if (currency !== prevCurrency) {
