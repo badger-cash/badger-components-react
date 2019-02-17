@@ -109,7 +109,6 @@ const PendingSpinner = styled.div`
 	justify-content: center;
 `;
 
-
 type Props = {
 	step: ButtonStates,
 	children: React.Node,

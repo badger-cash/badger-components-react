@@ -7,8 +7,7 @@ import { storiesOf } from '@storybook/react/dist/client/preview';
 import { select, text, boolean, number } from '@storybook/addon-knobs';
 
 import Button from './Button';
-import Text from '../Text'
-
+import Text from '../Text';
 
 const ButtonText = 'Badger Pay';
 

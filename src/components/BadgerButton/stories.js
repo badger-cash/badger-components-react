@@ -8,29 +8,32 @@ import { array, select, text, boolean, number } from '@storybook/addon-knobs';
 import BadgerButton from './BadgerButton';
 import { currencyOptions } from '../../utils/currency-helpers';
 
-const defaultOpReturn = ['0x6d02', 'Learn to build on BCH at https://developer.bitcoin.com']
+const defaultOpReturn = [
+	'0x6d02',
+	'Learn to build on BCH at https://developer.bitcoin.com',
+];
 
 storiesOf('BadgerButton', module)
-.add(
-	'default',
-	() => (
-		<BadgerButton
-			price={number('Price', 0.001)}
-			currency={select('Currency', currencyOptions, 'USD')}
-			to={text(
-				'To Address',
-				'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
-			)}
-			opReturn={array('OP_RETURN', defaultOpReturn)}
-			successFn={() => console.log('success example function called')}
-			failFn={() => console.log('fail example function called')}
-		/>
-	),
-	{
-		notes:
-			'Basic Badger Button.  Perfect for adding Badger integration to an existing flow, or in a minimal way.  Default has all the knobs to play with',
-	}
-)
+	.add(
+		'default',
+		() => (
+			<BadgerButton
+				price={number('Price', 0.001)}
+				currency={select('Currency', currencyOptions, 'USD')}
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				opReturn={array('OP_RETURN', defaultOpReturn)}
+				successFn={() => console.log('success example function called')}
+				failFn={() => console.log('fail example function called')}
+			/>
+		),
+		{
+			notes:
+				'Basic Badger Button.  Perfect for adding Badger integration to an existing flow, or in a minimal way.  Default has all the knobs to play with',
+		}
+	)
 	.add(
 		'all knobs',
 		() => (
