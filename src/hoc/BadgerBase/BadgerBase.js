@@ -2,15 +2,9 @@
 
 import * as React from 'react';
 
-import debounce from 'lodash/debounce'
+import debounce from 'lodash/debounce';
 
-import {
-	buildPriceEndpoint,
-	priceToSatoshis,
-	getSatoshiDisplayValue,
-	fiatToSatoshis,
-	formatSatoshis,
-} from '../../utils/badger-helpers';
+import { fiatToSatoshis } from '../../utils/badger-helpers';
 
 import { type CurrencyCode } from '../../utils/currency-helpers';
 
@@ -158,13 +152,17 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			}
 		};
 
-		updateSatoshisFiat = debounce(async () => {
-			const { price, currency } = this.props;
+		updateSatoshisFiat = debounce(
+			async () => {
+				const { price, currency } = this.props;
 
-			if (!price) return;
-			const satoshis = await fiatToSatoshis(currency, price);
-			this.setState({ satoshis });
-		}, 250, { lead: true, trailing: true});
+				if (!price) return;
+				const satoshis = await fiatToSatoshis(currency, price);
+				this.setState({ satoshis });
+			},
+			250,
+			{ lead: true, trailing: true }
+		);
 
 		async componentDidMount() {
 			if (typeof window !== 'undefined') {
@@ -236,15 +234,12 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		render() {
 			const { step, satoshis } = this.state;
 
-			// const satoshiDisplay = formatSatoshis(satoshis);
-
 			return (
 				<Wrapped
 					{...this.props}
 					handleClick={this.handleClick}
 					step={step}
 					satoshis={satoshis}
-					// satoshiDisplay={satoshiDisplay}
 				/>
 			);
 		}
