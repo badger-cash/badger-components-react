@@ -43,7 +43,7 @@ type BadgerBaseProps = {
 	failFn?: Function,
 };
 
-// TODO - Login/Install are badger states, others are payment states.  Separate them to be indepdendant.
+// TODO - Login/Install are badger states, others are payment states.  Separate them to be independent
 type ButtonStates = 'fresh' | 'pending' | 'complete' | 'login' | 'install';
 
 type State = {
@@ -214,7 +214,6 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					amount,
 					to,
 					watchAddress,
-					isRepeatable,
 				} = this.props;
 
 				// Watch for any source of payment to the address, not only Badger
@@ -273,23 +272,38 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 		componentDidUpdate(prevProps: BadgerBaseProps) {
 			if (typeof window !== 'undefined') {
-				const { currency, ticker, price, amount } = this.props;
+				const { currency, ticker, price, amount, isRepeatable, watchAddress } = this.props;
 				const { intervalPrice } = this.state;
 
 				const prevCurrency = prevProps.currency;
 				const prevTicker = prevProps.ticker;
 				const prevPrice = prevProps.price;
 				const prevAmount = prevProps.amount;
+				const prevIsRepeatable = prevProps.isRepeatable;
+				const prevWatchAddress = prevProps.watchAddress;
 
+				// Fiat price or currency changes
 				if (currency !== prevCurrency || price !== prevPrice) {
 					this.setupSatoshisFiat();
 				}
+
+				// Ticker or ticker amount changed
 				if (ticker !== prevTicker || amount !== prevAmount) {
 					// Currently BCH only ticker supported
 					if (ticker === 'BCH') {
 						this.setState({ satoshis: bchToSatoshis(amount) });
 					}
 				}
+
+				if(isRepeatable && (isRepeatable !== prevIsRepeatable)) {
+						this.startRepeatable();
+
+					}
+				}
+
+			
+
+
 			}
 		}
 
