@@ -7,17 +7,19 @@ const buildPriceEndpoint = (currency: CurrencyCode) => {
 	return `https://index-api.bitcoin.com/api/v0/cash/price/${currency}`;
 };
 
-const getAddressUnconfirmed = async (address: string): string[] => {
-	const transactionsRequest = await fetch(`https://rest.bitcoin.com/v2/address/unconfirmed/${address}`);
+const getAddressUnconfirmed = async (address: string): Promise<string[]> => {
+	const transactionsRequest = await fetch(
+		`https://rest.bitcoin.com/v2/address/unconfirmed/${address}`
+	);
 	const result = await transactionsRequest.json();
-	return result.utxos;
-}
+	return result.utxos || [];
+};
 
 const getCurrencyPreSymbol = (currency: CurrencyCode) => {
 	return currencySymbolMap[currency];
 };
 
-const formatPriceDisplay = (price?: number): string => {
+const formatPriceDisplay = (price?: number): ?number => {
 	if (!price) return null;
 	return +price.toFixed(5);
 };
@@ -47,7 +49,10 @@ const priceToSatoshis = (BCHRate: number, price: number): number => {
 	return Math.floor(price * singleDollarSatoshis);
 };
 
-const fiatToSatoshis = async (currency: CurrencyCode, price: number): number => {
+const fiatToSatoshis = async (
+	currency: CurrencyCode,
+	price: number
+): Promise<number> => {
 	const priceRequest = await fetch(buildPriceEndpoint(currency));
 	const result = await priceRequest.json();
 	const fiatPrice = result.price;
@@ -57,7 +62,7 @@ const fiatToSatoshis = async (currency: CurrencyCode, price: number): number => 
 
 const bchToSatoshis = (bchAmount: number): number => {
 	return bchAmount * 1e8;
-}
+};
 
 export {
 	bchToSatoshis,

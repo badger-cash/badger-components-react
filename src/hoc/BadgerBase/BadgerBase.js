@@ -51,7 +51,7 @@ type State = {
 	errors: string[],
 
 	satoshis: ?number,
-	unconfirmedCount?: number,
+	unconfirmedCount: ?number,
 
 	intervalPrice: ?IntervalID,
 	intervalLogin: ?IntervalID,
@@ -74,6 +74,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 			satoshis: null,
 			ticker: null,
+			unconfirmedCount: null,
 
 			intervalPrice: null,
 			intervalLogin: null,
@@ -102,7 +103,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			if (isRepeatable) {
 				this.startRepeatable();
 			} else {
-				clearInterval(intervalUnconfirmed);
+				intervalUnconfirmed && clearInterval(intervalUnconfirmed);
 			}
 		};
 
@@ -205,35 +206,37 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			this.setState({ intervalPrice: intervalPriceNext });
 		};
 
+		setupWatchAddress = async () => {
+			const { to } = this.props;
+			const { intervalUnconfirmed } = this.state;
+
+			intervalUnconfirmed && clearInterval(intervalUnconfirmed);
+
+			const initialUnconfirmed = await getAddressUnconfirmed(to);
+			this.setState({ unconfirmedCount: initialUnconfirmed.length });
+
+			// Watch UTXO interval
+			const intervalUnconfirmedNext = setInterval(async () => {
+				const prevUnconfirmedCount = this.state.unconfirmedCount;
+				const targetTransactions = await getAddressUnconfirmed(to);
+				const unconfirmedCount = targetTransactions.length;
+
+				this.setState({ unconfirmedCount });
+				if (unconfirmedCount > prevUnconfirmedCount) {
+					this.paymentSendSuccess();
+				}
+			}, URI_CHECK_INTERVAL);
+
+			this.setState({ intervalUnconfirmed: intervalUnconfirmedNext });
+		};
+
 		async componentDidMount() {
 			if (typeof window !== 'undefined') {
-				const {
-					currency,
-					price,
-					ticker,
-					amount,
-					to,
-					watchAddress,
-				} = this.props;
+				const { price, ticker, amount, watchAddress } = this.props;
 
 				// Watch for any source of payment to the address, not only Badger
 				if (watchAddress) {
-					const initialUnconfirmed = await getAddressUnconfirmed(to);
-					this.setState({ unconfirmedCount: initialUnconfirmed.length });
-
-					// Watch UTXO interval
-					const intervalUnconfirmed = setInterval(async () => {
-						const prevUnconfirmedCount = this.state.unconfirmedCount;
-						const targetTransactions = await getAddressUnconfirmed(to);
-						const unconfirmedCount = targetTransactions.length;
-
-						this.setState({ unconfirmedCount });
-						if (unconfirmedCount > prevUnconfirmedCount) {
-							this.paymentSendSuccess();
-						}
-					}, URI_CHECK_INTERVAL);
-
-					this.setState({ intervalUnconfirmed });
+					this.setupWatchAddress();
 				}
 
 				if (price) {
@@ -272,7 +275,14 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 		componentDidUpdate(prevProps: BadgerBaseProps) {
 			if (typeof window !== 'undefined') {
-				const { currency, ticker, price, amount, isRepeatable, watchAddress } = this.props;
+				const {
+					currency,
+					ticker,
+					price,
+					amount,
+					isRepeatable,
+					watchAddress,
+				} = this.props;
 				const { intervalPrice } = this.state;
 
 				const prevCurrency = prevProps.currency;
@@ -295,16 +305,18 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					}
 				}
 
-				if(isRepeatable && (isRepeatable !== prevIsRepeatable)) {
-						this.startRepeatable();
-
+				if (isRepeatable && isRepeatable !== prevIsRepeatable) {
+					this.startRepeatable();
 				}
 
-				if(watchAddress !== prevWatchAddress) {
-
+				if (watchAddress !== prevWatchAddress) {
+					if (watchAddress) {
+						this.setupWatchAddress();
+					} else {
+						const { intervalUnconfirmed } = this.state;
+						intervalUnconfirmed && clearInterval(intervalUnconfirmed);
+					}
 				}
-
-
 			}
 		}
 

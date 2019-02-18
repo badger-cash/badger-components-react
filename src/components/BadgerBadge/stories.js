@@ -48,7 +48,7 @@ storiesOf('BadgerBadge', module)
 		'price in BCH',
 		() => (
 			<BadgerBadge
-				ticker='BCH'
+				ticker="BCH"
 				amount={number('BCH Amount', 0.0001)}
 				to={text(
 					'To Address',
@@ -223,7 +223,8 @@ storiesOf('BadgerBadge', module)
 		{
 			notes: 'Modify the OP_RETURN value when paid with Badger wallet',
 		}
-	).add(
+	)
+	.add(
 		'Watch payments from all sources',
 		() => (
 			<BadgerBadge
@@ -239,4 +240,4 @@ storiesOf('BadgerBadge', module)
 			notes:
 				'if watchAddress is true, the payment will turn to confirmed when the address receives a payment from any source.  Including other people.  This is ideal to use if the payment codes are unique for the checkout.  Not great if the payment address is shared by users.',
 		}
-	)
+	);
