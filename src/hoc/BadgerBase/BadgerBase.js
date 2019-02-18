@@ -87,24 +87,24 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		};
 
 		startRepeatable = () => {
-			const {repeatTimeout} = this.props;
-			setTimeout(
-				() => this.setState({ step: 'fresh' }),
-				repeatTimeout
-			);
-		}
+			const { repeatTimeout } = this.props;
+			setTimeout(() => this.setState({ step: 'fresh' }), repeatTimeout);
+		};
 
 		paymentSendSuccess = () => {
 			const { isRepeatable } = this.props;
 			const { intervalUnconfirmed, unconfirmedCount } = this.state;
 
-			this.setState({ step: 'complete', unconfirmedCount: unconfirmedCount+1 });
+			this.setState({
+				step: 'complete',
+				unconfirmedCount: unconfirmedCount + 1,
+			});
 			if (isRepeatable) {
 				this.startRepeatable();
 			} else {
 				clearInterval(intervalUnconfirmed);
 			}
-		}
+		};
 
 		handleClick = () => {
 			const { to, successFn, failFn, opReturn, isRepeatable } = this.props;
@@ -141,7 +141,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 				this.setState({ step: 'pending' });
 
-				// console.info('Badger send begin', txParams);
+				console.info('Badger send begin', txParams);
 				web4bch2.bch.sendTransaction(txParams, (err, res) => {
 					if (err) {
 						console.info('Badger send cancel', err);
@@ -192,44 +192,54 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			{ lead: true, trailing: true }
 		);
 
+		setupSatoshisFiat = () => {
+			const { intervalPrice } = this.state;
+			intervalPrice && clearInterval(intervalPrice);
+
+			this.updateSatoshisFiat();
+			const intervalPriceNext = setInterval(
+				() => this.updateSatoshisFiat(),
+				PRICE_UPDATE_INTERVAL
+			);
+
+			this.setState({ intervalPrice: intervalPriceNext });
+		};
+
 		async componentDidMount() {
 			if (typeof window !== 'undefined') {
-				const { currency, price, ticker, amount, to, watchAddress, isRepeatable } = this.props;
+				const {
+					currency,
+					price,
+					ticker,
+					amount,
+					to,
+					watchAddress,
+					isRepeatable,
+				} = this.props;
 
 				// Watch for any source of payment to the address, not only Badger
-				if(watchAddress) {
+				if (watchAddress) {
 					const initialUnconfirmed = await getAddressUnconfirmed(to);
-					this.setState({unconfirmedCount: initialUnconfirmed.length});
+					this.setState({ unconfirmedCount: initialUnconfirmed.length });
 
 					// Watch UTXO interval
 					const intervalUnconfirmed = setInterval(async () => {
 						const prevUnconfirmedCount = this.state.unconfirmedCount;
 						const targetTransactions = await getAddressUnconfirmed(to);
 						const unconfirmedCount = targetTransactions.length;
-						
-						// If block found, unconfirmed could be lower than previous, likely 0
-						if(unconfirmedCount < prevUnconfirmedCount) {
-							this.setState({unconfirmedCount: unconfirmedCount});
-						}
 
-						if(unconfirmedCount > prevUnconfirmedCount) {
+						this.setState({ unconfirmedCount });
+						if (unconfirmedCount > prevUnconfirmedCount) {
 							this.paymentSendSuccess();
-							this.setState({unconfirmedCount});
 						}
 					}, URI_CHECK_INTERVAL);
 
 					this.setState({ intervalUnconfirmed });
 				}
 
-				
-
 				if (price) {
 					await this.updateSatoshisFiat();
-					const intervalPrice = setInterval(
-						async () => await this.updateSatoshisFiat(),
-						PRICE_UPDATE_INTERVAL
-					);
-					this.setState({ intervalPrice });
+					this.setupSatoshisFiat();
 				} else if (amount) {
 					if (ticker === 'BCH') {
 						this.setState({ satoshis: bchToSatoshis(amount) });
@@ -272,15 +282,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				const prevAmount = prevProps.amount;
 
 				if (currency !== prevCurrency || price !== prevPrice) {
-					intervalPrice && clearInterval(intervalPrice);
-
-					const intervalPriceNext = setInterval(
-						() => this.updateSatoshisFiat(),
-						PRICE_UPDATE_INTERVAL
-					);
-
-					this.setState({ intervalPrice: intervalPriceNext });
-					this.updateSatoshisFiat();
+					this.setupSatoshisFiat();
 				}
 				if (ticker !== prevTicker || amount !== prevAmount) {
 					// Currently BCH only ticker supported
