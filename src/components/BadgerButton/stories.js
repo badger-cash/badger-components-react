@@ -179,7 +179,8 @@ storiesOf('BadgerButton', module)
 		{
 			notes: 'Change the currency and price',
 		}
-	).add(
+	)
+	.add(
 		'repeatable payments',
 		() => (
 			<BadgerButton
@@ -196,7 +197,8 @@ storiesOf('BadgerButton', module)
 			notes:
 				'Payments which can happen more than once on a single page visit.  Games for example',
 		}
-	).add(
+	)
+	.add(
 		'Watch all sources',
 		() => (
 			<BadgerButton
