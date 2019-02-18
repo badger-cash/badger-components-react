@@ -16,7 +16,7 @@ const defaultOpReturn = [
 
 storiesOf('BadgerBadge', module)
 	.add(
-		'default',
+		'all knobs',
 		() => (
 			<BadgerBadge
 				price={number('Price', 0.001)}
@@ -29,6 +29,8 @@ storiesOf('BadgerBadge', module)
 				tag={text('Button Text', 'Badger Pay')}
 				text={text('Top Text', 'Payment Total')}
 				isRepeatable={boolean('Repeatable payment', false)}
+				repeatTimeout={number('Repeat Timeout (ms)', 4000)}
+				watchAddress={boolean('Watch Address All', true)}
 				showBrand={boolean('Toggle Brand', false)}
 				showSatoshis={boolean('Toggle Satoshis', true)}
 				showQR={boolean('Toggle QR', true)}
@@ -179,6 +181,7 @@ storiesOf('BadgerBadge', module)
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
 				isRepeatable={boolean('Repeatable payment', true)}
+				repeatTimeout={number('Reset Timeout (ms)', 5000)}
 			/>
 		),
 		{
@@ -218,6 +221,22 @@ storiesOf('BadgerBadge', module)
 			/>
 		),
 		{
-			notes: 'Change the currency and price',
+			notes: 'Modify the OP_RETURN value when paid with Badger wallet',
 		}
-	);
+	).add(
+		'Watch payments from all sources',
+		() => (
+			<BadgerBadge
+				amount={0.0001}
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				watchAddress={boolean('Watch Address All', true)}
+			/>
+		),
+		{
+			notes:
+				'if watchAddress is true, the payment will turn to confirmed when the address receives a payment from any source.  Including other people.  This is ideal to use if the payment codes are unique for the checkout.  Not great if the payment address is shared by users.',
+		}
+	)

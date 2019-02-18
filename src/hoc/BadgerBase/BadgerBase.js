@@ -16,7 +16,7 @@ const SECOND = 1000;
 
 const PRICE_UPDATE_INTERVAL = 60 * SECOND;
 const INTERVAL_LOGIN = 1 * SECOND;
-const REPEAT_TIMEOUT = 3 * SECOND;
+const REPEAT_TIMEOUT = 4 * SECOND;
 const URI_CHECK_INTERVAL = 10 * SECOND;
 
 // Whitelist of valid tickers.
@@ -34,6 +34,7 @@ type BadgerBaseProps = {
 	amount?: number,
 
 	isRepeatable: boolean,
+	repeatTimeout: number,
 	watchAddress: boolean,
 
 	opReturn?: string[],
@@ -64,7 +65,8 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			ticker: 'BCH',
 
 			isRepeatable: false,
-			watchAddress: true,
+			watchAddress: false,
+			repeatTimeout: REPEAT_TIMEOUT,
 		};
 
 		state = {
@@ -85,10 +87,23 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		};
 
 		startRepeatable = () => {
+			const {repeatTimeout} = this.props;
 			setTimeout(
 				() => this.setState({ step: 'fresh' }),
-				REPEAT_TIMEOUT
+				repeatTimeout
 			);
+		}
+
+		paymentSendSuccess = () => {
+			const { isRepeatable } = this.props;
+			const { intervalUnconfirmed, unconfirmedCount } = this.state;
+
+			this.setState({ step: 'complete', unconfirmedCount: unconfirmedCount+1 });
+			if (isRepeatable) {
+				this.startRepeatable();
+			} else {
+				clearInterval(intervalUnconfirmed);
+			}
 		}
 
 		handleClick = () => {
@@ -135,10 +150,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					} else {
 						console.info('Badger send success:', res);
 						successFn && successFn(res);
-						this.setState({ step: 'complete' });
-						if (isRepeatable) {
-							this.startRepeatable();
-						}
+						this.paymentSendSuccess();
 					}
 				});
 			} else {
@@ -201,14 +213,8 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 						}
 
 						if(unconfirmedCount > prevUnconfirmedCount) {
-							this.setState({step: 'complete', unconfirmedCount});
-							
-							// Stop watching address or reset payment state
-							if(isRepeatable) {
-								this.startRepeatable();
-							} else {
-								clearInterval(intervalUnconfirmed);
-							}
+							this.paymentSendSuccess();
+							this.setState({unconfirmedCount});
 						}
 					}, URI_CHECK_INTERVAL);
 
