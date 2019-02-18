@@ -32,7 +32,7 @@ storiesOf('Button', module)
 			</Button>
 		),
 		{
-			notes: 'Awaitng a confirmation or cancellation of Badger popup',
+			notes: 'Awaiting a confirmation or cancellation of Badger popup',
 		}
 	)
 	.add(
@@ -43,7 +43,7 @@ storiesOf('Button', module)
 			</Button>
 		),
 		{
-			notes: 'Awaitng a confirmation or cancellation of Badger popup',
+			notes: 'Payment received, at least on the front-end',
 		}
 	)
 	.add(
