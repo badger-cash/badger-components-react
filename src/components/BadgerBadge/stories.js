@@ -185,7 +185,7 @@ storiesOf('BadgerBadge', module)
 		),
 		{
 			notes:
-				'Badger Badges are perfect for showing the price and Satoshis in a simple clean all in one component.  Default has knobs to experiment with all settings',
+				'Payments which can happen more than once on a single page visit.  Games for example',
 		}
 	)
 	.add(
@@ -232,7 +232,7 @@ storiesOf('BadgerBadge', module)
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
-				watchAddress={boolean('Watch Address All', true)}
+				watchAddress={boolean('watch Address All', true)}
 			/>
 		),
 		{

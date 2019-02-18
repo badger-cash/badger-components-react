@@ -26,7 +26,7 @@ import Text from '../../atoms/Text';
 
 const PRICE_UPDATE_INTERVAL = 60 * 1000;
 
-const Outter = styled.div`
+const Outer = styled.div`
 	display: grid;
 	grid-template-columns: max-content;
 `;
@@ -139,7 +139,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 		} = this.props;
 
 		return (
-			<Outter>
+			<Outer>
 				<Main showBorder={showBorder}>
 					<HeaderText>{text}</HeaderText>
 					<Prices>
@@ -193,7 +193,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 						)}
 					</ButtonContainer>
 				</Main>
-			</Outter>
+			</Outer>
 		);
 	}
 }

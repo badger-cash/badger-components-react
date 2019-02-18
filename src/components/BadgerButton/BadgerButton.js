@@ -20,6 +20,7 @@ import BadgerBase, {
 } from '../../hoc/BadgerBase';
 
 import Button from '../../atoms/Button';
+import ButtonQR from '../../atoms/ButtonQR';
 import Small from '../../atoms/Small';
 import Text from '../../atoms/Text';
 
@@ -33,10 +34,11 @@ const SatoshiText = styled.p`
 	align-items: center;
 `;
 
-const Outter = styled.div`
+const Outer = styled.div`
 	display: grid;
 	grid-template-columns: max-content;
 `;
+
 const Wrapper = styled.div`
 	display: grid;
 	grid-gap: 5px;
@@ -53,6 +55,7 @@ const Wrapper = styled.div`
 // Badger Button Props
 type Props = BadgerBaseProps & {
 	text?: string,
+
 	showSatoshis?: boolean,
 	showBorder?: boolean,
 	showQR?: boolean,
@@ -64,17 +67,16 @@ type Props = BadgerBaseProps & {
 
 class BadgerButton extends React.PureComponent<Props> {
 	static defaultProps = {
-		currency: 'USD',
 		showSatoshis: true,
 		showBorder: false,
-
-		showQR: true,
+		showQR: false,
 	};
 
 	render() {
 		const {
 			text,
 			price,
+			to,
 			currency,
 			step,
 			handleClick,
@@ -85,15 +87,38 @@ class BadgerButton extends React.PureComponent<Props> {
 		} = this.props;
 
 		return (
-			<Outter>
+			<Outer>
 				<Wrapper hasBorder={showBorder}>
 					<Text style={{ textAlign: 'center' }}>{text}</Text>
-					<Button onClick={handleClick} step={step}>
-						<Text>
-							{getCurrencyPreSymbol(currency)} {formatPriceDisplay(price)}
-							<Small> {currency}</Small>
-						</Text>
-					</Button>
+					{showQR ? (
+						<ButtonQR
+							amountSatoshis={satoshis}
+							toAddress={to}
+							onClick={handleClick}
+							step={step}
+						>
+							{price ? (
+								<Text>
+									{getCurrencyPreSymbol(currency)} {formatPriceDisplay(price)}
+									<Small> {currency}</Small>
+								</Text>
+							) : (
+								<Text>Badger Pay</Text>
+							)}
+						</ButtonQR>
+					) : (
+						<Button onClick={handleClick} step={step}>
+							{price ? (
+								<Text>
+									{getCurrencyPreSymbol(currency)} {formatPriceDisplay(price)}
+									<Small> {currency}</Small>
+								</Text>
+							) : (
+								<Text>Badger Pay</Text>
+							)}
+						</Button>
+					)}
+
 					{showSatoshis && (
 						<SatoshiText>
 							<img
@@ -108,7 +133,7 @@ class BadgerButton extends React.PureComponent<Props> {
 						</SatoshiText>
 					)}
 				</Wrapper>
-			</Outter>
+			</Outer>
 		);
 	}
 }

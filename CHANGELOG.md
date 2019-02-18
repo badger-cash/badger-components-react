@@ -2,7 +2,7 @@
 
 ## 0.2.0 (February xx, 2019)
 
-Major changes to internal workings of the library.  Now can control amounts independently from Satoshis, should be the base work required to easily add SLP tokens in the near future.
+Major changes to internal workings of the library.  Can now control amounts independently from Satoshis, should be the base work required to easily add SLP tokens in the near future.
 
 ### BadgerBase
 
@@ -19,6 +19,7 @@ Major changes to internal workings of the library.  Now can control amounts inde
 ### BadgerButton
 
 * Rename prop `border` => `showBorder`
+* Enable BCH only payments
 
 ### BadgerBadge
 
@@ -33,7 +34,7 @@ Major changes to internal workings of the library.  Now can control amounts inde
 
 ### ButtonQR
 
-* Allow people to pay who don't install Badger.  Now Badger handles  all the payment methods with ease.
+* Allow people to pay who don't have Badger installed.  Now Badger handles  all the payment methods with ease.
 * New component to show a QR code as a URI link, along with button
 
 ## 0.1.5 (February 14, 2019)
