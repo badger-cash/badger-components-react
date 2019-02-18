@@ -1,14 +1,8 @@
 # Changelog - Badger Components React
 
-
-***
-  Continue work
-  * Pass satoshi amount to buttons
-  * Update story with Badge QR
-  * Update stories for `default` to include everything with cleanest settings
-***
-
 ## 0.2.0 (February xx, 2019)
+
+Major changes to internal workings of the library.  Now can control amounts independantly from Satoshis, should be the base work required to easily add SLP tokens in the near futures.
 
 ### BadgerBase
 
@@ -17,7 +11,6 @@
     * example: `<BadgerButton ticker='BCH' amount={0.00000550} to=...`
 * Repeatable payments, `step` refreshes to `fresh` after 3 seconds.
   * prop `isRepeatable`
-* 
 
 ### BadgerButton
 

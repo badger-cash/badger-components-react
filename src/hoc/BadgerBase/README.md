@@ -11,6 +11,8 @@ Badger buttons and badges get wrapped in this Higher Order Component (HOC), whic
 * Handle OP_RETURN
 * Mounting setup
 * Unmounting cleanup
+* Watch address
+* Repeatable
 
 
 ### Fiat Pricing

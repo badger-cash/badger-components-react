@@ -4,14 +4,22 @@ import * as React from 'react';
 
 import debounce from 'lodash/debounce';
 
-import { fiatToSatoshis, bchToSatoshis } from '../../utils/badger-helpers';
+import {
+	fiatToSatoshis,
+	bchToSatoshis,
+	getAddressUnconfirmed,
+} from '../../utils/badger-helpers';
 
 import { type CurrencyCode } from '../../utils/currency-helpers';
 
-const PRICE_UPDATE_INTERVAL = 60 * 1000;
-const INTERVAL_LOGIN = 1000;
-const REPEAT_TIMEOUT = 3 * 1000;
+const SECOND = 1000;
 
+const PRICE_UPDATE_INTERVAL = 60 * SECOND;
+const INTERVAL_LOGIN = 1 * SECOND;
+const REPEAT_TIMEOUT = 3 * SECOND;
+const URI_CHECK_INTERVAL = 10 * SECOND;
+
+// Whitelist of valid tickers.
 type ValidTickers = 'BCH';
 
 type BadgerBaseProps = {
@@ -26,6 +34,7 @@ type BadgerBaseProps = {
 	amount?: number,
 
 	isRepeatable: boolean,
+	watchAddress: boolean,
 
 	opReturn?: string[],
 
@@ -33,18 +42,19 @@ type BadgerBaseProps = {
 	failFn?: Function,
 };
 
+// TODO - Login/Install are badger states, others are payment states.  Separate them to be indepdendant.
 type ButtonStates = 'fresh' | 'pending' | 'complete' | 'login' | 'install';
-
-// White list of valid tickers
 
 type State = {
 	step: ButtonStates,
 	errors: string[],
 
 	satoshis: ?number,
+	unconfirmedCount?: number,
 
 	intervalPrice: ?IntervalID,
 	intervalLogin: ?IntervalID,
+	intervalUnconfirmed: ?IntervalID,
 };
 
 const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
@@ -54,6 +64,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			ticker: 'BCH',
 
 			isRepeatable: false,
+			watchAddress: true,
 		};
 
 		state = {
@@ -64,6 +75,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 			intervalPrice: null,
 			intervalLogin: null,
+			intervalUnconfirmed: null,
 			errors: [],
 		};
 
@@ -71,6 +83,13 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			const { errors } = this.state;
 			this.setState({ errors: [...errors, error] });
 		};
+
+		startRepeatable = () => {
+			setTimeout(
+				() => this.setState({ step: 'fresh' }),
+				REPEAT_TIMEOUT
+			);
+		}
 
 		handleClick = () => {
 			const { to, successFn, failFn, opReturn, isRepeatable } = this.props;
@@ -118,10 +137,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 						successFn && successFn(res);
 						this.setState({ step: 'complete' });
 						if (isRepeatable) {
-							setTimeout(
-								() => this.setState({ step: 'fresh' }),
-								REPEAT_TIMEOUT
-							);
+							this.startRepeatable();
 						}
 					}
 				});
@@ -166,7 +182,40 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 		async componentDidMount() {
 			if (typeof window !== 'undefined') {
-				const { currency, price, ticker, amount } = this.props;
+				const { currency, price, ticker, amount, to, watchAddress, isRepeatable } = this.props;
+
+				// Watch for any source of payment to the address, not only Badger
+				if(watchAddress) {
+					const initialUnconfirmed = await getAddressUnconfirmed(to);
+					this.setState({unconfirmedCount: initialUnconfirmed.length});
+
+					// Watch UTXO interval
+					const intervalUnconfirmed = setInterval(async () => {
+						const prevUnconfirmedCount = this.state.unconfirmedCount;
+						const targetTransactions = await getAddressUnconfirmed(to);
+						const unconfirmedCount = targetTransactions.length;
+						
+						// If block found, unconfirmed could be lower than previous, likely 0
+						if(unconfirmedCount < prevUnconfirmedCount) {
+							this.setState({unconfirmedCount: unconfirmedCount});
+						}
+
+						if(unconfirmedCount > prevUnconfirmedCount) {
+							this.setState({step: 'complete', unconfirmedCount});
+							
+							// Stop watching address or reset payment state
+							if(isRepeatable) {
+								this.startRepeatable();
+							} else {
+								clearInterval(intervalUnconfirmed);
+							}
+						}
+					}, URI_CHECK_INTERVAL);
+
+					this.setState({ intervalUnconfirmed });
+				}
+
+				
 
 				if (price) {
 					await this.updateSatoshisFiat();
@@ -177,7 +226,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					this.setState({ intervalPrice });
 				} else if (amount) {
 					if (ticker === 'BCH') {
-						this.setState({ satoshis: bchToSatoshis(amount)});
+						this.setState({ satoshis: bchToSatoshis(amount) });
 					} else {
 						this.addError(
 							`Ticker ${ticker} not supported by this version of badger-react-components`
@@ -200,9 +249,10 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		}
 
 		componentWillUnmount() {
-			const { intervalPrice, intervalLogin } = this.state;
+			const { intervalPrice, intervalLogin, intervalUnconfirmed } = this.state;
 			intervalPrice && clearInterval(intervalPrice);
 			intervalLogin && clearInterval(intervalLogin);
+			intervalUnconfirmed && clearInterval(intervalUnconfirmed);
 		}
 
 		componentDidUpdate(prevProps: BadgerBaseProps) {
@@ -226,10 +276,10 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					this.setState({ intervalPrice: intervalPriceNext });
 					this.updateSatoshisFiat();
 				}
-				if(ticker !== prevTicker || amount !== prevAmount) {
+				if (ticker !== prevTicker || amount !== prevAmount) {
 					// Currently BCH only ticker supported
-					if(ticker === 'BCH') {
-						this.setState({satoshis: bchToSatoshis(amount)});
+					if (ticker === 'BCH') {
+						this.setState({ satoshis: bchToSatoshis(amount) });
 					}
 				}
 			}
