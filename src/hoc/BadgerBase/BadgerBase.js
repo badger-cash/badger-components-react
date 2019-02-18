@@ -298,10 +298,11 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				if(isRepeatable && (isRepeatable !== prevIsRepeatable)) {
 						this.startRepeatable();
 
-					}
 				}
 
-			
+				if(watchAddress !== prevWatchAddress) {
+
+				}
 
 
 			}
