@@ -45,6 +45,25 @@ storiesOf('BadgerBadge', module)
 		}
 	)
 	.add(
+		'minimal look',
+		() => (
+			<BadgerBadge
+				amount={0.001}
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				text={''}
+				showSatoshis={false}
+				showQR={boolean('Toggle QR', true)}
+			/>
+		),
+		{
+			notes:
+				'Minimal look of Badge',
+		}
+	)
+	.add(
 		'price in BCH',
 		() => (
 			<BadgerBadge
@@ -224,7 +243,7 @@ storiesOf('BadgerBadge', module)
 		}
 	)
 	.add(
-		'Watch payments from all sources',
+		'watch all sources',
 		() => (
 			<BadgerBadge
 				amount={0.0001}

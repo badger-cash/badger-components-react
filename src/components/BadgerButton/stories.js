@@ -61,6 +61,23 @@ storiesOf('BadgerButton', module)
 		}
 	)
 	.add(
+		'minimal look',
+		() => (
+			<BadgerButton
+				amount={0.0001}
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				showSatoshis={false}
+			/>
+		),
+		{
+			notes:
+				'minimal look',
+		}
+	)
+	.add(
 		'price in BCH',
 		() => (
 			<BadgerButton
@@ -199,7 +216,7 @@ storiesOf('BadgerButton', module)
 		}
 	)
 	.add(
-		'Watch all sources',
+		'watch all sources',
 		() => (
 			<BadgerButton
 				amount={0.0001}
