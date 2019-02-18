@@ -1,5 +1,42 @@
 # Changelog - Badger Components React
 
+## 0.2.0 (February 18, 2019)
+
+Major changes to internal workings of the library.  Can now control amounts independently from Satoshis, should be the base work required to easily add SLP tokens in the near future.
+
+### BadgerBase
+
+* Enabling crypto pricing.  Can enter an absolute amount of BCH, not just fiat conversions
+  * use props `ticker` and `amount` to price in BCH.
+    * example: `<BadgerButton ticker='BCH' amount={0.00000550} to=...`
+* New props
+  * `watchAddress` - Confirm if payment comes from any source or anyone
+  * `isRepeatable` - Rest the button to `fresh` state after a brief period
+  * `repeatTimeout` - Number of milliseconds to reset button to `fresh` after a repeatable payment
+  * `ticker` - Crypto to price in, currently only supports BCH
+  * `amount` - Amount of given ticker for payment
+
+### BadgerButton
+
+* Rename prop `border` => `showBorder`
+* Enable BCH only payments
+
+### BadgerBadge
+
+* Adding QR Code and Payment URI
+  * prop `showQR` default `true`
+  * Uses `ButtonQR` instead of `Button`
+* watch payments to address as well as QR
+* Handles BCH only payments
+* New props
+  * `showBorder`
+  * `showQR`
+
+### ButtonQR
+
+* Allow people to pay who don't have Badger installed.  Now Badger handles  all the payment methods with ease.
+* New component to show a QR code as a URI link, along with button
+
 ## 0.1.5 (February 14, 2019)
 
 ### Badger Base / Button / Badge

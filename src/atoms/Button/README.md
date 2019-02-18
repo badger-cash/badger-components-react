@@ -5,4 +5,8 @@ This fully controlled component is the core interface to the state of the badger
 
 ## Example Usage
 
-Internal usage only for now.  Not exposed in library.
+```jsx
+<Button step="fresh">
+  <p>Pay with Badger</p>
+</Button>
+```

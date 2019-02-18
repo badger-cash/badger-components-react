@@ -1,16 +1,15 @@
 // @flow
 
 import * as React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import {
 	getCurrencyPreSymbol,
 	formatPriceDisplay,
+	formatSatoshis,
 } from '../../utils/badger-helpers';
 
-import {
-	type CurrencyCode
-} from '../../utils/currency-helpers';
+import { type CurrencyCode } from '../../utils/currency-helpers';
 
 import BadgerBase, {
 	type ButtonStates,
@@ -21,12 +20,13 @@ import BitcoinCashImage from '../../images/bitcoin-cash.svg';
 import colors from '../../styles/colors';
 
 import Button from '../../atoms/Button';
+import ButtonQR from '../../atoms/ButtonQR';
 import Small from '../../atoms/Small';
 import Text from '../../atoms/Text';
 
 const PRICE_UPDATE_INTERVAL = 60 * 1000;
 
-const Outter = styled.div`
+const Outer = styled.div`
 	display: grid;
 	grid-template-columns: max-content;
 `;
@@ -36,8 +36,13 @@ const Main = styled.div`
 	display: grid;
 	grid-gap: 20px;
 	padding: 12px 12px 6px;
-	border: 1px dashed ${colors.brand500};
-	border-radius: 4px;
+
+	${(props) =>
+		props.showBorder &&
+		css`
+			border: 1px dashed ${colors.brand500};
+			border-radius: 4px;
+		`}
 `;
 
 const Prices = styled.div`
@@ -94,28 +99,27 @@ const A = styled.a`
 type Props = BadgerBaseProps & {
 	text?: string,
 	tag?: string,
+	step: ButtonStates,
+
 	showSatoshis?: boolean,
-	satoshiDisplay: string,
+	satoshis: number,
+
 	showBrand?: boolean,
+	showQR?: boolean,
+	showBorder?: boolean,
 
 	handleClick: Function,
-
-	step: ButtonStates,
-	BCHPrice: {
-		[currency: CurrencyCode]: {
-			price: ?number,
-			stamp: ?number,
-		},
-	},
 };
 
 class BadgerBadge extends React.PureComponent<Props> {
 	static defaultProps = {
 		currency: 'USD',
 		tag: 'Badger Pay',
-		showSatoshis: true,
-		showBrand: true,
 		text: 'Payment Total',
+		showSatoshis: true,
+		showBrand: false,
+		showQR: true,
+		showBorder: false,
 	};
 
 	render() {
@@ -125,23 +129,29 @@ class BadgerBadge extends React.PureComponent<Props> {
 			currency,
 			tag,
 			step,
-			BCHPrice,
+			satoshis,
 			showSatoshis,
-			satoshiDisplay,
+			showQR,
+			showBorder,
 			showBrand,
 			handleClick,
+			to,
 		} = this.props;
 
 		return (
-			<Outter>
-				<Main>
+			<Outer>
+				<Main showBorder={showBorder}>
 					<HeaderText>{text}</HeaderText>
 					<Prices>
-						<PriceText style={{ textAlign: 'right' }}>
-							{getCurrencyPreSymbol(currency)}
-							{formatPriceDisplay(price)}{' '}
-						</PriceText>
-						<Small>{currency}</Small>
+						{price && (
+							<>
+								<PriceText style={{ textAlign: 'right' }}>
+									{getCurrencyPreSymbol(currency)}
+									{formatPriceDisplay(price)}{' '}
+								</PriceText>
+								<Small>{currency}</Small>
+							</>
+						)}
 						{showSatoshis && (
 							<>
 								<PriceText>
@@ -150,18 +160,29 @@ class BadgerBadge extends React.PureComponent<Props> {
 										style={{ height: 14 }}
 										alt="BCH"
 									/>{' '}
-									{satoshiDisplay}
+									{formatSatoshis(satoshis)}
 								</PriceText>
 								<Small>BCH</Small>
 							</>
 						)}
 					</Prices>
 					<ButtonContainer>
-						<Button onClick={handleClick} step={step}>
-							<Text>{tag}</Text>
-						</Button>
+						{showQR ? (
+							<ButtonQR
+								onClick={handleClick}
+								step={step}
+								amountSatoshis={satoshis}
+								toAddress={to}
+							>
+								<Text>{tag}</Text>
+							</ButtonQR>
+						) : (
+							<Button onClick={handleClick} step={step}>
+								<Text>{tag}</Text>
+							</Button>
+						)}
 
-						{showBrand && (
+						{(step === 'install' || showBrand) && (
 							<BrandBottom>
 								<Small>
 									<A href="badger.bitcoin.com" target="_blank">
@@ -172,7 +193,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 						)}
 					</ButtonContainer>
 				</Main>
-			</Outter>
+			</Outer>
 		);
 	}
 }

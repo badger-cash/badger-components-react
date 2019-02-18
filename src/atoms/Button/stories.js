@@ -7,14 +7,11 @@ import { storiesOf } from '@storybook/react/dist/client/preview';
 import { select, text, boolean, number } from '@storybook/addon-knobs';
 
 import Button from './Button';
+import Text from '../Text';
 
-const Text = styled.div`
-	font-size: 24px;
-`;
+const ButtonText = 'Badger Pay';
 
-const ButtonText = 'Pay';
-
-storiesOf('Internal - Button', module)
+storiesOf('Button', module)
 	.add(
 		'default',
 		() => (
@@ -35,7 +32,7 @@ storiesOf('Internal - Button', module)
 			</Button>
 		),
 		{
-			notes: 'Awaitng a confirmation or cancellation of Badger popup',
+			notes: 'Awaiting a confirmation or cancellation of Badger popup',
 		}
 	)
 	.add(
@@ -46,7 +43,7 @@ storiesOf('Internal - Button', module)
 			</Button>
 		),
 		{
-			notes: 'Awaitng a confirmation or cancellation of Badger popup',
+			notes: 'Payment received, at least on the front-end',
 		}
 	)
 	.add(

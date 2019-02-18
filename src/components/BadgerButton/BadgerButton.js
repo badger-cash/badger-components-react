@@ -6,11 +6,10 @@ import styled from 'styled-components';
 import {
 	getCurrencyPreSymbol,
 	formatPriceDisplay,
+	formatSatoshis,
 } from '../../utils/badger-helpers';
 
-import {
-	type CurrencyCode
-} from '../../utils/currency-helpers';
+import { type CurrencyCode } from '../../utils/currency-helpers';
 
 import colors from '../../styles/colors';
 import BitcoinCashImage from '../../images/bitcoin-cash.svg';
@@ -21,6 +20,7 @@ import BadgerBase, {
 } from '../../hoc/BadgerBase';
 
 import Button from '../../atoms/Button';
+import ButtonQR from '../../atoms/ButtonQR';
 import Small from '../../atoms/Small';
 import Text from '../../atoms/Text';
 
@@ -34,10 +34,11 @@ const SatoshiText = styled.p`
 	align-items: center;
 `;
 
-const Outter = styled.div`
+const Outer = styled.div`
 	display: grid;
 	grid-template-columns: max-content;
 `;
+
 const Wrapper = styled.div`
 	display: grid;
 	grid-gap: 5px;
@@ -54,50 +55,70 @@ const Wrapper = styled.div`
 // Badger Button Props
 type Props = BadgerBaseProps & {
 	text?: string,
-	showSatoshis?: boolean,
-	border?: boolean,
 
-	satoshiDisplay: string,
+	showSatoshis?: boolean,
+	showBorder?: boolean,
+	showQR?: boolean,
+
+	satoshis: number,
 	handleClick: Function,
 	step: ButtonStates,
-	BCHPrice: {
-		[currency: CurrencyCode]: {
-			price: ?number,
-			stamp: ?number,
-		},
-	},
 };
 
 class BadgerButton extends React.PureComponent<Props> {
 	static defaultProps = {
-		currency: 'USD',
 		showSatoshis: true,
-		border: true,
+		showBorder: false,
+		showQR: false,
 	};
 
 	render() {
 		const {
 			text,
 			price,
+			to,
 			currency,
-			showSatoshis,
-			satoshiDisplay,
 			step,
-			BCHPrice,
 			handleClick,
-			border,
+			showSatoshis,
+			satoshis,
+			showBorder,
+			showQR,
 		} = this.props;
 
 		return (
-			<Outter>
-				<Wrapper hasBorder={border}>
+			<Outer>
+				<Wrapper hasBorder={showBorder}>
 					<Text style={{ textAlign: 'center' }}>{text}</Text>
-					<Button onClick={handleClick} step={step}>
-						<Text>
-							{getCurrencyPreSymbol(currency)} {formatPriceDisplay(price)}
-							<Small> {currency}</Small>
-						</Text>
-					</Button>
+					{showQR ? (
+						<ButtonQR
+							amountSatoshis={satoshis}
+							toAddress={to}
+							onClick={handleClick}
+							step={step}
+						>
+							{price ? (
+								<Text>
+									{getCurrencyPreSymbol(currency)} {formatPriceDisplay(price)}
+									<Small> {currency}</Small>
+								</Text>
+							) : (
+								<Text>Badger Pay</Text>
+							)}
+						</ButtonQR>
+					) : (
+						<Button onClick={handleClick} step={step}>
+							{price ? (
+								<Text>
+									{getCurrencyPreSymbol(currency)} {formatPriceDisplay(price)}
+									<Small> {currency}</Small>
+								</Text>
+							) : (
+								<Text>Badger Pay</Text>
+							)}
+						</Button>
+					)}
+
 					{showSatoshis && (
 						<SatoshiText>
 							<img
@@ -107,12 +128,12 @@ class BadgerButton extends React.PureComponent<Props> {
 							/>{' '}
 							BCH{' '}
 							<span style={{ fontFamily: 'monospace' }}>
-								{satoshiDisplay}
+								{formatSatoshis(satoshis)}
 							</span>
 						</SatoshiText>
 					)}
 				</Wrapper>
-			</Outter>
+			</Outer>
 		);
 	}
 }

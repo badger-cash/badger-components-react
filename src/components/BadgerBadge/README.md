@@ -20,20 +20,26 @@ class MyClass extends React.Component {
 
 	// EatBCH address for example purposes.
 		const paymentAddress = 'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
-		const amount = 0.1; // Amount of target currency to convert for payment
+		const price = 0.1; // Amount of target currency to convert for payment
 		const currency = 'CAD'; // Target currency to convert to relative BCH amount
 
 		return (
 			<section>
 				<BadgerBadge
 					to={paymentAddress}
-					amount={amount}
+					price={price}
 					currency={currency}
 					successFn={this.successFn}
 					failFn={this.failFn}
 					opReturn={["0x6d02", "Hello BadgerBadge"]}
           tag="Send Now"
-          text="Complete Payment"
+					text="Complete Payment"
+					
+					showQR={true}
+					showBorder={false}
+					repeatable={false}
+					repeatTimeout={4000}
+					watchAddress={true}
 				/>
 			</section>
 		);

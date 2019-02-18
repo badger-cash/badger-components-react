@@ -8,7 +8,7 @@ const colors = {
 	pending500: '#00BFFF',
 	pending700: '#0070AA',
 	success500: '#00C571',
-	succcess700: '#007328',
+	success700: '#007328',
 	bg100: '#ffffff',
 };
 

@@ -2,22 +2,40 @@
 
 import * as React from 'react';
 
+import debounce from 'lodash/debounce';
+
 import {
-	buildPriceEndpoint,
-	priceToSatoshis,
-	getSatoshiDisplayValue,
+	fiatToSatoshis,
+	bchToSatoshis,
+	getAddressUnconfirmed,
 } from '../../utils/badger-helpers';
 
-import {
-	type CurrencyCode
-} from '../../utils/currency-helpers';
+import { type CurrencyCode } from '../../utils/currency-helpers';
 
-const PRICE_UPDATE_INTERVAL = 60 * 1000;
+const SECOND = 1000;
+
+const PRICE_UPDATE_INTERVAL = 60 * SECOND;
+const INTERVAL_LOGIN = 1 * SECOND;
+const REPEAT_TIMEOUT = 4 * SECOND;
+const URI_CHECK_INTERVAL = 10 * SECOND;
+
+// Whitelist of valid tickers.
+type ValidTickers = 'BCH';
 
 type BadgerBaseProps = {
 	to: string,
-	price: number,
+
+	// Both present to price in fiat equivalent
 	currency: CurrencyCode,
+	price?: number,
+
+	// Both present to price in ticker absolute amount
+	ticker: ValidTickers,
+	amount?: number,
+
+	isRepeatable: boolean,
+	repeatTimeout: number,
+	watchAddress: boolean,
 
 	opReturn?: string[],
 
@@ -25,56 +43,78 @@ type BadgerBaseProps = {
 	failFn?: Function,
 };
 
+// TODO - Login/Install are badger states, others are payment states.  Separate them to be independent
 type ButtonStates = 'fresh' | 'pending' | 'complete' | 'login' | 'install';
 
 type State = {
 	step: ButtonStates,
-	BCHPrice: {
-		[currency: CurrencyCode]: {
-			price: ?number,
-			stamp: ?number,
-		},
-	},
+	errors: string[],
+
+	satoshis: ?number,
+	unconfirmedCount: ?number,
 
 	intervalPrice: ?IntervalID,
 	intervalLogin: ?IntervalID,
+	intervalUnconfirmed: ?IntervalID,
 };
 
 const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 	return class extends React.Component<BadgerBaseProps, State> {
 		static defaultProps = {
 			currency: 'USD',
+			ticker: 'BCH',
+
+			isRepeatable: false,
+			watchAddress: false,
+			repeatTimeout: REPEAT_TIMEOUT,
 		};
 
 		state = {
 			step: 'fresh',
-			BCHPrice: {},
+
+			satoshis: null,
+			ticker: null,
+			unconfirmedCount: null,
 
 			intervalPrice: null,
 			intervalLogin: null,
+			intervalUnconfirmed: null,
+			errors: [],
 		};
 
-		updateBCHPrice = async (currency: CurrencyCode) => {
-			const priceRequest = await fetch(buildPriceEndpoint(currency));
-			const result = await priceRequest.json();
+		addError = (error: string) => {
+			const { errors } = this.state;
+			this.setState({ errors: [...errors, error] });
+		};
 
-			const { price, stamp } = result;
+		startRepeatable = () => {
+			const { repeatTimeout } = this.props;
+			setTimeout(() => this.setState({ step: 'fresh' }), repeatTimeout);
+		};
+
+		paymentSendSuccess = () => {
+			const { isRepeatable } = this.props;
+			const { intervalUnconfirmed, unconfirmedCount } = this.state;
+
 			this.setState({
-				BCHPrice: { [currency]: { price, stamp } },
+				step: 'complete',
+				unconfirmedCount: unconfirmedCount + 1,
 			});
+			if (isRepeatable) {
+				this.startRepeatable();
+			} else {
+				intervalUnconfirmed && clearInterval(intervalUnconfirmed);
+			}
 		};
 
 		handleClick = () => {
-			const { to, successFn, failFn, currency, price, opReturn } = this.props;
-			const { BCHPrice } = this.state;
+			const { to, successFn, failFn, opReturn, isRepeatable } = this.props;
+			const { satoshis } = this.state;
 
-			const currencyPriceBCH = BCHPrice[currency].price;
-			if (!currencyPriceBCH) {
-				this.updateBCHPrice(currency);
+			// Satoshis might not set be set during server rendering
+			if (!satoshis) {
 				return;
 			}
-
-			const satoshis = priceToSatoshis(currencyPriceBCH, price);
 
 			if (
 				typeof window !== `undefined` &&
@@ -93,25 +133,25 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				const txParamsBase = {
 					to,
 					from: defaultAccount,
-					value: satoshis
+					value: satoshis,
 				};
 
-				const txParams = opReturn 
-					? {...txParamsBase, opReturn: {data: opReturn}}
-					: {...txParamsBase}
+				const txParams = opReturn
+					? { ...txParamsBase, opReturn: { data: opReturn } }
+					: { ...txParamsBase };
 
 				this.setState({ step: 'pending' });
 
-				console.log(txParams);
+				console.info('Badger send begin', txParams);
 				web4bch2.bch.sendTransaction(txParams, (err, res) => {
 					if (err) {
-						console.log('BadgerButton send cancel', err);
+						console.info('Badger send cancel', err);
 						failFn && failFn(err);
 						this.setState({ step: 'fresh' });
 					} else {
-						console.log('BadgerButton send success:', res);
+						console.info('Badger send success:', res);
 						successFn && successFn(res);
-						this.setState({ step: 'complete' });
+						this.paymentSendSuccess();
 					}
 				});
 			} else {
@@ -135,23 +175,82 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 						clearInterval(intervalLogin);
 						this.setState({ step: 'fresh' });
 					}
-				}, 1000);
+				}, INTERVAL_LOGIN);
 
-				this.setState({intervalLogin});
+				this.setState({ intervalLogin });
 			}
 		};
 
-		componentDidMount() {
-			// Get price on load, and update price every minute
-			if (typeof window !== 'undefined') {
-				const currency = this.props.currency;
-				this.updateBCHPrice(currency);
-				const intervalPrice = setInterval(
-					() => this.updateBCHPrice(currency),
-					PRICE_UPDATE_INTERVAL
-				);
+		updateSatoshisFiat = debounce(
+			async () => {
+				const { price, currency } = this.props;
 
-				this.setState({intervalPrice});
+				if (!price) return;
+				const satoshis = await fiatToSatoshis(currency, price);
+				this.setState({ satoshis });
+			},
+			250,
+			{ lead: true, trailing: true }
+		);
+
+		setupSatoshisFiat = () => {
+			const { intervalPrice } = this.state;
+			intervalPrice && clearInterval(intervalPrice);
+
+			this.updateSatoshisFiat();
+			const intervalPriceNext = setInterval(
+				() => this.updateSatoshisFiat(),
+				PRICE_UPDATE_INTERVAL
+			);
+
+			this.setState({ intervalPrice: intervalPriceNext });
+		};
+
+		setupWatchAddress = async () => {
+			const { to } = this.props;
+			const { intervalUnconfirmed } = this.state;
+
+			intervalUnconfirmed && clearInterval(intervalUnconfirmed);
+
+			const initialUnconfirmed = await getAddressUnconfirmed(to);
+			this.setState({ unconfirmedCount: initialUnconfirmed.length });
+
+			// Watch UTXO interval
+			const intervalUnconfirmedNext = setInterval(async () => {
+				const prevUnconfirmedCount = this.state.unconfirmedCount;
+				const targetTransactions = await getAddressUnconfirmed(to);
+				const unconfirmedCount = targetTransactions.length;
+
+				this.setState({ unconfirmedCount });
+				if (unconfirmedCount > prevUnconfirmedCount) {
+					this.paymentSendSuccess();
+				}
+			}, URI_CHECK_INTERVAL);
+
+			this.setState({ intervalUnconfirmed: intervalUnconfirmedNext });
+		};
+
+		async componentDidMount() {
+			if (typeof window !== 'undefined') {
+				const { price, ticker, amount, watchAddress } = this.props;
+
+				// Watch for any source of payment to the address, not only Badger
+				if (watchAddress) {
+					this.setupWatchAddress();
+				}
+
+				if (price) {
+					await this.updateSatoshisFiat();
+					this.setupSatoshisFiat();
+				} else if (amount) {
+					if (ticker === 'BCH') {
+						this.setState({ satoshis: bchToSatoshis(amount) });
+					} else {
+						this.addError(
+							`Ticker ${ticker} not supported by this version of badger-react-components`
+						);
+					}
+				}
 
 				// Determine if button should show login or install CTA
 				if (window.Web4Bch) {
@@ -168,48 +267,68 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		}
 
 		componentWillUnmount() {
-			const { intervalPrice, intervalLogin } = this.state;
+			const { intervalPrice, intervalLogin, intervalUnconfirmed } = this.state;
 			intervalPrice && clearInterval(intervalPrice);
 			intervalLogin && clearInterval(intervalLogin);
+			intervalUnconfirmed && clearInterval(intervalUnconfirmed);
 		}
 
 		componentDidUpdate(prevProps: BadgerBaseProps) {
-			const { currency } = this.props;
-			const { intervalPrice } = this.state;
-			const prevCurrency = prevProps.currency;
 			if (typeof window !== 'undefined') {
-				// Clear previous price interval, set a new one, and immediately update price
-				if (currency !== prevCurrency) {
-					intervalPrice && clearInterval(intervalPrice);
+				const {
+					currency,
+					ticker,
+					price,
+					amount,
+					isRepeatable,
+					watchAddress,
+				} = this.props;
+				const { intervalPrice } = this.state;
 
-					const intervalPriceNext = setInterval(
-						() => this.updateBCHPrice(currency),
-						PRICE_UPDATE_INTERVAL
-					);
+				const prevCurrency = prevProps.currency;
+				const prevTicker = prevProps.ticker;
+				const prevPrice = prevProps.price;
+				const prevAmount = prevProps.amount;
+				const prevIsRepeatable = prevProps.isRepeatable;
+				const prevWatchAddress = prevProps.watchAddress;
 
-					this.setState({intervalPrice: intervalPriceNext})
-					this.updateBCHPrice(currency);
+				// Fiat price or currency changes
+				if (currency !== prevCurrency || price !== prevPrice) {
+					this.setupSatoshisFiat();
+				}
+
+				// Ticker or ticker amount changed
+				if (ticker !== prevTicker || amount !== prevAmount) {
+					// Currently BCH only ticker supported
+					if (ticker === 'BCH') {
+						this.setState({ satoshis: bchToSatoshis(amount) });
+					}
+				}
+
+				if (isRepeatable && isRepeatable !== prevIsRepeatable) {
+					this.startRepeatable();
+				}
+
+				if (watchAddress !== prevWatchAddress) {
+					if (watchAddress) {
+						this.setupWatchAddress();
+					} else {
+						const { intervalUnconfirmed } = this.state;
+						intervalUnconfirmed && clearInterval(intervalUnconfirmed);
+					}
 				}
 			}
 		}
 
 		render() {
-			const { currency, price, ...passThrough  } = this.props;
-			const { step, BCHPrice } = this.state;
-
-			const priceInCurrency = BCHPrice[currency] && BCHPrice[currency].price;
-			const satoshiDisplay = getSatoshiDisplayValue(priceInCurrency, price)
+			const { step, satoshis } = this.state;
 
 			return (
 				<Wrapped
-					{...passThrough}
-					currency={currency}
-					price={price}
-
+					{...this.props}
 					handleClick={this.handleClick}
 					step={step}
-					BCHPrice={BCHPrice}
-					satoshiDisplay={satoshiDisplay}
+					satoshis={satoshis}
 				/>
 			);
 		}
