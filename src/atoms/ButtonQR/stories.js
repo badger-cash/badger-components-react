@@ -39,7 +39,14 @@ storiesOf('ButtonQR', module)
 	.add(
 		'payment pending',
 		() => (
-			<ButtonQR {...props} step={'pending'}>
+			<ButtonQR
+				toAddress={text(
+					'To address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				amountSatoshis={number('Satoshis', 550)}
+				step={'pending'}
+			>
 				<Text>{ButtonText}</Text>
 			</ButtonQR>
 		),
@@ -50,7 +57,14 @@ storiesOf('ButtonQR', module)
 	.add(
 		'payment complete',
 		() => (
-			<ButtonQR {...props} step={'complete'}>
+			<ButtonQR
+				toAddress={text(
+					'To address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				amountSatoshis={number('Satoshis', 550)}
+				step={'complete'}
+			>
 				<Text>{ButtonText}</Text>
 			</ButtonQR>
 		),
@@ -61,7 +75,14 @@ storiesOf('ButtonQR', module)
 	.add(
 		'login prompt',
 		() => (
-			<ButtonQR {...props} step={'login'}>
+			<ButtonQR
+				toAddress={text(
+					'To address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				amountSatoshis={number('Satoshis', 550)}
+				step={'login'}
+			>
 				<Text>{ButtonText}</Text>
 			</ButtonQR>
 		),
@@ -72,7 +93,14 @@ storiesOf('ButtonQR', module)
 	.add(
 		'install prompt',
 		() => (
-			<ButtonQR {...props} step={'install'}>
+			<ButtonQR
+				toAddress={text(
+					'To address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				amountSatoshis={number('Satoshis', 550)}
+				step={'install'}
+			>
 				<Text>{ButtonText}</Text>
 			</ButtonQR>
 		),

@@ -108,7 +108,6 @@ storiesOf('BadgerBadge', module)
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
-				opReturn={array('OP_RETURN', defaultOpReturn)}
 				showQR={boolean('Toggle QR', false)}
 				successFn={() => console.log('success')}
 				failFn={() => console.log('fail')}
