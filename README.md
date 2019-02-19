@@ -6,6 +6,7 @@
 
 * [Homepage](https://badger.bitcoin.com)
 * [Component Showcase](http://badger-storybook.surge.sh)
+* [Developer Documentation](https://developer.bitcoin.com/badger)
 
 ### Install Component
 
