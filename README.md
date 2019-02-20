@@ -7,6 +7,7 @@
 * [Homepage](https://badger.bitcoin.com)
 * [Component Showcase](http://badger-storybook.surge.sh)
 * [Developer Documentation](https://developer.bitcoin.com/badger)
+* [NPM page](https://www.npmjs.com/package/badger-components-react)
 
 ### Install Component
 
