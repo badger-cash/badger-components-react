@@ -1,5 +1,9 @@
 # Changelog - Badger Components React
 
+## 0.2.1 (February 19, 2019)
+
+* Important hotfix, fixing URI/QR Code calculation amount
+
 ## 0.2.0 (February 18, 2019)
 
 Major changes to internal workings of the library.  Can now control amounts independently from Satoshis, should be the base work required to easily add SLP tokens in the near future.
