@@ -139,8 +139,10 @@ class ButtonQR extends React.PureComponent<Props> {
 		// QR code source
 		const uriBase = toAddress;
 
+		const amountBCH = amountSatoshis / 1e8;
+
 		const uri =
-			amountSatoshis > 0 ? `${uriBase}?amount=${amountSatoshis}` : uriBase;
+			amountSatoshis > 0 ? `${uriBase}?amount=${amountBCH}` : uriBase;
 
 		// State booleans
 		const isFresh = step === 'fresh';
