@@ -19,8 +19,8 @@ const INTERVAL_LOGIN = 1 * SECOND;
 const REPEAT_TIMEOUT = 4 * SECOND;
 const URI_CHECK_INTERVAL = 10 * SECOND;
 
-// Whitelist of valid tickers.
-type ValidTickers = 'BCH';
+// Whitelist of valid coinType.
+type ValidCoinTypes = 'BCH'  | 'SLP';
 
 type BadgerBaseProps = {
 	to: string,
@@ -29,8 +29,9 @@ type BadgerBaseProps = {
 	currency: CurrencyCode,
 	price?: number,
 
-	// Both present to price in ticker absolute amount
-	ticker: ValidTickers,
+	// Both present to price in coinType absolute amount
+	coinType: ValidCoinTypes,
+	tokenId: string,
 	amount?: number,
 
 	isRepeatable: boolean,
@@ -62,7 +63,9 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 	return class extends React.Component<BadgerBaseProps, State> {
 		static defaultProps = {
 			currency: 'USD',
-			ticker: 'BCH',
+			coinType: 'BCH',
+
+			tokenId: null,
 
 			isRepeatable: false,
 			watchAddress: false,
@@ -73,7 +76,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			step: 'fresh',
 
 			satoshis: null,
-			ticker: null,
+			// coinType: null,
 			unconfirmedCount: null,
 
 			intervalPrice: null,
@@ -232,7 +235,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 		async componentDidMount() {
 			if (typeof window !== 'undefined') {
-				const { price, ticker, amount, watchAddress } = this.props;
+				const { price, coinType, amount, watchAddress } = this.props;
 
 				// Watch for any source of payment to the address, not only Badger
 				if (watchAddress) {
@@ -243,11 +246,11 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					await this.updateSatoshisFiat();
 					this.setupSatoshisFiat();
 				} else if (amount) {
-					if (ticker === 'BCH') {
+					if (coinType === 'BCH') {
 						this.setState({ satoshis: bchToSatoshis(amount) });
 					} else {
 						this.addError(
-							`Ticker ${ticker} not supported by this version of badger-react-components`
+							`Coin type ${coinType} not supported by this version of badger-react-components`
 						);
 					}
 				}
@@ -277,7 +280,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			if (typeof window !== 'undefined') {
 				const {
 					currency,
-					ticker,
+					coinType,
 					price,
 					amount,
 					isRepeatable,
@@ -286,7 +289,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				const { intervalPrice } = this.state;
 
 				const prevCurrency = prevProps.currency;
-				const prevTicker = prevProps.ticker;
+				const prevCoinType = prevProps.coinType;
 				const prevPrice = prevProps.price;
 				const prevAmount = prevProps.amount;
 				const prevIsRepeatable = prevProps.isRepeatable;
@@ -297,10 +300,10 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					this.setupSatoshisFiat();
 				}
 
-				// Ticker or ticker amount changed
-				if (ticker !== prevTicker || amount !== prevAmount) {
-					// Currently BCH only ticker supported
-					if (ticker === 'BCH') {
+				// Coin type or  amount changed
+				if (coinType !== prevCoinType || amount !== prevAmount) {
+					// Currently BCH only coinType supported
+					if (coinType === 'BCH') {
 						this.setState({ satoshis: bchToSatoshis(amount) });
 					}
 				}

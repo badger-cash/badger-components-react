@@ -44,8 +44,8 @@ const Example = (props) => {
       <BadgerBadge to={toAddress} price={0.5} currency='USD' />
       <BadgerButton to={toAddress} price={1} currency='JPY' />
 
-      <BadgerBadge to={toAddress} amount={0.01} ticker='BCH' />
-      <BadgerButton to={toAddress} amount={0.0001} currency='BCH' />
+      <BadgerBadge to={toAddress} amount={0.01} coinType='BCH' />
+      <BadgerButton to={toAddress} amount={0.0001} coinType='BCH' />
 
       {/* More Complex Examples, pricing in fiat */}
       <BadgerBadge
@@ -78,7 +78,7 @@ const Example = (props) => {
       {/* Pricing in BCH */}
       <BadgerBadge
         amount={0.001} // Amount in crypto
-        ticker='BCH' // Defaults to BCH
+        coinType='BCH' // Defaults to BCH
         to='bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g' // Payment address
 
         isRepeatable // Reset to fresh state after a few seconds
@@ -114,7 +114,7 @@ const MyButton extends React.Component {
       to,
       price,
       currency,
-      ticker,
+      coinType,
       amount,
       satoshis,
       step,
