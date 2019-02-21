@@ -14,6 +14,11 @@ const defaultOpReturn = [
 	'Try out Badger at https://badger.bitcoin.com',
 ];
 
+
+const coinTypeOptions = ['BCH', 'SLP']
+// [ NAKAMOTO, DOGECASH ]
+const tokenIdOptions = ['df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb', '3916a24a051f8b3833a7fd128be51dd93015555ed9142d6106ec03267f5cdc4c']
+
 storiesOf('BadgerBadge', module)
 	.add(
 		'all knobs',
@@ -32,7 +37,7 @@ storiesOf('BadgerBadge', module)
 				repeatTimeout={number('Repeat Timeout (ms)', 4000)}
 				watchAddress={boolean('Watch Address All', true)}
 				showBrand={boolean('Toggle Brand', false)}
-				showSatoshis={boolean('Toggle Satoshis', true)}
+				showAmount={boolean('Toggle Amount', true)}
 				showQR={boolean('Toggle QR', true)}
 				showBorder={boolean('Toggle Border', false)}
 				successFn={() => console.log('success')}
@@ -54,13 +59,30 @@ storiesOf('BadgerBadge', module)
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
 				text={''}
-				showSatoshis={false}
+				showAmount={false}
 				showQR={boolean('Toggle QR', true)}
 			/>
 		),
 		{
 			notes:
 				'Minimal look of Badge',
+		}
+	).add(
+		'price in fiat',
+		() => (
+			<BadgerBadge
+				price={number('Price', 0.001)}
+				currency={select('Currency', currencyOptions, 'USD')}
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				successFn={() => console.log('success')}
+				failFn={() => console.log('fail')}
+			/>
+		),
+		{
+			notes: 'Pay in any currency, and automagically convert the amount to BCH',
 		}
 	)
 	.add(
@@ -73,6 +95,34 @@ storiesOf('BadgerBadge', module)
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
+			/>
+		),
+		{
+			notes:
+				'Badger Badges are perfect for showing the price and Satoshis in a simple clean all in one component.  Default has knobs to experiment with all settings',
+		}
+	).add(
+		'SLP tokens',
+		() => (
+			<BadgerBadge
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				coinType='SLP'
+				coinId={select('Token ID', tokenIdOptions)}
+				amount={number('Amount', 5)}
+				tag={text('Button Text', 'Send Tokens')}
+				text={'Send SLP Tokens'}
+				isRepeatable={boolean('Repeatable payment', false)}
+				repeatTimeout={number('Repeat Timeout (ms)', 4000)}
+				watchAddress={boolean('Watch Address All', true)}
+				showBrand={boolean('Toggle Brand', false)}
+				showAmount={boolean('Toggle Satoshis', true)}
+				showQR={boolean('Toggle QR', true)}
+				showBorder={boolean('Toggle Border', false)}
+				successFn={() => console.log('success')}
+				failFn={() => console.log('fail')}
 			/>
 		),
 		{
@@ -98,24 +148,6 @@ storiesOf('BadgerBadge', module)
 		),
 		{
 			notes: 'Customize the title and button text',
-		}
-	)
-	.add(
-		'currency variety',
-		() => (
-			<BadgerBadge
-				price={number('Price', 0.001)}
-				currency={select('Currency', currencyOptions, 'USD')}
-				to={text(
-					'To Address',
-					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
-				)}
-				successFn={() => console.log('success')}
-				failFn={() => console.log('fail')}
-			/>
-		),
-		{
-			notes: 'Pay in any currency, and automagically convert the amount to BCH',
 		}
 	)
 	.add(
@@ -146,7 +178,7 @@ storiesOf('BadgerBadge', module)
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
-				showSatoshis={boolean('Show Satoshis', false)}
+				showAmount={boolean('Show Satoshis', false)}
 				successFn={() => console.log('success')}
 				failFn={() => console.log('fail')}
 			/>

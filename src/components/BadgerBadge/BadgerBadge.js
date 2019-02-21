@@ -17,6 +17,8 @@ import BadgerBase, {
 } from '../../hoc/BadgerBase';
 
 import BitcoinCashImage from '../../images/bitcoin-cash.svg';
+import SLPLogoImage from '../../images/slp-logo.png'
+
 import colors from '../../styles/colors';
 
 import Button from '../../atoms/Button';
@@ -101,8 +103,8 @@ type Props = BadgerBaseProps & {
 	tag?: string,
 	step: ButtonStates,
 
-	showSatoshis?: boolean,
-	satoshis: number,
+	showAmount?: boolean,
+	coinAmount: number,
 
 	showBrand?: boolean,
 	showQR?: boolean,
@@ -116,7 +118,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 		currency: 'USD',
 		tag: 'Badger Pay',
 		text: 'Payment Total',
-		showSatoshis: true,
+		showAmount: true,
 		showBrand: false,
 		showQR: true,
 		showBorder: false,
@@ -125,18 +127,23 @@ class BadgerBadge extends React.PureComponent<Props> {
 	render() {
 		const {
 			text,
-			price,
 			currency,
+			price,
+			coinType,
+			coinSymbol,
+			amount,
 			tag,
 			step,
-			satoshis,
-			showSatoshis,
+			// showSatoshis,
+			showAmount,
 			showQR,
 			showBorder,
 			showBrand,
 			handleClick,
 			to,
 		} = this.props;
+
+		// const showAmount = showSatoshis // move to a prop;
 
 		return (
 			<Outer>
@@ -152,7 +159,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 								<Small>{currency}</Small>
 							</>
 						)}
-						{showSatoshis && (
+						{showAmount && (
 							<>
 								<PriceText>
 									<img
@@ -164,6 +171,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 								</PriceText>
 								<Small>BCH</Small>
 							</>
+
 						)}
 					</Prices>
 					<ButtonContainer>

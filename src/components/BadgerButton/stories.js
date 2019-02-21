@@ -81,7 +81,7 @@ storiesOf('BadgerButton', module)
 		'price in BCH',
 		() => (
 			<BadgerButton
-				ticker={'BCH'}
+				coinType={'BCH'}
 				amount={number('BCH amount', 0.001)}
 				to={text(
 					'To Address',

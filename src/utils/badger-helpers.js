@@ -49,6 +49,13 @@ const priceToSatoshis = (BCHRate: number, price: number): number => {
 	return Math.floor(price * singleDollarSatoshis);
 };
 
+// const priceToBCH = (BCHRate: number, price:number):number => {
+// 	const satoshis = priceToSatoshis(BCHRate, price);
+
+// 	const singleDollarSatoshis = 100000000 / singleDollarValue;
+// 	const satoshis = 
+// }
+
 const fiatToSatoshis = async (
 	currency: CurrencyCode,
 	price: number
@@ -60,8 +67,8 @@ const fiatToSatoshis = async (
 	return satoshis;
 };
 
-const bchToSatoshis = (bchAmount: number): number => {
-	return bchAmount * 1e8;
+const bchToSatoshis = (bchAmount: ?number): ?number => {
+	return bchAmount ? bchAmount * 1e8 : null;
 };
 
 export {
