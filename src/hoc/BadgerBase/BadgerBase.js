@@ -6,8 +6,9 @@ import debounce from 'lodash/debounce';
 
 import {
 	fiatToSatoshis,
-	bchToSatoshis,
+	adjustAmount,
 	getAddressUnconfirmed,
+	getTokenInfo
 } from '../../utils/badger-helpers';
 
 import { type CurrencyCode } from '../../utils/currency-helpers';
@@ -80,7 +81,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 			satoshis: null,
 			coinSymbol: null,
-			coinDecimals: 8, // TODO
+			coinDecimals: null, // TODO
 
 			unconfirmedCount: null,
 
@@ -126,6 +127,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				tokenId,
 				coinType,
 			} = this.props;
+
 			const { satoshis } = this.state;
 
 			// Satoshis might not set be set during server rendering
@@ -263,6 +265,28 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			this.setState({ intervalUnconfirmed: intervalUnconfirmedNext });
 		};
 
+		setupCoinMeta = async () => {
+			const { coinType, tokenId } = this.props;
+			console.log(tokenId)
+			if(coinType === 'BCH') {
+				this.setState({
+					coinSymbol: 'BCH',
+					coinDecimals: 8
+				})
+			} else if ( coinType === 'SLP' && tokenId) {
+				const tokenInfo = await getTokenInfo(tokenId)
+
+				const { symbol, decimals } = tokenInfo;
+				this.setState({
+					coinSymbol: symbol,
+					coinDecimals: decimals,
+				})
+
+				console.log('got it')
+				console.log(tokenInfo)
+			}
+		}
+
 		async componentDidMount() {
 			if (typeof window !== 'undefined') {
 				const { price, coinType, amount, watchAddress } = this.props;
@@ -276,6 +300,8 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					// await this.updateSatoshisFiat();
 					this.setupSatoshisFiat();
 				}
+
+				this.setupCoinMeta();
 				// else if (amount) {
 				// 	if (coinType === 'BCH') {
 				// 		this.setState({ satoshis: bchToSatoshis(amount), tokenAmount: null });
@@ -318,6 +344,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					amount,
 					isRepeatable,
 					watchAddress,
+					tokenId,
 				} = this.props;
 				const { intervalPrice } = this.state;
 
@@ -327,6 +354,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				const prevAmount = prevProps.amount;
 				const prevIsRepeatable = prevProps.isRepeatable;
 				const prevWatchAddress = prevProps.watchAddress;
+				const prevTokenId = prevProps.tokenId
 
 				// Fiat price or currency changes
 				if (currency !== prevCurrency || price !== prevPrice) {
@@ -345,6 +373,10 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					this.startRepeatable();
 				}
 
+				if(tokenId !== prevTokenId) {
+					this.setupCoinMeta();
+				}
+
 				if (watchAddress !== prevWatchAddress) {
 					if (watchAddress) {
 						this.setupWatchAddress();
@@ -358,7 +390,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 		render() {
 			const { amount } = this.props;
-			const { step, satoshis, decimals, coinSymbol } = this.state;
+			const { step, satoshis, coinDecimals, coinSymbol } = this.state;
 
 			// console.log('----')
 			// console.log(amount)
@@ -366,7 +398,9 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 			// if amount is set for BCH or SLP - use that valueDirect
 			// satoshis come from the fiat conversion rate
-			const calculatedAmount = bchToSatoshis(amount) || satoshis;
+			const calculatedAmount = adjustAmount(amount, coinDecimals) || satoshis;
+
+			console.log(this.props)
 
 			return (
 				<Wrapped
@@ -374,14 +408,14 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					handleClick={this.handleClick}
 					step={step}
 					amount={calculatedAmount}
-					coinDecimals={decimals}
-					// satoshis={calculatedAmount}
+					coinDecimals={coinDecimals}
+					coinSymbol={coinSymbol}
 				/>
 			);
 		}
 	};
 };
 
-export type { BadgerBaseProps, ButtonStates };
+export type { BadgerBaseProps, ButtonStates, ValidCoinTypes };
 
 export default BadgerBase;

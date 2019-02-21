@@ -7,6 +7,7 @@ import {
 	getCurrencyPreSymbol,
 	formatPriceDisplay,
 	formatSatoshis,
+	formatAmount,
 } from '../../utils/badger-helpers';
 
 import { type CurrencyCode } from '../../utils/currency-helpers';
@@ -14,6 +15,7 @@ import { type CurrencyCode } from '../../utils/currency-helpers';
 import BadgerBase, {
 	type ButtonStates,
 	type BadgerBaseProps,
+	type ValidCoinTypes,
 } from '../../hoc/BadgerBase';
 
 import BitcoinCashImage from '../../images/bitcoin-cash.svg';
@@ -104,6 +106,8 @@ type Props = BadgerBaseProps & {
 	step: ButtonStates,
 
 	showAmount?: boolean,
+	coinType: ValidCoinTypes,
+	coinSymbol: string,
 	coinAmount: number,
 
 	showBrand?: boolean,
@@ -131,6 +135,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 			price,
 			coinType,
 			coinSymbol,
+			coinDecimals,
 			amount,
 			tag,
 			step,
@@ -144,6 +149,8 @@ class BadgerBadge extends React.PureComponent<Props> {
 		} = this.props;
 
 		// const showAmount = showSatoshis // move to a prop;
+
+		const CoinImage = coinType === 'BCH' ? BitcoinCashImage : SLPLogoImage;
 
 		return (
 			<Outer>
@@ -163,13 +170,13 @@ class BadgerBadge extends React.PureComponent<Props> {
 							<>
 								<PriceText>
 									<img
-										src={BitcoinCashImage}
+										src={CoinImage}
 										style={{ height: 14 }}
-										alt="BCH"
+										alt={coinType}
 									/>{' '}
-									{formatSatoshis(satoshis)}
+									{formatAmount(amount, coinDecimals)}
 								</PriceText>
-								<Small>BCH</Small>
+								<Small>{coinSymbol}</Small>
 							</>
 
 						)}
@@ -179,7 +186,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 							<ButtonQR
 								onClick={handleClick}
 								step={step}
-								amountSatoshis={satoshis}
+								amountSatoshis={amount}
 								toAddress={to}
 							>
 								<Text>{tag}</Text>
