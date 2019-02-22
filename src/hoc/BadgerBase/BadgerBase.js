@@ -167,7 +167,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 						  }
 						: txParamsBase;
 
-				const txParams = opReturn
+				const txParams = (opReturn && opReturn.length)
 					? { ...txParamsSLP, opReturn: { data: opReturn } }
 					: txParamsSLP;
 
