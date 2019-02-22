@@ -76,6 +76,7 @@ storiesOf('BadgerButton', module)
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
 				showSatoshis={false}
+				showQR={boolean('QR?', true)}
 			/>
 		),
 		{
@@ -146,6 +147,7 @@ storiesOf('BadgerButton', module)
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
+				text={text('text', '')}
 				successFn={() => console.log('success example function called')}
 				failFn={() => console.log('fail example function called')}
 			/>

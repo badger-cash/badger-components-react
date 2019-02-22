@@ -20,8 +20,6 @@ const getTokenInfo = async (coinId: string): Promise<any> => {
 		`https://rest.bitcoin.com/v2/slp/list/${coinId}`
 	)
 	const tokenInfo = await tokenInfoRequest.json()
-	console.log('token')
-	console.log(tokenInfo);
 	return tokenInfo;
 }
 
@@ -42,20 +40,12 @@ const formatAmount = (amount: ?number, decimals: ?number) : string => {
 	if(!amount) {
 		return `-.`.padEnd(decimals + 2, '-');
 	}
-	return (amount / Math.pow(10, decimals)).toFixed(decimals);
+	const adjustDecimals = (amount / Math.pow(10, decimals)).toFixed(decimals);
+	const removeTrailing = +adjustDecimals+"";
+
+	return removeTrailing;
 }
 
-const getSatoshiDisplayValue = (
-	priceInCurrency: ?number,
-	price: number
-): string => {
-	if (!priceInCurrency) {
-		return '-.--------';
-	}
-	const singleDollarValue = priceInCurrency / 100;
-	const singleDollarSatoshis = 100000000 / singleDollarValue;
-	return (Math.trunc(price * singleDollarSatoshis) / 100000000).toFixed(8);
-};
 
 const priceToSatoshis = (BCHRate: number, price: number): number => {
 	const singleDollarValue = BCHRate / 100;
@@ -86,7 +76,6 @@ export {
 	formatPriceDisplay,
 	getAddressUnconfirmed,
 	getCurrencyPreSymbol,
-	getSatoshiDisplayValue,
 	getTokenInfo,
 	priceToSatoshis,
 };

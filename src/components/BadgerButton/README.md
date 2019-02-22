@@ -31,7 +31,7 @@ class MyClass extends React.PureComponent {
 					opReturn={["0x6d02", "Hello BadgerButton"]}
 
 					showBorder={false}
-					showSatoshis={true}
+					showAmount={true}
 					showQR={false}
 					isRepeatable={false}
 					repeatTimeout={4000}

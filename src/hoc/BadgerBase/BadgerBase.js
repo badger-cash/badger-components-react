@@ -81,7 +81,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 			satoshis: null,
 			coinSymbol: null,
-			coinDecimals: null, // TODO
+			coinDecimals: null,
 
 			unconfirmedCount: null,
 
@@ -104,7 +104,6 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		paymentSendSuccess = () => {
 			const { isRepeatable } = this.props;
 			const { intervalUnconfirmed, unconfirmedCount } = this.state;
-			console.log('3');
 
 			this.setState({
 				step: 'complete',
@@ -268,7 +267,6 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 		setupCoinMeta = async () => {
 			const { coinType, tokenId } = this.props;
-			console.log(tokenId);
 			if (coinType === 'BCH') {
 				this.setState({
 					coinSymbol: 'BCH',
