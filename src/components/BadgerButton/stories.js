@@ -13,6 +13,12 @@ const defaultOpReturn = [
 	'Learn to build on BCH at https://developer.bitcoin.com',
 ];
 
+
+const coinTypeOptions = ['BCH', 'SLP']
+
+// [ NAKAMOTO, DOGECASH, BROC ]
+const tokenIdOptions = ['df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb', '3916a24a051f8b3833a7fd128be51dd93015555ed9142d6106ec03267f5cdc4c', '259908ae44f46ef585edef4bcc1e50dc06e4c391ac4be929fae27235b8158cf1']
+
 storiesOf('BadgerButton', module)
 	.add(
 		'default',
@@ -24,7 +30,7 @@ storiesOf('BadgerButton', module)
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
-				opReturn={array('OP_RETURN', defaultOpReturn)}
+				opReturn={array('OP_RETURN', [])}
 				successFn={() => console.log('success example function called')}
 				failFn={() => console.log('fail example function called')}
 			/>
@@ -35,7 +41,7 @@ storiesOf('BadgerButton', module)
 		}
 	)
 	.add(
-		'all knobs',
+		'most knobs',
 		() => (
 			<BadgerButton
 				price={number('Price', 0.001)}
@@ -78,11 +84,28 @@ storiesOf('BadgerButton', module)
 		}
 	)
 	.add(
+		'price in fiat',
+		() => (
+			<BadgerButton
+				price={number('Price', 0.001)}
+				currency={select('Currency', currencyOptions, 'USD')}
+				text="Pay with Badger"
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+			/>
+		),
+		{
+			notes: 'Change the currency and price',
+		}
+	)
+	.add(
 		'price in BCH',
 		() => (
 			<BadgerButton
-				coinType={'BCH'}
-				amount={number('BCH amount', 0.001)}
+				coinType='BCH'
+				amount={number('Amountt', 0.001)}
 				to={text(
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
@@ -91,6 +114,26 @@ storiesOf('BadgerButton', module)
 		),
 		{
 			notes: 'Without a text prop, it only shows the price',
+		}
+	)
+	.add(
+		'SLP tokens',
+		() => (
+			<BadgerButton
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				coinType='SLP'
+				tokenId={select('Token ID', tokenIdOptions, tokenIdOptions[0])}
+				amount={number('Amount', 5)}
+				text='Send SLP Tokens'
+				showAmount={boolean('Toggle Amount', true)}
+			/>
+		),
+		{
+			notes:
+			'Enter the token ID and send whichever SLP tokens you want!',
 		}
 	)
 	.add(
@@ -127,23 +170,7 @@ storiesOf('BadgerButton', module)
 			notes: 'Optional use a QR code in addition to Button',
 		}
 	)
-	.add(
-		'currency variety',
-		() => (
-			<BadgerButton
-				price={number('Price', 0.001)}
-				currency={select('Currency', currencyOptions, 'USD')}
-				text="Pay with Badger"
-				to={text(
-					'To Address',
-					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
-				)}
-			/>
-		),
-		{
-			notes: 'Change the currency and price',
-		}
-	)
+	
 	.add(
 		'toggle Satoshis',
 		() => (

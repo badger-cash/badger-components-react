@@ -6,13 +6,15 @@ import styled from 'styled-components';
 import {
 	getCurrencyPreSymbol,
 	formatPriceDisplay,
-	formatSatoshis,
+	formatAmount,
 } from '../../utils/badger-helpers';
 
 import { type CurrencyCode } from '../../utils/currency-helpers';
 
 import colors from '../../styles/colors';
+
 import BitcoinCashImage from '../../images/bitcoin-cash.svg';
+import SLPLogoImage from '../../images/slp-logo.png';
 
 import BadgerBase, {
 	type ButtonStates,
@@ -24,7 +26,6 @@ import Button from '../../atoms/Button';
 import ButtonQR from '../../atoms/ButtonQR';
 import Small from '../../atoms/Small';
 import Text from '../../atoms/Text';
-
 
 const SatoshiText = styled.p`
 	font-size: 12px;
@@ -85,7 +86,7 @@ class BadgerButton extends React.PureComponent<Props> {
 
 			currency,
 			price,
-			
+
 			coinType,
 			coinSymbol,
 			coinDecimals,
@@ -96,6 +97,8 @@ class BadgerButton extends React.PureComponent<Props> {
 			showBorder,
 			showQR,
 		} = this.props;
+
+		const CoinImage = coinType === 'BCH' ? BitcoinCashImage : SLPLogoImage;
 
 		return (
 			<Outer>
@@ -133,13 +136,13 @@ class BadgerButton extends React.PureComponent<Props> {
 					{showAmount && (
 						<SatoshiText>
 							<img
-								src={BitcoinCashImage}
+								src={CoinImage}
 								style={{ height: 14, margin: 0 }}
-								alt="BCH"
+								alt={coinType}
 							/>{' '}
-							BCH{' '}
+							{coinSymbol}{' '}
 							<span style={{ fontFamily: 'monospace' }}>
-								{formatSatoshis(amount)}
+								{formatAmount(amount, coinDecimals)}
 							</span>
 						</SatoshiText>
 					)}

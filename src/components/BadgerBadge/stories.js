@@ -16,12 +16,13 @@ const defaultOpReturn = [
 
 
 const coinTypeOptions = ['BCH', 'SLP']
+
 // [ NAKAMOTO, DOGECASH, BROC ]
 const tokenIdOptions = ['df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb', '3916a24a051f8b3833a7fd128be51dd93015555ed9142d6106ec03267f5cdc4c', '259908ae44f46ef585edef4bcc1e50dc06e4c391ac4be929fae27235b8158cf1']
 
 storiesOf('BadgerBadge', module)
 	.add(
-		'all knobs',
+		'most knobs',
 		() => (
 			<BadgerBadge
 				price={number('Price', 0.001)}
@@ -30,7 +31,7 @@ storiesOf('BadgerBadge', module)
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
-				opReturn={array('OP_RETURN', defaultOpReturn)}
+				opReturn={array('OP_RETURN', [])}
 				tag={text('Button Text', 'Badger Pay')}
 				text={text('Top Text', 'Payment Total')}
 				isRepeatable={boolean('Repeatable payment', false)}
@@ -90,7 +91,7 @@ storiesOf('BadgerBadge', module)
 		() => (
 			<BadgerBadge
 				coinType="BCH"
-				amount={number('BCH Amount', 0.0001)}
+				amount={number('Amount', 0.0001)}
 				to={text(
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
@@ -119,7 +120,7 @@ storiesOf('BadgerBadge', module)
 		),
 		{
 			notes:
-				'Badger Badges are perfect for showing the price and Satoshis in a simple clean all in one component.  Default has knobs to experiment with all settings',
+				'Enter the token ID and send whichever SLP tokens you want!',
 		}
 	)
 	.add(

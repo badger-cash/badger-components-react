@@ -122,7 +122,7 @@ type Props = {
 	step: ButtonStates,
 	children: React.Node,
 	toAddress: string,
-	amountSatoshis: number,
+	amountSatoshis: ?number,
 	sizeQR: number,
 };
 
@@ -139,10 +139,9 @@ class ButtonQR extends React.PureComponent<Props> {
 		// QR code source
 		const uriBase = toAddress;
 
-		const amountBCH = amountSatoshis / 1e8;
-
-		const uri =
-			amountSatoshis > 0 ? `${uriBase}?amount=${amountBCH}` : uriBase;
+		const uri = amountSatoshis
+			? `${uriBase}?amount=${amountSatoshis / 1e8}`
+			: uriBase;
 
 		// State booleans
 		const isFresh = step === 'fresh';

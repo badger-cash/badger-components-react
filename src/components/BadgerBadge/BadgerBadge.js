@@ -6,7 +6,6 @@ import styled, { css } from 'styled-components';
 import {
 	getCurrencyPreSymbol,
 	formatPriceDisplay,
-	formatSatoshis,
 	formatAmount,
 } from '../../utils/badger-helpers';
 

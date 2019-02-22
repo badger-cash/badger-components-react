@@ -34,12 +34,6 @@ const formatPriceDisplay = (price?: number): ?number => {
 	return +price.toFixed(5);
 };
 
-const formatSatoshis = (satoshis: ?number): string => {
-	if (!satoshis) {
-		return '-.--------';
-	}
-	return (satoshis / 100000000).toFixed(8);
-};
 
 const formatAmount = (amount: ?number, decimals: ?number) : string => {
 	if(decimals == null) {
@@ -69,13 +63,6 @@ const priceToSatoshis = (BCHRate: number, price: number): number => {
 	return Math.floor(price * singleDollarSatoshis);
 };
 
-// const priceToBCH = (BCHRate: number, price:number):number => {
-// 	const satoshis = priceToSatoshis(BCHRate, price);
-
-// 	const singleDollarSatoshis = 100000000 / singleDollarValue;
-// 	const satoshis = 
-// }
-
 const fiatToSatoshis = async (
 	currency: CurrencyCode,
 	price: number
@@ -91,15 +78,12 @@ const adjustAmount = (amount: ?number, decimals: ?number): ?number => {
 	return amount ? amount * Math.pow(10, decimals) : null;
 };
 
-// const 
-
 export {
 	adjustAmount,
 	buildPriceEndpoint,
 	fiatToSatoshis,
 	formatAmount,
 	formatPriceDisplay,
-	formatSatoshis,
 	getAddressUnconfirmed,
 	getCurrencyPreSymbol,
 	getSatoshiDisplayValue,
