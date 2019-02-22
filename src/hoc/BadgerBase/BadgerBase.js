@@ -124,9 +124,9 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				successFn,
 				failFn,
 				opReturn,
+				coinType,
 				isRepeatable,
 				tokenId,
-				coinType,
 			} = this.props;
 
 			const { satoshis } = this.state;
@@ -150,10 +150,13 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					return;
 				}
 
+				// BCH amount = satoshis, SLP amount = absolute value
+				const calculatedValue = (coinType === 'BCH' && amount) ? amount*1e8 : amount || satoshis;
+
 				const txParamsBase = {
 					to,
 					from: defaultAccount,
-					value: amount || satoshis,
+					value: calculatedValue
 				};
 
 				const txParamsSLP =

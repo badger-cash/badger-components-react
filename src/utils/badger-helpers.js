@@ -64,7 +64,7 @@ const fiatToSatoshis = async (
 	return satoshis;
 };
 
-const adjustAmount = (amount: ?number, decimals: ?number): ?number => {
+const adjustAmount = (amount: ?number, decimals: number): ?number => {
 	return amount ? amount * Math.pow(10, decimals) : null;
 };
 
