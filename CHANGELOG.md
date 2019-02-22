@@ -1,21 +1,23 @@
 # Changelog - Badger Components React
 
-## 0.3.0 (February xx, 2019)
+## 0.3.0 (February 22, 2019)
 
-SLP support added
+SLP support added  🎉
 
 ### BadgerBase (HOC)
 
-* Added SLP support to Base and all components which use this HOC
+* Added SLP support to BadgerBase and all components which use this HOC
+* Amounts of coins/tokens show as many decimals as needed rather than the most possible
 * new props
-  * ``
+  * `tokenId` - ID of SLP token when `coinType` is set to `SLP`
 * changed props
   * `ticker` => `coinType`
     * Renamed as many coins/tokens can share a ticker.  `coinType` denotes the coin or token protocol.   `BCH`, `SLP` supported currently, with others potentially in the future.
+  * `showQR` - Will only show a QR code if the transaction and options can be encoded in BIP44 URI's
 
 ## 0.2.1 (February 19, 2019)
 
-* Hotfix - fixing URI/QR Code satoshi calculation 
+* Fixing URI/QR Code Satoshi calculation
 
 ## 0.2.0 (February 18, 2019)
 
