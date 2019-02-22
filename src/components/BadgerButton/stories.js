@@ -56,7 +56,7 @@ storiesOf('BadgerButton', module)
 				successFn={() => console.log('success example function called')}
 				failFn={() => console.log('fail example function called')}
 				text={text('Top Text', 'Badger Pay')}
-				showSatoshis={boolean('Toggle Satoshis', true)}
+				showAmount={boolean('Toggle coin amount', false)}
 				showBorder={boolean('Toggle Border', true)}
 				showQR={boolean('Show QR', false)}
 			/>
@@ -97,7 +97,7 @@ storiesOf('BadgerButton', module)
 			/>
 		),
 		{
-			notes: 'Change the currency and price',
+			notes: 'Change the currency and price to charge in any fiat currency equivalent of BCH',
 		}
 	)
 	.add(
@@ -117,7 +117,7 @@ storiesOf('BadgerButton', module)
 		}
 	)
 	.add(
-		'SLP tokens',
+		'price in SLP tokens',
 		() => (
 			<BadgerButton
 				to={text(
@@ -167,15 +167,15 @@ storiesOf('BadgerButton', module)
 			/>
 		),
 		{
-			notes: 'Optional use a QR code in addition to Button',
+			notes: 'Optional QR code in addition to Button.  Only shows if transaction fully compatible in a URI',
 		}
 	)
 	
 	.add(
-		'toggle Satoshis',
+		'toggle coin amount',
 		() => (
 			<BadgerButton
-				showSatoshis={boolean('Toggle Satoshis', false)}
+				showAmount={boolean('Toggle coin amount', false)}
 				price={0.001}
 				currency={'USD'}
 				text="Pay now"
@@ -186,7 +186,7 @@ storiesOf('BadgerButton', module)
 			/>
 		),
 		{
-			notes: 'Change the currency and price',
+			notes: 'Choose to show the coin or token amount',
 		}
 	)
 	.add(

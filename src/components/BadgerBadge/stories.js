@@ -47,7 +47,7 @@ storiesOf('BadgerBadge', module)
 		),
 		{
 			notes:
-				'Badger Badges are perfect for showing the price and Satoshis in a simple clean all in one component.  Default has knobs to experiment with all settings',
+				'Badger Badges are perfect for showing the price and amount in a simple clean all in one component.  Default has knobs to experiment with all settings',
 		}
 	)
 	.add(
@@ -103,7 +103,7 @@ storiesOf('BadgerBadge', module)
 				'Badger Badges are perfect for showing the price and Satoshis in a simple clean all in one component.  Default has knobs to experiment with all settings',
 		}
 	).add(
-		'SLP tokens',
+		'price in SLP tokens',
 		() => (
 			<BadgerBadge
 				to={text(
@@ -159,11 +159,11 @@ storiesOf('BadgerBadge', module)
 		),
 		{
 			notes:
-				'Badger Badges are perfect for showing the price and Satoshis in a simple clean all in one component.  Default has knobs to experiment with all settings',
+				'Optional QR code in addition to Button.  Only shows if transaction fully compatible in a URI',
 		}
 	)
 	.add(
-		'toggle satoshis',
+		'toggle coin amount',
 		() => (
 			<BadgerBadge
 				price={0.001}
@@ -177,7 +177,7 @@ storiesOf('BadgerBadge', module)
 			/>
 		),
 		{
-			notes: 'Choose to show the Satoshi amount alongside the currency amount',
+			notes: 'Choose to show the coin or token amount',
 		}
 	)
 	.add(
