@@ -28,6 +28,7 @@ const QRCodeWrapper = styled.div`
 	border: 1px solid ${colors.fg500};
 	border-radius: 5px 5px 0 0;
 	border-bottom: none;
+	background-color: white;
 `;
 
 const A = styled.a`
