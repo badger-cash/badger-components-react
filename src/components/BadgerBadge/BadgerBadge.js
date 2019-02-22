@@ -106,7 +106,6 @@ type Props = BadgerBaseProps & {
 	step: ButtonStates,
 
 	showAmount?: boolean,
-	coinType: ValidCoinTypes,
 	coinSymbol: string,
 	coinAmount: number,
 	coinDecimals?: number,
@@ -131,25 +130,26 @@ class BadgerBadge extends React.PureComponent<Props> {
 
 	render() {
 		const {
-			text,
+			to,
+			step,
+			handleClick,
+
 			currency,
 			price,
+
 			coinType,
 			coinSymbol,
 			coinDecimals,
 			amount,
+
+			text,
 			tag,
-			step,
-			// showSatoshis,
+
 			showAmount,
 			showQR,
 			showBorder,
 			showBrand,
-			handleClick,
-			to,
 		} = this.props;
-
-		// const showAmount = showSatoshis // move to a prop;
 
 		const CoinImage = coinType === 'BCH' ? BitcoinCashImage : SLPLogoImage;
 

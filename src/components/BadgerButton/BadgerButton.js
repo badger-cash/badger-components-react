@@ -17,12 +17,14 @@ import BitcoinCashImage from '../../images/bitcoin-cash.svg';
 import BadgerBase, {
 	type ButtonStates,
 	type BadgerBaseProps,
+	type ValidCoinTypes,
 } from '../../hoc/BadgerBase';
 
 import Button from '../../atoms/Button';
 import ButtonQR from '../../atoms/ButtonQR';
 import Small from '../../atoms/Small';
 import Text from '../../atoms/Text';
+
 
 const SatoshiText = styled.p`
 	font-size: 12px;
@@ -56,11 +58,14 @@ const Wrapper = styled.div`
 type Props = BadgerBaseProps & {
 	text?: string,
 
-	showSatoshis?: boolean,
+	showAmount?: boolean,
 	showBorder?: boolean,
 	showQR?: boolean,
 
-	satoshis: number,
+	showAmount?: boolean,
+	coinSymbol: string,
+	coinDecimals?: number,
+
 	handleClick: Function,
 	step: ButtonStates,
 };
@@ -74,14 +79,20 @@ class BadgerButton extends React.PureComponent<Props> {
 
 	render() {
 		const {
-			text,
-			price,
 			to,
-			currency,
 			step,
 			handleClick,
-			showSatoshis,
-			satoshis,
+
+			currency,
+			price,
+			
+			coinType,
+			coinSymbol,
+			coinDecimals,
+			amount,
+			showAmount,
+
+			text,
 			showBorder,
 			showQR,
 		} = this.props;
@@ -92,7 +103,7 @@ class BadgerButton extends React.PureComponent<Props> {
 					<Text style={{ textAlign: 'center' }}>{text}</Text>
 					{showQR ? (
 						<ButtonQR
-							amountSatoshis={satoshis}
+							amountSatoshis={amount}
 							toAddress={to}
 							onClick={handleClick}
 							step={step}
@@ -119,7 +130,7 @@ class BadgerButton extends React.PureComponent<Props> {
 						</Button>
 					)}
 
-					{showSatoshis && (
+					{showAmount && (
 						<SatoshiText>
 							<img
 								src={BitcoinCashImage}
@@ -128,7 +139,7 @@ class BadgerButton extends React.PureComponent<Props> {
 							/>{' '}
 							BCH{' '}
 							<span style={{ fontFamily: 'monospace' }}>
-								{formatSatoshis(satoshis)}
+								{formatSatoshis(amount)}
 							</span>
 						</SatoshiText>
 					)}
