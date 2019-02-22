@@ -109,6 +109,7 @@ type Props = BadgerBaseProps & {
 	coinType: ValidCoinTypes,
 	coinSymbol: string,
 	coinAmount: number,
+	coinDecimals?: number,
 
 	showBrand?: boolean,
 	showQR?: boolean,

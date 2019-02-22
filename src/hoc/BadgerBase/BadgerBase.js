@@ -56,7 +56,7 @@ type State = {
 	satoshis: ?number, // Used when converting fiat to BCH
 
 	coinSymbol: ?string,
-	coinDecimals: number,
+	coinDecimals: ?number,
 	unconfirmedCount: ?number,
 
 	intervalPrice: ?IntervalID,
@@ -104,11 +104,13 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		paymentSendSuccess = () => {
 			const { isRepeatable } = this.props;
 			const { intervalUnconfirmed, unconfirmedCount } = this.state;
+			console.log('3')
 
 			this.setState({
 				step: 'complete',
 				unconfirmedCount: unconfirmedCount + 1,
 			});
+
 			if (isRepeatable) {
 				this.startRepeatable();
 			} else {
@@ -257,7 +259,8 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				const unconfirmedCount = targetTransactions.length;
 
 				this.setState({ unconfirmedCount });
-				if (prevUnconfirmedCount && unconfirmedCount > prevUnconfirmedCount) {
+				if (prevUnconfirmedCount != null && unconfirmedCount > prevUnconfirmedCount) {
+					console.log('success?')
 					this.paymentSendSuccess();
 				}
 			}, URI_CHECK_INTERVAL);
@@ -274,6 +277,10 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					coinDecimals: 8
 				})
 			} else if ( coinType === 'SLP' && tokenId) {
+				this.setState({
+					coinSymbol: null,
+					coinDecimals: null,
+				})
 				const tokenInfo = await getTokenInfo(tokenId)
 
 				const { symbol, decimals } = tokenInfo;
@@ -282,8 +289,6 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					coinDecimals: decimals,
 				})
 
-				console.log('got it')
-				console.log(tokenInfo)
 			}
 		}
 
@@ -291,30 +296,12 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			if (typeof window !== 'undefined') {
 				const { price, coinType, amount, watchAddress } = this.props;
 
-				// Watch for any source of payment to the address, not only Badger
-				if (watchAddress) {
-					this.setupWatchAddress();
-				}
-
-				if (price) {
-					// await this.updateSatoshisFiat();
-					this.setupSatoshisFiat();
-				}
-
+				// setup state, intervals, and listeners
+				watchAddress && this.setupWatchAddress();
+				price && this.setupSatoshisFiat();
 				this.setupCoinMeta();
-				// else if (amount) {
-				// 	if (coinType === 'BCH') {
-				// 		this.setState({ satoshis: bchToSatoshis(amount), tokenAmount: null });
-				// 	} else if (coinType === 'SLP') {
-				// 		this.setState({satoshis: null, tokenAmount: amount })
-				// 	} else {
-				// 		this.addError(
-				// 			`Coin type ${coinType} not supported by this version of badger-react-components`
-				// 		);
-				// 	}
-				// }
 
-				// Determine if button should show login or install CTA
+				// Detect Badger and determine if button should show login or install CTA
 				if (window.Web4Bch) {
 					const { web4bch } = window;
 					const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
@@ -391,13 +378,6 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		render() {
 			const { amount } = this.props;
 			const { step, satoshis, coinDecimals, coinSymbol } = this.state;
-
-			// console.log('----')
-			// console.log(amount)
-			// console.log(satoshis)
-
-			// if amount is set for BCH or SLP - use that valueDirect
-			// satoshis come from the fiat conversion rate
 			const calculatedAmount = adjustAmount(amount, coinDecimals) || satoshis;
 
 			console.log(this.props)
