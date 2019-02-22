@@ -8,7 +8,7 @@ import {
 	fiatToSatoshis,
 	adjustAmount,
 	getAddressUnconfirmed,
-	getTokenInfo
+	getTokenInfo,
 } from '../../utils/badger-helpers';
 
 import { type CurrencyCode } from '../../utils/currency-helpers';
@@ -104,7 +104,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		paymentSendSuccess = () => {
 			const { isRepeatable } = this.props;
 			const { intervalUnconfirmed, unconfirmedCount } = this.state;
-			console.log('3')
+			console.log('3');
 
 			this.setState({
 				step: 'complete',
@@ -167,11 +167,6 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 								},
 						  }
 						: txParamsBase;
-
-				// sendTokenData: {
-				// 	tokenId: 'df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb',
-				// 	tokenProtocol: 'slp'
-				// }
 
 				const txParams = opReturn
 					? { ...txParamsSLP, opReturn: { data: opReturn } }
@@ -259,8 +254,11 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				const unconfirmedCount = targetTransactions.length;
 
 				this.setState({ unconfirmedCount });
-				if (prevUnconfirmedCount != null && unconfirmedCount > prevUnconfirmedCount) {
-					console.log('success?')
+				if (
+					prevUnconfirmedCount != null &&
+					unconfirmedCount > prevUnconfirmedCount
+				) {
+					console.log('success?');
 					this.paymentSendSuccess();
 				}
 			}, URI_CHECK_INTERVAL);
@@ -270,27 +268,26 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 		setupCoinMeta = async () => {
 			const { coinType, tokenId } = this.props;
-			console.log(tokenId)
-			if(coinType === 'BCH') {
+			console.log(tokenId);
+			if (coinType === 'BCH') {
 				this.setState({
 					coinSymbol: 'BCH',
-					coinDecimals: 8
-				})
-			} else if ( coinType === 'SLP' && tokenId) {
+					coinDecimals: 8,
+				});
+			} else if (coinType === 'SLP' && tokenId) {
 				this.setState({
 					coinSymbol: null,
 					coinDecimals: null,
-				})
-				const tokenInfo = await getTokenInfo(tokenId)
+				});
+				const tokenInfo = await getTokenInfo(tokenId);
 
 				const { symbol, decimals } = tokenInfo;
 				this.setState({
 					coinSymbol: symbol,
 					coinDecimals: decimals,
-				})
-
+				});
 			}
-		}
+		};
 
 		async componentDidMount() {
 			if (typeof window !== 'undefined') {
@@ -341,26 +338,18 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				const prevAmount = prevProps.amount;
 				const prevIsRepeatable = prevProps.isRepeatable;
 				const prevWatchAddress = prevProps.watchAddress;
-				const prevTokenId = prevProps.tokenId
+				const prevTokenId = prevProps.tokenId;
 
 				// Fiat price or currency changes
 				if (currency !== prevCurrency || price !== prevPrice) {
 					this.setupSatoshisFiat();
 				}
 
-				// Coin type or  amount changed
-				// if (coinType !== prevCoinType || amount !== prevAmount) {
-				// Currently BCH only coinType supported
-				// if (coinType === 'BCH') {
-				// 	this.setState({ satoshis: bchToSatoshis(amount) });
-				// }
-				// }
-
 				if (isRepeatable && isRepeatable !== prevIsRepeatable) {
 					this.startRepeatable();
 				}
 
-				if(tokenId !== prevTokenId) {
+				if (tokenId !== prevTokenId) {
 					this.setupCoinMeta();
 				}
 
@@ -376,15 +365,18 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		}
 
 		render() {
-			const { amount } = this.props;
+			const { amount, showQR, opReturn, coinType } = this.props;
 			const { step, satoshis, coinDecimals, coinSymbol } = this.state;
 			const calculatedAmount = adjustAmount(amount, coinDecimals) || satoshis;
 
-			console.log(this.props)
+			// Only show QR if all requested features can be encoded in the BIP44 URI
+			const shouldShowQR =
+				showQR && coinType === 'BCH' && (!opReturn || !opReturn.length);
 
 			return (
 				<Wrapped
 					{...this.props}
+					showQR={shouldShowQR}
 					handleClick={this.handleClick}
 					step={step}
 					amount={calculatedAmount}
