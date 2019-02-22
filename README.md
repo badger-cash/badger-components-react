@@ -31,12 +31,15 @@ $ npm install --save styled-components react react-dom
 
 ```js
 import React from 'react'
-import { BadgerButton, BadgerBadge} from 'badger-components-react'
+import { BadgerButton, BadgerBadge } from 'badger-components-react'
 
 const Example = (props) => {
 
   // EatBCH address for example purposes.
   const toAddress = 'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+  const toSLPAddress = 'simpleledger:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+
+  const nakamotoID = 'df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb'
 
   return (
     <>
@@ -44,8 +47,13 @@ const Example = (props) => {
       <BadgerBadge to={toAddress} price={0.5} currency='USD' />
       <BadgerButton to={toAddress} price={1} currency='JPY' />
 
+      {/* Price in bch */}
       <BadgerBadge to={toAddress} amount={0.01} coinType='BCH' />
       <BadgerButton to={toAddress} amount={0.0001} coinType='BCH' />
+
+      {/* Price in SLP tokens - NAKAMOTO in this example */}
+      <BadgerBadge to={toSLPAddress} amount={5.01} coinType='SLP' tokenId={nakamotoID} />
+      <BadgerButton to={toSLPAddress} amount={2.0001} coinType='SLP' tokenId={nakamotoID} />
 
       {/* More Complex Examples, pricing in fiat */}
       <BadgerBadge
@@ -55,9 +63,11 @@ const Example = (props) => {
         opReturn={["0x6d02", "Hello badger-components-react"]}
         tag='Badger Pay' // Text on button
         text='Payment Total' // Text at top of badge
+
         showBrand// Show link to badger website
-        showSatoshis // Show BCH satoshi amount
-        showQR
+        showAmount // Show BCH satoshi amount
+        showQR // Intent to show QR if transaction is URI encodeable
+
         successFn={() => console.log('Payment success callback')}
         failFn={() => console.warn('Payment failed or cancelled callback')}
       />
@@ -68,7 +78,7 @@ const Example = (props) => {
         to='bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
         opReturn={["0x6d02", "Hello badger-components-react"]}
         text='Badger Pay'
-        showSatoshis
+        showAmount
         showBorder
         showQR
         successFn={() => console.log('success example function called')}
@@ -96,7 +106,7 @@ export default Example
 
 ```js
 import React from 'react'
-import { BadgerBase, formatSatoshis } from 'badger-react-components'
+import { BadgerBase, formatAmount } from 'badger-react-components'
 
 import styled from 'styled-components'
 
@@ -112,20 +122,27 @@ const MyButton extends React.Component {
     const {
       handleClick,
       to,
+      step,
+
       price,
       currency,
+
       coinType,
+      coinDecimals,
+      coinSymbol,
       amount,
-      satoshis,
-      step,
+
+      showQR,
+
       isRepeatable,
       repeatTimeout,
-      watchAddress } = this.props;
+      watchAddress,
+      } = this.props;
 
     return (
       <div>
         <h3>Donate {price}{currency} to {to}</h3>
-        <h4>Satoshis: {formatSatoshis(satoshis)}</h4>
+        <h4>Satoshis: {formatAmount(amount, coinDecimals)}</h4>
         <CoolButton onClick={handleClick}>Custom looking button with render</CoolButton>
       </div>
     )
