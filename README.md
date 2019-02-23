@@ -35,9 +35,11 @@ import { BadgerButton, BadgerBadge } from 'badger-components-react'
 
 const Example = (props) => {
 
-  // EatBCH address for example purposes.
+  // eatBCH bitcoin cash address
   const toAddress = 'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
-  const toSLPAddress = 'simpleledger:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+
+  // Random SLP address
+  const toSLPAddress = 'simpleledger:qq6qcjt6xlkeqzdwkhdvfyl2q2d2wafkgg8phzcqez'
 
   const nakamotoID = 'df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb'
 

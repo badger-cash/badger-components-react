@@ -123,7 +123,7 @@ storiesOf('BadgerButton', module)
 			<BadgerButton
 				to={text(
 					'To Address',
-					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+					'simpleledger:qq6qcjt6xlkeqzdwkhdvfyl2q2d2wafkgg8phzcqez'
 				)}
 				coinType='SLP'
 				tokenId={select('Token ID', tokenIdOptions, tokenIdOptions[0])}
