@@ -19,8 +19,7 @@ addDecorator(
   withOptions({
     name: 'Badger Components React',
     url: 'https://www.npmjs.com/package/badger-components-react',
-    theme: {...themes.normal, highlightColor: '#F59332'},
-    sortStoriesByKind: true
+    theme: {...themes.normal, highlightColor: '#F59332'}
   })
 );
 
