@@ -151,12 +151,15 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				}
 
 				// BCH amount = satoshis, SLP amount = absolute value
-				const calculatedValue = (coinType === 'BCH' && amount) ? amount*1e8 : amount || satoshis;
+				const calculatedValue =
+					coinType === ('BCH' && amount)
+						? adjustAmount(amount, 8)
+						: amount || satoshis;
 
 				const txParamsBase = {
 					to,
 					from: defaultAccount,
-					value: calculatedValue
+					value: calculatedValue,
 				};
 
 				const txParamsSLP =
@@ -170,9 +173,10 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 						  }
 						: txParamsBase;
 
-				const txParams = (opReturn && opReturn.length)
-					? { ...txParamsSLP, opReturn: { data: opReturn } }
-					: txParamsSLP;
+				const txParams =
+					opReturn && opReturn.length
+						? { ...txParamsSLP, opReturn: { data: opReturn } }
+						: txParamsSLP;
 
 				this.setState({ step: 'pending' });
 
@@ -368,6 +372,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		render() {
 			const { amount, showQR, opReturn, coinType } = this.props;
 			const { step, satoshis, coinDecimals, coinSymbol } = this.state;
+
 			const calculatedAmount = adjustAmount(amount, coinDecimals) || satoshis;
 
 			// Only show QR if all requested features can be encoded in the BIP44 URI
