@@ -106,7 +106,7 @@ storiesOf('BadgerButton', module)
 		() => (
 			<BadgerButton
 				coinType='BCH'
-				amount={number('Amountt', 0.001)}
+				amount={number('Amount', 0.001)}
 				to={text(
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'

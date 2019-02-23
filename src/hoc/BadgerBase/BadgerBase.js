@@ -152,7 +152,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 				// BCH amount = satoshis, SLP amount = absolute value
 				const calculatedValue =
-					coinType === ('BCH' && amount)
+					(coinType === 'BCH' && amount)
 						? adjustAmount(amount, 8)
 						: amount || satoshis;
 
