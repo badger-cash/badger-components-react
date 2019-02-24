@@ -1,6 +1,6 @@
 # Changelog - Badger Components React
 
-## 0.3.0 (February 22, 2019)
+## 0.3.0 (February xx, 2019)
 
 SLP support added  🎉
 
@@ -18,6 +18,11 @@ SLP support added  🎉
   * `coinDecimals` - Number of decimals the coin or token support.  8 for BCH, variable for SLP
   * `coinSymbol` - Symbol assigned to the coin or token
   * `coinName` - Name assigned to the coin or token
+
+### PriceDisplay
+
+New component PriceDisplay contains all the logic to display amounts in fiat, BCH, and SLP tokens.  
+Used in both BadgerButton and BadgerBadge to display the price information.  Useful for custom Badger integrations, letting the developers focus on building the app, not formating prices.  
 
 ## 0.2.1 (February 19, 2019)
 

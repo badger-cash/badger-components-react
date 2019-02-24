@@ -22,10 +22,13 @@ import SLPLogoImage from '../../images/slp-logo.png'
 
 import colors from '../../styles/colors';
 
+import PriceDisplay from '../PriceDisplay';
+
 import Button from '../../atoms/Button';
 import ButtonQR from '../../atoms/ButtonQR';
 import Small from '../../atoms/Small';
 import Text from '../../atoms/Text';
+import H3 from '../../atoms/H3';
 
 const PRICE_UPDATE_INTERVAL = 60 * 1000;
 
@@ -50,7 +53,7 @@ const Main = styled.div`
 
 const Prices = styled.div`
 	display: grid;
-	grid-template-columns: max-content max-content;
+	/* grid-template-columns: max-content max-content; */
 	grid-gap: 5px;
 	align-items: end;
 	justify-content: end;
@@ -68,13 +71,6 @@ const PriceText = styled.p`
 	align-items: center;
 `;
 
-const HeaderText = styled.h3`
-	text-align: center;
-	font-size: 28px;
-	line-height: 1em;
-	margin: 0;
-	font-weight: 400;
-`;
 
 const ButtonContainer = styled.div`
 	min-height: 40px;
@@ -157,9 +153,12 @@ class BadgerBadge extends React.PureComponent<Props> {
 		return (
 			<Outer>
 				<Main showBorder={showBorder}>
-					<HeaderText>{text}</HeaderText>
+					<H3>{text}</H3>
 					<Prices>
-						{price && (
+					{ price && <PriceDisplay preSymbol={getCurrencyPreSymbol(currency)} price={formatPriceDisplay(price)} symbol={currency} />}
+					{ showAmount && <PriceDisplay coinType={coinType} price={formatAmount(amount, coinDecimals)} symbol={coinSymbol} name={coinName}/>}
+
+						{/* {price && (
 							<>
 								<PriceText style={{ textAlign: 'right' }}>
 									{getCurrencyPreSymbol(currency)}
@@ -167,8 +166,8 @@ class BadgerBadge extends React.PureComponent<Props> {
 								</PriceText>
 								<Small>{currency}</Small>
 							</>
-						)}
-						{showAmount && (
+						)} */}
+						{/* {showAmount && (
 							<>
 								<PriceText>
 									<img
@@ -179,9 +178,9 @@ class BadgerBadge extends React.PureComponent<Props> {
 									{formatAmount(amount, coinDecimals)}
 								</PriceText>
 								<Small>{coinSymbol}</Small>
-							</>
+							</> */}
 
-						)}
+						{/* )} */}
 					</Prices>
 					<ButtonContainer>
 						{showQR ? (
