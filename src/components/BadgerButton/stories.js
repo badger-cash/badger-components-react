@@ -126,7 +126,7 @@ storiesOf('BadgerButton', module)
 					'simpleledger:qq6qcjt6xlkeqzdwkhdvfyl2q2d2wafkgg8phzcqez'
 				)}
 				coinType='SLP'
-				tokenId={select('Token ID', tokenIdOptions, tokenIdOptions[0])}
+				tokenId={text('Token ID', '') || select('Token ID select', tokenIdOptions, tokenIdOptions[0])}
 				amount={number('Amount', 5)}
 				text='Send SLP Tokens'
 				showAmount={boolean('Toggle Amount', true)}

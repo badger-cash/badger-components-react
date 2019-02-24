@@ -111,7 +111,7 @@ storiesOf('BadgerBadge', module)
 					'simpleledger:qq6qcjt6xlkeqzdwkhdvfyl2q2d2wafkgg8phzcqez'
 				)}
 				coinType='SLP'
-				tokenId={select('Token ID', tokenIdOptions, tokenIdOptions[0])}
+				tokenId={text('Token ID', '') || select('Token ID Select', tokenIdOptions, tokenIdOptions[0])}
 				amount={number('Amount', 5)}
 				tag='Send Tokens'
 				text='Send SLP Tokens'
