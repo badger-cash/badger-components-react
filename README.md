@@ -1,6 +1,6 @@
 # Build on Bitcoin Cash (BCH)
 
- > A set of React components and helpers to integrate Bitcoin Cash (BCH) and the Badger wallet into your app with ease.
+ > A set of React components and helpers to integrate Bitcoin Cash (BCH) and SLP tokens into your app with ease.  Integrates with the Badger wallet.
 
 ## Get Started
 
@@ -41,6 +41,7 @@ const Example = (props) => {
   // Random SLP address
   const toSLPAddress = 'simpleledger:qq6qcjt6xlkeqzdwkhdvfyl2q2d2wafkgg8phzcqez'
 
+  // tokenId
   const nakamotoID = 'df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb'
 
   return (
@@ -154,6 +155,10 @@ const MyButton extends React.Component {
 // Wrap with BadgerBase higher order component
 export default BadgerBase(MyButton);
 ```
+
+### Control Step from app
+
+When accepting payments, the state of the payment should be handled by the backend of your application.  As such, you can pass in `stepControlled` with the values of `fresh`, `pending` or `complete` to indicate which part of the payment the user is on.
 
 ## Development with Storybook
 
