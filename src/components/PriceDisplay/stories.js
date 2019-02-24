@@ -24,7 +24,7 @@ const tokenIdOptions = [
 
 storiesOf('Price Display', module)
 	.addDecorator((story) => (
-		<div style={{ display: 'inline-block' }}>{story()}</div>
+		<div style={{ display: 'inline-block', minWidth: 150 }}>{story()}</div>
 	))
 	.add(
 		'fiat',
@@ -82,4 +82,4 @@ storiesOf('Price Display', module)
 		{
 			notes: 'Displaying SLP tokens',
 		}
-	);
+	)

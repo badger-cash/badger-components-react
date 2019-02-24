@@ -135,7 +135,6 @@ storiesOf('BadgerButton', module)
 				}
 				amount={number('Amount', 5)}
 				text="Send SLP Tokens"
-				showAmount={boolean('Toggle Amount', true)}
 			/>
 		),
 		{
@@ -265,5 +264,22 @@ storiesOf('BadgerButton', module)
 		{
 			notes:
 				'if watchAddress is true, the payment will turn to confirmed when the address receives a payment from any source.  Including other people.  This is ideal to use if the payment codes are unique for the checkout.  Not great if the payment address is shared by users.',
+		}
+	)
+	.add(
+		'controlled step',
+		() => (
+			<BadgerButton
+				amount={0.0001}
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				stepControlled={select('step', ['fresh', 'pending', 'complete'], 'fresh')}
+			/>
+		),
+		{
+			notes:
+				'Controlled step overrides the component step state.  Valuable for payment systems where the app/backend does payment confirmation.',
 		}
 	);

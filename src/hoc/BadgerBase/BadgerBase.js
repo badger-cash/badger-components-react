@@ -23,8 +23,12 @@ const URI_CHECK_INTERVAL = 10 * SECOND;
 // Whitelist of valid coinType.
 type ValidCoinTypes = 'BCH' | 'SLP';
 
+// TODO - Login/Install are badger states, others are payment states.  Separate them to be independent
+type ButtonStates = 'fresh' | 'pending' | 'complete' | 'login' | 'install';
+
 type BadgerBaseProps = {
 	to: string,
+	stepControlled?: ButtonStates,
 
 	// Both present to price in fiat equivalent
 	currency: CurrencyCode,
@@ -46,8 +50,7 @@ type BadgerBaseProps = {
 	failFn?: Function,
 };
 
-// TODO - Login/Install are badger states, others are payment states.  Separate them to be independent
-type ButtonStates = 'fresh' | 'pending' | 'complete' | 'login' | 'install';
+
 
 type State = {
 	step: ButtonStates,
@@ -375,7 +378,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		}
 
 		render() {
-			const { amount, showQR, opReturn, coinType } = this.props;
+			const { amount, showQR, opReturn, coinType, stepControlled } = this.props;
 			const { step, satoshis, coinDecimals, coinSymbol, coinName } = this.state;
 
 			const calculatedAmount = adjustAmount(amount, coinDecimals) || satoshis;
@@ -389,7 +392,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					{...this.props}
 					showQR={shouldShowQR}
 					handleClick={this.handleClick}
-					step={step}
+					step={stepControlled || step}
 					amount={calculatedAmount}
 					coinDecimals={coinDecimals}
 					coinSymbol={coinSymbol}
