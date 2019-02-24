@@ -14,6 +14,10 @@ SLP support added  🎉
   * `ticker` => `coinType`
     * Renamed as many coins/tokens can share a ticker.  `coinType` denotes the coin or token protocol.   `BCH`, `SLP` supported currently, with others potentially in the future.
   * `showQR` - Will only show a QR code if the transaction and options can be encoded in BIP44 URI's
+* New props passed to wrapped components
+  * `coinDecimals` - Number of decimals the coin or token support.  8 for BCH, variable for SLP
+  * `coinSymbol` - Symbol assigned to the coin or token
+  * `coinName` - Name assigned to the coin or token
 
 ## 0.2.1 (February 19, 2019)
 
