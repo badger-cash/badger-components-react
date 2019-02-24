@@ -23,7 +23,7 @@ SLP support added  🎉
 ### PriceDisplay
 
 New component PriceDisplay `contains` all the logic to display amounts in fiat, BCH, and SLP tokens.  
-Used in both BadgerButton and BadgerBadge to display the price information.  Useful for custom Badger integrations, letting the developers focus on building the app, not formating prices.  
+Used in both BadgerButton and BadgerBadge to display the price information.  Useful for custom Badger integrations, letting the developers focus on building the app, not formatting prices.  
 
 ## 0.2.1 (February 19, 2019)
 

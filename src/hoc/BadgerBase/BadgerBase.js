@@ -50,8 +50,6 @@ type BadgerBaseProps = {
 	failFn?: Function,
 };
 
-
-
 type State = {
 	step: ButtonStates,
 	errors: string[],

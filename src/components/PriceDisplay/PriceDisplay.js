@@ -6,12 +6,9 @@ import styled from 'styled-components';
 import BitcoinCashImage from '../../images/bitcoin-cash.svg';
 import SLPLogoImage from '../../images/slp-logo.png';
 
-import {
-	type ValidCoinTypes,
-} from '../../hoc/BadgerBase';
+import { type ValidCoinTypes } from '../../hoc/BadgerBase';
 
 import Small from '../../atoms/Small';
-
 
 const Outer = styled.div`
 	font-family: sans-serif;

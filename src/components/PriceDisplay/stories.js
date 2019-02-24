@@ -82,4 +82,4 @@ storiesOf('Price Display', module)
 		{
 			notes: 'Displaying SLP tokens',
 		}
-	)
+	);
