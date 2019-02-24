@@ -146,18 +146,6 @@ class BadgerButton extends React.PureComponent<Props> {
 							name={coinName}
 						/>
 					)}
-					{/* <SatoshiText>
-							<img
-								src={CoinImage}
-								style={{ height: 14, margin: 0 }}
-								alt={coinType}
-							/>{' '}
-							{coinSymbol}{' '}
-							<span style={{ fontFamily: 'monospace' }}>
-								{formatAmount(amount, coinDecimals)}
-							</span>
-						</SatoshiText>
-					)} */}
 				</Wrapper>
 			</Outer>
 		);
