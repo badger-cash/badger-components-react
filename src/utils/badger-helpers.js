@@ -27,7 +27,7 @@ const getCurrencyPreSymbol = (currency: CurrencyCode) => {
 	return currencySymbolMap[currency];
 };
 
-const formatPriceDisplay = (price?: number): ?number => {
+const formatPriceDisplay = (price: ?number): ?number => {
 	if (!price) return null;
 	return +price.toFixed(5);
 };

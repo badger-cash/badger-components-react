@@ -22,6 +22,8 @@ import BadgerBase, {
 	type ValidCoinTypes,
 } from '../../hoc/BadgerBase';
 
+import PriceDisplay from '../PriceDisplay';
+
 import Button from '../../atoms/Button';
 import ButtonQR from '../../atoms/ButtonQR';
 import Small from '../../atoms/Small';
@@ -66,6 +68,7 @@ type Props = BadgerBaseProps & {
 	showAmount?: boolean,
 	coinSymbol: string,
 	coinDecimals?: number,
+	coinName?: string,
 
 	handleClick: Function,
 	step: ButtonStates,
@@ -73,7 +76,7 @@ type Props = BadgerBaseProps & {
 
 class BadgerButton extends React.PureComponent<Props> {
 	static defaultProps = {
-		showSatoshis: true,
+		showAmount: true,
 		showBorder: false,
 		showQR: false,
 	};
@@ -90,6 +93,8 @@ class BadgerButton extends React.PureComponent<Props> {
 			coinType,
 			coinSymbol,
 			coinDecimals,
+			coinName,
+
 			amount,
 			showAmount,
 
@@ -133,8 +138,8 @@ class BadgerButton extends React.PureComponent<Props> {
 						</Button>
 					)}
 
-					{showAmount && (
-						<SatoshiText>
+					{showAmount && <PriceDisplay coinType={coinType} price={formatAmount(amount, coinDecimals)} symbol={coinSymbol} name={coinName}/>}
+						{/* <SatoshiText>
 							<img
 								src={CoinImage}
 								style={{ height: 14, margin: 0 }}
@@ -145,7 +150,7 @@ class BadgerButton extends React.PureComponent<Props> {
 								{formatAmount(amount, coinDecimals)}
 							</span>
 						</SatoshiText>
-					)}
+					)} */}
 				</Wrapper>
 			</Outer>
 		);

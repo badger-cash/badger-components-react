@@ -56,7 +56,7 @@ storiesOf('BadgerButton', module)
 				successFn={() => console.log('success example function called')}
 				failFn={() => console.log('fail example function called')}
 				text={text('Top Text', 'Badger Pay')}
-				showAmount={boolean('Toggle coin amount', false)}
+				showAmount={boolean('Toggle coin amount', true)}
 				showBorder={boolean('Toggle Border', true)}
 				showQR={boolean('Show QR', false)}
 			/>

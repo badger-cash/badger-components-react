@@ -40,7 +40,7 @@ const Outer = styled.div`
 const Main = styled.div`
 	font-family: sans-serif;
 	display: grid;
-	grid-gap: 20px;
+	grid-gap: 12px;
 	padding: 12px 12px 6px;
 
 	${(props) =>
@@ -157,30 +157,6 @@ class BadgerBadge extends React.PureComponent<Props> {
 					<Prices>
 					{ price && <PriceDisplay preSymbol={getCurrencyPreSymbol(currency)} price={formatPriceDisplay(price)} symbol={currency} />}
 					{ showAmount && <PriceDisplay coinType={coinType} price={formatAmount(amount, coinDecimals)} symbol={coinSymbol} name={coinName}/>}
-
-						{/* {price && (
-							<>
-								<PriceText style={{ textAlign: 'right' }}>
-									{getCurrencyPreSymbol(currency)}
-									{formatPriceDisplay(price)}{' '}
-								</PriceText>
-								<Small>{currency}</Small>
-							</>
-						)} */}
-						{/* {showAmount && (
-							<>
-								<PriceText>
-									<img
-										src={CoinImage}
-										style={{ height: 14 }}
-										alt={coinType}
-									/>{' '}
-									{formatAmount(amount, coinDecimals)}
-								</PriceText>
-								<Small>{coinSymbol}</Small>
-							</> */}
-
-						{/* )} */}
 					</Prices>
 					<ButtonContainer>
 						{showQR ? (
