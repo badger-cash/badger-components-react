@@ -14,11 +14,14 @@ const defaultOpReturn = [
 	'Try out Badger at https://badger.bitcoin.com',
 ];
 
-
-const coinTypeOptions = ['BCH', 'SLP']
+const coinTypeOptions = ['BCH', 'SLP'];
 
 // [ NAKAMOTO, DOGECASH, BROC ]
-const tokenIdOptions = ['df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb', '3916a24a051f8b3833a7fd128be51dd93015555ed9142d6106ec03267f5cdc4c', '259908ae44f46ef585edef4bcc1e50dc06e4c391ac4be929fae27235b8158cf1']
+const tokenIdOptions = [
+	'df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb',
+	'3916a24a051f8b3833a7fd128be51dd93015555ed9142d6106ec03267f5cdc4c',
+	'259908ae44f46ef585edef4bcc1e50dc06e4c391ac4be929fae27235b8158cf1',
+];
 
 storiesOf('BadgerBadge', module)
 	.add(
@@ -65,10 +68,10 @@ storiesOf('BadgerBadge', module)
 			/>
 		),
 		{
-			notes:
-				'Minimal look of Badge',
+			notes: 'Minimal look of Badge',
 		}
-	).add(
+	)
+	.add(
 		'price in fiat',
 		() => (
 			<BadgerBadge
@@ -99,10 +102,10 @@ storiesOf('BadgerBadge', module)
 			/>
 		),
 		{
-			notes:
-				'Price in BCH absolute value',
+			notes: 'Price in BCH absolute value',
 		}
-	).add(
+	)
+	.add(
 		'price in SLP tokens',
 		() => (
 			<BadgerBadge
@@ -110,17 +113,19 @@ storiesOf('BadgerBadge', module)
 					'To Address',
 					'simpleledger:qq6qcjt6xlkeqzdwkhdvfyl2q2d2wafkgg8phzcqez'
 				)}
-				coinType='SLP'
-				tokenId={text('Token ID', '') || select('Token ID Select', tokenIdOptions, tokenIdOptions[0])}
+				coinType="SLP"
+				tokenId={
+					text('Token ID', '') ||
+					select('Token ID Select', tokenIdOptions, tokenIdOptions[0])
+				}
 				amount={number('Amount', 5)}
-				tag='Send Tokens'
-				text='Send SLP Tokens'
+				tag="Send Tokens"
+				text="Send SLP Tokens"
 				showAmount={boolean('Toggle Amount', true)}
 			/>
 		),
 		{
-			notes:
-				'Enter the token ID and send whichever SLP tokens you want!',
+			notes: 'Enter the token ID and send whichever SLP tokens you want!',
 		}
 	)
 	.add(

@@ -18,10 +18,10 @@ const getAddressUnconfirmed = async (address: string): Promise<string[]> => {
 const getTokenInfo = async (coinId: string): Promise<any> => {
 	const tokenInfoRequest = await fetch(
 		`https://rest.bitcoin.com/v2/slp/list/${coinId}`
-	)
-	const tokenInfo = await tokenInfoRequest.json()
+	);
+	const tokenInfo = await tokenInfoRequest.json();
 	return tokenInfo;
-}
+};
 
 const getCurrencyPreSymbol = (currency: CurrencyCode) => {
 	return currencySymbolMap[currency];
@@ -32,20 +32,18 @@ const formatPriceDisplay = (price: ?number): ?number => {
 	return +price.toFixed(5);
 };
 
-
-const formatAmount = (amount: ?number, decimals: ?number) : string => {
-	if(decimals == null) {
+const formatAmount = (amount: ?number, decimals: ?number): string => {
+	if (decimals == null) {
 		return '-.--------';
 	}
-	if(!amount) {
+	if (!amount) {
 		return `-.`.padEnd(decimals + 2, '-');
 	}
 	const adjustDecimals = (amount / Math.pow(10, decimals)).toFixed(decimals);
-	const removeTrailing = +adjustDecimals+"";
+	const removeTrailing = +adjustDecimals + '';
 
 	return removeTrailing;
-}
-
+};
 
 const priceToSatoshis = (BCHRate: number, price: number): number => {
 	const singleDollarValue = BCHRate / 100;

@@ -138,8 +138,15 @@ class BadgerButton extends React.PureComponent<Props> {
 						</Button>
 					)}
 
-					{showAmount && <PriceDisplay coinType={coinType} price={formatAmount(amount, coinDecimals)} symbol={coinSymbol} name={coinName}/>}
-						{/* <SatoshiText>
+					{showAmount && (
+						<PriceDisplay
+							coinType={coinType}
+							price={formatAmount(amount, coinDecimals)}
+							symbol={coinSymbol}
+							name={coinName}
+						/>
+					)}
+					{/* <SatoshiText>
 							<img
 								src={CoinImage}
 								style={{ height: 14, margin: 0 }}

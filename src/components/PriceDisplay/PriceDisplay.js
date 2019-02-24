@@ -38,13 +38,12 @@ import Text from '../../atoms/Text';
 // `;
 
 const Outer = styled.div`
-font-family: sans-serif;
+	font-family: sans-serif;
 	display: grid;
 	grid-gap: 5px;
 	/* grid-auto-flow: column;
 	justify-content: end;
 	align-items: end; */
-
 `;
 
 const Top = styled.div`
@@ -54,13 +53,13 @@ const Top = styled.div`
 	grid-auto-flow: column;
 	justify-content: end;
 	align-items: end;
-`
+`;
 
 const Bottom = styled.div`
-display: flex;
-justify-content: flex-end;
-/* column-span: 3; */
-`
+	display: flex;
+	justify-content: flex-end;
+	/* column-span: 3; */
+`;
 
 // const Wrapper = styled.div`
 // 	display: grid;
@@ -91,7 +90,7 @@ const PriceText = styled.p`
 type Props = {
 	price: string,
 	symbol: string,
-	
+
 	coinType?: ValidCoinTypes,
 	preSymbol?: string,
 	name?: string,
@@ -111,12 +110,16 @@ class PriceDisplay extends React.PureComponent<Props> {
 
 		return (
 			<Outer>
-			<Top>
-				{preContent}
-				<PriceText>{price}</PriceText>
-				<Small>{symbol}</Small>
+				<Top>
+					{preContent}
+					<PriceText>{price}</PriceText>
+					<Small>{symbol}</Small>
 				</Top>
-				{name && <Bottom><Small muted>{name}</Small></Bottom>}
+				{name && (
+					<Bottom>
+						<Small muted>{name}</Small>
+					</Bottom>
+				)}
 			</Outer>
 		);
 	}

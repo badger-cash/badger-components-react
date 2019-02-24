@@ -154,7 +154,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 				// BCH amount = satoshis, SLP amount = absolute value
 				const calculatedValue =
-					(coinType === 'BCH' && amount)
+					coinType === 'BCH' && amount
 						? adjustAmount(amount, 8)
 						: amount || satoshis;
 
@@ -280,7 +280,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				this.setState({
 					coinSymbol: 'BCH',
 					coinDecimals: 8,
-					coinName: 'Bitcoin Cash'
+					coinName: 'Bitcoin Cash',
 				});
 			} else if (coinType === 'SLP' && tokenId) {
 				this.setState({

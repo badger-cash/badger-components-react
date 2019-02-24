@@ -13,11 +13,14 @@ const defaultOpReturn = [
 	'Learn to build on BCH at https://developer.bitcoin.com',
 ];
 
-
-const coinTypeOptions = ['BCH', 'SLP']
+const coinTypeOptions = ['BCH', 'SLP'];
 
 // [ NAKAMOTO, DOGECASH, BROC ]
-const tokenIdOptions = ['df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb', '3916a24a051f8b3833a7fd128be51dd93015555ed9142d6106ec03267f5cdc4c', '259908ae44f46ef585edef4bcc1e50dc06e4c391ac4be929fae27235b8158cf1']
+const tokenIdOptions = [
+	'df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb',
+	'3916a24a051f8b3833a7fd128be51dd93015555ed9142d6106ec03267f5cdc4c',
+	'259908ae44f46ef585edef4bcc1e50dc06e4c391ac4be929fae27235b8158cf1',
+];
 
 storiesOf('BadgerButton', module)
 	.add(
@@ -80,8 +83,7 @@ storiesOf('BadgerButton', module)
 			/>
 		),
 		{
-			notes:
-				'minimal look',
+			notes: 'minimal look',
 		}
 	)
 	.add(
@@ -98,14 +100,15 @@ storiesOf('BadgerButton', module)
 			/>
 		),
 		{
-			notes: 'Change the currency and price to charge in any fiat currency equivalent of BCH',
+			notes:
+				'Change the currency and price to charge in any fiat currency equivalent of BCH',
 		}
 	)
 	.add(
 		'price in BCH',
 		() => (
 			<BadgerButton
-				coinType='BCH'
+				coinType="BCH"
 				amount={number('Amount', 0.001)}
 				to={text(
 					'To Address',
@@ -125,16 +128,18 @@ storiesOf('BadgerButton', module)
 					'To Address',
 					'simpleledger:qq6qcjt6xlkeqzdwkhdvfyl2q2d2wafkgg8phzcqez'
 				)}
-				coinType='SLP'
-				tokenId={text('Token ID', '') || select('Token ID select', tokenIdOptions, tokenIdOptions[0])}
+				coinType="SLP"
+				tokenId={
+					text('Token ID', '') ||
+					select('Token ID select', tokenIdOptions, tokenIdOptions[0])
+				}
 				amount={number('Amount', 5)}
-				text='Send SLP Tokens'
+				text="Send SLP Tokens"
 				showAmount={boolean('Toggle Amount', true)}
 			/>
 		),
 		{
-			notes:
-			'Enter the token ID and send whichever SLP tokens you want!',
+			notes: 'Enter the token ID and send whichever SLP tokens you want!',
 		}
 	)
 	.add(
@@ -169,10 +174,11 @@ storiesOf('BadgerButton', module)
 			/>
 		),
 		{
-			notes: 'Optional QR code in addition to Button.  Only shows if transaction fully compatible in a URI',
+			notes:
+				'Optional QR code in addition to Button.  Only shows if transaction fully compatible in a URI',
 		}
 	)
-	
+
 	.add(
 		'toggle coin amount',
 		() => (

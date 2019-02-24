@@ -18,7 +18,7 @@ import BadgerBase, {
 } from '../../hoc/BadgerBase';
 
 import BitcoinCashImage from '../../images/bitcoin-cash.svg';
-import SLPLogoImage from '../../images/slp-logo.png'
+import SLPLogoImage from '../../images/slp-logo.png';
 
 import colors from '../../styles/colors';
 
@@ -70,7 +70,6 @@ const PriceText = styled.p`
 	justify-content: flex-end;
 	align-items: center;
 `;
-
 
 const ButtonContainer = styled.div`
 	min-height: 40px;
@@ -155,8 +154,21 @@ class BadgerBadge extends React.PureComponent<Props> {
 				<Main showBorder={showBorder}>
 					<H3>{text}</H3>
 					<Prices>
-					{ price && <PriceDisplay preSymbol={getCurrencyPreSymbol(currency)} price={formatPriceDisplay(price)} symbol={currency} />}
-					{ showAmount && <PriceDisplay coinType={coinType} price={formatAmount(amount, coinDecimals)} symbol={coinSymbol} name={coinName}/>}
+						{price && (
+							<PriceDisplay
+								preSymbol={getCurrencyPreSymbol(currency)}
+								price={formatPriceDisplay(price)}
+								symbol={currency}
+							/>
+						)}
+						{showAmount && (
+							<PriceDisplay
+								coinType={coinType}
+								price={formatAmount(amount, coinDecimals)}
+								symbol={coinSymbol}
+								name={coinName}
+							/>
+						)}
 					</Prices>
 					<ButtonContainer>
 						{showQR ? (

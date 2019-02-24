@@ -3,7 +3,7 @@
 import BadgerBase, {
 	type ButtonStates,
 	type BadgerBaseProps,
-	type ValidCoinTypes
+	type ValidCoinTypes,
 } from './BadgerBase';
 
 export type { ButtonStates, BadgerBaseProps, ValidCoinTypes };
