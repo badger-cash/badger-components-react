@@ -106,6 +106,7 @@ type Props = BadgerBaseProps & {
 
 	showAmount?: boolean,
 	coinSymbol: string,
+	coinName: string,
 	coinAmount: number,
 	coinDecimals?: number,
 
@@ -138,6 +139,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 
 			coinType,
 			coinSymbol,
+			coinName,
 			coinDecimals,
 			amount,
 

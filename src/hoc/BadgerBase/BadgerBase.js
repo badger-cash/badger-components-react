@@ -56,6 +56,7 @@ type State = {
 	satoshis: ?number, // Used when converting fiat to BCH
 
 	coinSymbol: ?string,
+	coinName: ?string,
 	coinDecimals: ?number,
 	unconfirmedCount: ?number,
 
@@ -82,6 +83,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			satoshis: null,
 			coinSymbol: null,
 			coinDecimals: null,
+			coinName: null,
 
 			unconfirmedCount: null,
 
@@ -278,18 +280,21 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				this.setState({
 					coinSymbol: 'BCH',
 					coinDecimals: 8,
+					coinName: 'Bitcoin Cash'
 				});
 			} else if (coinType === 'SLP' && tokenId) {
 				this.setState({
 					coinSymbol: null,
+					coinName: null,
 					coinDecimals: null,
 				});
 				const tokenInfo = await getTokenInfo(tokenId);
 
-				const { symbol, decimals } = tokenInfo;
+				const { symbol, decimals, name } = tokenInfo;
 				this.setState({
 					coinSymbol: symbol,
 					coinDecimals: decimals,
+					coinName: name,
 				});
 			}
 		};
@@ -371,7 +376,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 		render() {
 			const { amount, showQR, opReturn, coinType } = this.props;
-			const { step, satoshis, coinDecimals, coinSymbol } = this.state;
+			const { step, satoshis, coinDecimals, coinSymbol, coinName } = this.state;
 
 			const calculatedAmount = adjustAmount(amount, coinDecimals) || satoshis;
 
@@ -388,6 +393,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					amount={calculatedAmount}
 					coinDecimals={coinDecimals}
 					coinSymbol={coinSymbol}
+					coinName={coinName}
 				/>
 			);
 		}
