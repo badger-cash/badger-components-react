@@ -6,7 +6,7 @@ import styled, { css } from 'styled-components';
 import {
 	getCurrencyPreSymbol,
 	formatPriceDisplay,
-	formatSatoshis,
+	formatAmount,
 } from '../../utils/badger-helpers';
 
 import { type CurrencyCode } from '../../utils/currency-helpers';
@@ -14,15 +14,21 @@ import { type CurrencyCode } from '../../utils/currency-helpers';
 import BadgerBase, {
 	type ButtonStates,
 	type BadgerBaseProps,
+	type ValidCoinTypes,
 } from '../../hoc/BadgerBase';
 
 import BitcoinCashImage from '../../images/bitcoin-cash.svg';
+import SLPLogoImage from '../../images/slp-logo.png';
+
 import colors from '../../styles/colors';
+
+import PriceDisplay from '../PriceDisplay';
 
 import Button from '../../atoms/Button';
 import ButtonQR from '../../atoms/ButtonQR';
 import Small from '../../atoms/Small';
 import Text from '../../atoms/Text';
+import H3 from '../../atoms/H3';
 
 const PRICE_UPDATE_INTERVAL = 60 * 1000;
 
@@ -34,7 +40,7 @@ const Outer = styled.div`
 const Main = styled.div`
 	font-family: sans-serif;
 	display: grid;
-	grid-gap: 20px;
+	grid-gap: 12px;
 	padding: 12px 12px 6px;
 
 	${(props) =>
@@ -47,7 +53,7 @@ const Main = styled.div`
 
 const Prices = styled.div`
 	display: grid;
-	grid-template-columns: max-content max-content;
+	/* grid-template-columns: max-content max-content; */
 	grid-gap: 5px;
 	align-items: end;
 	justify-content: end;
@@ -63,14 +69,6 @@ const PriceText = styled.p`
 	grid-auto-flow: column;
 	justify-content: flex-end;
 	align-items: center;
-`;
-
-const HeaderText = styled.h3`
-	text-align: center;
-	font-size: 28px;
-	line-height: 1em;
-	margin: 0;
-	font-weight: 400;
 `;
 
 const ButtonContainer = styled.div`
@@ -101,8 +99,11 @@ type Props = BadgerBaseProps & {
 	tag?: string,
 	step: ButtonStates,
 
-	showSatoshis?: boolean,
-	satoshis: number,
+	showAmount?: boolean,
+	coinSymbol: string,
+	coinName: string,
+	coinAmount: number,
+	coinDecimals?: number,
 
 	showBrand?: boolean,
 	showQR?: boolean,
@@ -116,7 +117,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 		currency: 'USD',
 		tag: 'Badger Pay',
 		text: 'Payment Total',
-		showSatoshis: true,
+		showAmount: true,
 		showBrand: false,
 		showQR: true,
 		showBorder: false,
@@ -124,46 +125,49 @@ class BadgerBadge extends React.PureComponent<Props> {
 
 	render() {
 		const {
-			text,
-			price,
-			currency,
-			tag,
+			to,
 			step,
-			satoshis,
-			showSatoshis,
+			handleClick,
+
+			currency,
+			price,
+
+			coinType,
+			coinSymbol,
+			coinName,
+			coinDecimals,
+			amount,
+
+			text,
+			tag,
+
+			showAmount,
 			showQR,
 			showBorder,
 			showBrand,
-			handleClick,
-			to,
 		} = this.props;
+
+		const CoinImage = coinType === 'BCH' ? BitcoinCashImage : SLPLogoImage;
 
 		return (
 			<Outer>
 				<Main showBorder={showBorder}>
-					<HeaderText>{text}</HeaderText>
+					<H3>{text}</H3>
 					<Prices>
 						{price && (
-							<>
-								<PriceText style={{ textAlign: 'right' }}>
-									{getCurrencyPreSymbol(currency)}
-									{formatPriceDisplay(price)}{' '}
-								</PriceText>
-								<Small>{currency}</Small>
-							</>
+							<PriceDisplay
+								preSymbol={getCurrencyPreSymbol(currency)}
+								price={formatPriceDisplay(price)}
+								symbol={currency}
+							/>
 						)}
-						{showSatoshis && (
-							<>
-								<PriceText>
-									<img
-										src={BitcoinCashImage}
-										style={{ height: 14 }}
-										alt="BCH"
-									/>{' '}
-									{formatSatoshis(satoshis)}
-								</PriceText>
-								<Small>BCH</Small>
-							</>
+						{showAmount && (
+							<PriceDisplay
+								coinType={coinType}
+								price={formatAmount(amount, coinDecimals)}
+								symbol={coinSymbol}
+								name={coinName}
+							/>
 						)}
 					</Prices>
 					<ButtonContainer>
@@ -171,7 +175,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 							<ButtonQR
 								onClick={handleClick}
 								step={step}
-								amountSatoshis={satoshis}
+								amountSatoshis={amount}
 								toAddress={to}
 							>
 								<Text>{tag}</Text>

@@ -16,8 +16,13 @@ Badger buttons and badges get wrapped in this Higher Order Component (HOC), whic
 
 
 ### Fiat Pricing
+
 if props `currency` and `price` are entered, the real world fiat currency to BCH price will be computed and automatically set
 
 ### Token Pricing
-if props `ticker` and `amount` are entered that amount of the chosen `ticker` token/coin will be used as payment.
-For now works with only `BCH`, but will extend to use SLP tokens.
+
+if props `coinType` and `amount` are entered that amount of the chosen `coinType` token/coin will be used as payment.
+
+#### SLP pricing
+
+if `coinType === 'SLP'` and `tokenID` is valid SLP token ID, then `amount` will refer to the amounf of that token to send.

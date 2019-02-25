@@ -1,9 +1,16 @@
 // @flow
 
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const Small = styled.span`
 	font-size: 12px;
 	font-weight: 700;
+	line-height: 10px;
+	${(props) =>
+		props.muted &&
+		css`
+			font-weight: 500;
+			opacity: 0.55;
+		`}
 `;
 export default Small;

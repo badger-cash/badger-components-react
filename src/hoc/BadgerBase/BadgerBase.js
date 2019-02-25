@@ -6,8 +6,9 @@ import debounce from 'lodash/debounce';
 
 import {
 	fiatToSatoshis,
-	bchToSatoshis,
+	adjustAmount,
 	getAddressUnconfirmed,
+	getTokenInfo,
 } from '../../utils/badger-helpers';
 
 import { type CurrencyCode } from '../../utils/currency-helpers';
@@ -19,18 +20,23 @@ const INTERVAL_LOGIN = 1 * SECOND;
 const REPEAT_TIMEOUT = 4 * SECOND;
 const URI_CHECK_INTERVAL = 10 * SECOND;
 
-// Whitelist of valid tickers.
-type ValidTickers = 'BCH';
+// Whitelist of valid coinType.
+type ValidCoinTypes = 'BCH' | 'SLP';
+
+// TODO - Login/Install are badger states, others are payment states.  Separate them to be independent
+type ButtonStates = 'fresh' | 'pending' | 'complete' | 'login' | 'install';
 
 type BadgerBaseProps = {
 	to: string,
+	stepControlled?: ButtonStates,
 
 	// Both present to price in fiat equivalent
 	currency: CurrencyCode,
 	price?: number,
 
-	// Both present to price in ticker absolute amount
-	ticker: ValidTickers,
+	// Both present to price in coinType absolute amount
+	coinType: ValidCoinTypes,
+	tokenId?: string,
 	amount?: number,
 
 	isRepeatable: boolean,
@@ -38,19 +44,21 @@ type BadgerBaseProps = {
 	watchAddress: boolean,
 
 	opReturn?: string[],
+	showQR: boolean, // Intent to show QR.  Only show if amount is BCH or fiat as OP_RETURN and SLP do not work with QR
 
 	successFn?: Function,
 	failFn?: Function,
 };
 
-// TODO - Login/Install are badger states, others are payment states.  Separate them to be independent
-type ButtonStates = 'fresh' | 'pending' | 'complete' | 'login' | 'install';
-
 type State = {
 	step: ButtonStates,
 	errors: string[],
 
-	satoshis: ?number,
+	satoshis: ?number, // Used when converting fiat to BCH
+
+	coinSymbol: ?string,
+	coinName: ?string,
+	coinDecimals: ?number,
 	unconfirmedCount: ?number,
 
 	intervalPrice: ?IntervalID,
@@ -62,10 +70,11 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 	return class extends React.Component<BadgerBaseProps, State> {
 		static defaultProps = {
 			currency: 'USD',
-			ticker: 'BCH',
+			coinType: 'BCH',
 
 			isRepeatable: false,
 			watchAddress: false,
+			showQR: true,
 			repeatTimeout: REPEAT_TIMEOUT,
 		};
 
@@ -73,7 +82,10 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			step: 'fresh',
 
 			satoshis: null,
-			ticker: null,
+			coinSymbol: null,
+			coinDecimals: null,
+			coinName: null,
+
 			unconfirmedCount: null,
 
 			intervalPrice: null,
@@ -100,6 +112,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				step: 'complete',
 				unconfirmedCount: unconfirmedCount + 1,
 			});
+
 			if (isRepeatable) {
 				this.startRepeatable();
 			} else {
@@ -108,11 +121,21 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		};
 
 		handleClick = () => {
-			const { to, successFn, failFn, opReturn, isRepeatable } = this.props;
+			const {
+				amount,
+				to,
+				successFn,
+				failFn,
+				opReturn,
+				coinType,
+				isRepeatable,
+				tokenId,
+			} = this.props;
+
 			const { satoshis } = this.state;
 
 			// Satoshis might not set be set during server rendering
-			if (!satoshis) {
+			if (!amount && !satoshis) {
 				return;
 			}
 
@@ -130,15 +153,33 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					return;
 				}
 
+				// BCH amount = satoshis, SLP amount = absolute value
+				const calculatedValue =
+					coinType === 'BCH' && amount
+						? adjustAmount(amount, 8)
+						: amount || satoshis;
+
 				const txParamsBase = {
 					to,
 					from: defaultAccount,
-					value: satoshis,
+					value: calculatedValue,
 				};
 
-				const txParams = opReturn
-					? { ...txParamsBase, opReturn: { data: opReturn } }
-					: { ...txParamsBase };
+				const txParamsSLP =
+					coinType === 'SLP' && tokenId
+						? {
+								...txParamsBase,
+								sendTokenData: {
+									tokenId,
+									tokenProtocol: 'slp',
+								},
+						  }
+						: txParamsBase;
+
+				const txParams =
+					opReturn && opReturn.length
+						? { ...txParamsSLP, opReturn: { data: opReturn } }
+						: txParamsSLP;
 
 				this.setState({ step: 'pending' });
 
@@ -222,7 +263,11 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				const unconfirmedCount = targetTransactions.length;
 
 				this.setState({ unconfirmedCount });
-				if (unconfirmedCount > prevUnconfirmedCount) {
+				if (
+					prevUnconfirmedCount != null &&
+					unconfirmedCount > prevUnconfirmedCount
+				) {
+					console.log('success?');
 					this.paymentSendSuccess();
 				}
 			}, URI_CHECK_INTERVAL);
@@ -230,29 +275,41 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			this.setState({ intervalUnconfirmed: intervalUnconfirmedNext });
 		};
 
+		setupCoinMeta = async () => {
+			const { coinType, tokenId } = this.props;
+			if (coinType === 'BCH') {
+				this.setState({
+					coinSymbol: 'BCH',
+					coinDecimals: 8,
+					coinName: 'Bitcoin Cash',
+				});
+			} else if (coinType === 'SLP' && tokenId) {
+				this.setState({
+					coinSymbol: null,
+					coinName: null,
+					coinDecimals: null,
+				});
+				const tokenInfo = await getTokenInfo(tokenId);
+
+				const { symbol, decimals, name } = tokenInfo;
+				this.setState({
+					coinSymbol: symbol,
+					coinDecimals: decimals,
+					coinName: name,
+				});
+			}
+		};
+
 		async componentDidMount() {
 			if (typeof window !== 'undefined') {
-				const { price, ticker, amount, watchAddress } = this.props;
+				const { price, coinType, amount, watchAddress } = this.props;
 
-				// Watch for any source of payment to the address, not only Badger
-				if (watchAddress) {
-					this.setupWatchAddress();
-				}
+				// setup state, intervals, and listeners
+				watchAddress && this.setupWatchAddress();
+				price && this.setupSatoshisFiat();
+				this.setupCoinMeta();
 
-				if (price) {
-					await this.updateSatoshisFiat();
-					this.setupSatoshisFiat();
-				} else if (amount) {
-					if (ticker === 'BCH') {
-						this.setState({ satoshis: bchToSatoshis(amount) });
-					} else {
-						this.addError(
-							`Ticker ${ticker} not supported by this version of badger-react-components`
-						);
-					}
-				}
-
-				// Determine if button should show login or install CTA
+				// Detect Badger and determine if button should show login or install CTA
 				if (window.Web4Bch) {
 					const { web4bch } = window;
 					const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
@@ -277,36 +334,34 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			if (typeof window !== 'undefined') {
 				const {
 					currency,
-					ticker,
+					coinType,
 					price,
 					amount,
 					isRepeatable,
 					watchAddress,
+					tokenId,
 				} = this.props;
 				const { intervalPrice } = this.state;
 
 				const prevCurrency = prevProps.currency;
-				const prevTicker = prevProps.ticker;
+				const prevCoinType = prevProps.coinType;
 				const prevPrice = prevProps.price;
 				const prevAmount = prevProps.amount;
 				const prevIsRepeatable = prevProps.isRepeatable;
 				const prevWatchAddress = prevProps.watchAddress;
+				const prevTokenId = prevProps.tokenId;
 
 				// Fiat price or currency changes
 				if (currency !== prevCurrency || price !== prevPrice) {
 					this.setupSatoshisFiat();
 				}
 
-				// Ticker or ticker amount changed
-				if (ticker !== prevTicker || amount !== prevAmount) {
-					// Currently BCH only ticker supported
-					if (ticker === 'BCH') {
-						this.setState({ satoshis: bchToSatoshis(amount) });
-					}
-				}
-
 				if (isRepeatable && isRepeatable !== prevIsRepeatable) {
 					this.startRepeatable();
+				}
+
+				if (tokenId !== prevTokenId) {
+					this.setupCoinMeta();
 				}
 
 				if (watchAddress !== prevWatchAddress) {
@@ -321,20 +376,31 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		}
 
 		render() {
-			const { step, satoshis } = this.state;
+			const { amount, showQR, opReturn, coinType, stepControlled } = this.props;
+			const { step, satoshis, coinDecimals, coinSymbol, coinName } = this.state;
+
+			const calculatedAmount = adjustAmount(amount, coinDecimals) || satoshis;
+
+			// Only show QR if all requested features can be encoded in the BIP44 URI
+			const shouldShowQR =
+				showQR && coinType === 'BCH' && (!opReturn || !opReturn.length);
 
 			return (
 				<Wrapped
 					{...this.props}
+					showQR={shouldShowQR}
 					handleClick={this.handleClick}
-					step={step}
-					satoshis={satoshis}
+					step={stepControlled || step}
+					amount={calculatedAmount}
+					coinDecimals={coinDecimals}
+					coinSymbol={coinSymbol}
+					coinName={coinName}
 				/>
 			);
 		}
 	};
 };
 
-export type { BadgerBaseProps, ButtonStates };
+export type { BadgerBaseProps, ButtonStates, ValidCoinTypes };
 
 export default BadgerBase;

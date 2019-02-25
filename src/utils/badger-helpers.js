@@ -15,32 +15,34 @@ const getAddressUnconfirmed = async (address: string): Promise<string[]> => {
 	return result.utxos || [];
 };
 
+const getTokenInfo = async (coinId: string): Promise<any> => {
+	const tokenInfoRequest = await fetch(
+		`https://rest.bitcoin.com/v2/slp/list/${coinId}`
+	);
+	const tokenInfo = await tokenInfoRequest.json();
+	return tokenInfo;
+};
+
 const getCurrencyPreSymbol = (currency: CurrencyCode) => {
 	return currencySymbolMap[currency];
 };
 
-const formatPriceDisplay = (price?: number): ?number => {
+const formatPriceDisplay = (price: ?number): ?number => {
 	if (!price) return null;
 	return +price.toFixed(5);
 };
 
-const formatSatoshis = (satoshis: ?number): string => {
-	if (!satoshis) {
+const formatAmount = (amount: ?number, decimals: ?number): string => {
+	if (decimals == null) {
 		return '-.--------';
 	}
-	return (satoshis / 100000000).toFixed(8);
-};
+	if (!amount) {
+		return `-.`.padEnd(decimals + 2, '-');
+	}
+	const adjustDecimals = (amount / Math.pow(10, decimals)).toFixed(decimals);
+	const removeTrailing = +adjustDecimals + '';
 
-const getSatoshiDisplayValue = (
-	priceInCurrency: ?number,
-	price: number
-): string => {
-	if (!priceInCurrency) {
-		return '-.--------';
-	}
-	const singleDollarValue = priceInCurrency / 100;
-	const singleDollarSatoshis = 100000000 / singleDollarValue;
-	return (Math.trunc(price * singleDollarSatoshis) / 100000000).toFixed(8);
+	return removeTrailing;
 };
 
 const priceToSatoshis = (BCHRate: number, price: number): number => {
@@ -60,18 +62,18 @@ const fiatToSatoshis = async (
 	return satoshis;
 };
 
-const bchToSatoshis = (bchAmount: number): number => {
-	return bchAmount * 1e8;
+const adjustAmount = (amount: ?number, decimals: number): ?number => {
+	return amount ? amount * Math.pow(10, decimals) : null;
 };
 
 export {
-	bchToSatoshis,
+	adjustAmount,
 	buildPriceEndpoint,
 	fiatToSatoshis,
+	formatAmount,
 	formatPriceDisplay,
-	formatSatoshis,
 	getAddressUnconfirmed,
 	getCurrencyPreSymbol,
-	getSatoshiDisplayValue,
+	getTokenInfo,
 	priceToSatoshis,
 };

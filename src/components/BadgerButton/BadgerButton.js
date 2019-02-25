@@ -6,18 +6,23 @@ import styled from 'styled-components';
 import {
 	getCurrencyPreSymbol,
 	formatPriceDisplay,
-	formatSatoshis,
+	formatAmount,
 } from '../../utils/badger-helpers';
 
 import { type CurrencyCode } from '../../utils/currency-helpers';
 
 import colors from '../../styles/colors';
+
 import BitcoinCashImage from '../../images/bitcoin-cash.svg';
+import SLPLogoImage from '../../images/slp-logo.png';
 
 import BadgerBase, {
 	type ButtonStates,
 	type BadgerBaseProps,
+	type ValidCoinTypes,
 } from '../../hoc/BadgerBase';
+
+import PriceDisplay from '../PriceDisplay';
 
 import Button from '../../atoms/Button';
 import ButtonQR from '../../atoms/ButtonQR';
@@ -56,35 +61,49 @@ const Wrapper = styled.div`
 type Props = BadgerBaseProps & {
 	text?: string,
 
-	showSatoshis?: boolean,
+	showAmount?: boolean,
 	showBorder?: boolean,
 	showQR?: boolean,
 
-	satoshis: number,
+	showAmount?: boolean,
+	coinSymbol: string,
+	coinDecimals?: number,
+	coinName?: string,
+
 	handleClick: Function,
 	step: ButtonStates,
 };
 
 class BadgerButton extends React.PureComponent<Props> {
 	static defaultProps = {
-		showSatoshis: true,
+		showAmount: true,
 		showBorder: false,
 		showQR: false,
 	};
 
 	render() {
 		const {
-			text,
-			price,
 			to,
-			currency,
 			step,
 			handleClick,
-			showSatoshis,
-			satoshis,
+
+			currency,
+			price,
+
+			coinType,
+			coinSymbol,
+			coinDecimals,
+			coinName,
+
+			amount,
+			showAmount,
+
+			text,
 			showBorder,
 			showQR,
 		} = this.props;
+
+		const CoinImage = coinType === 'BCH' ? BitcoinCashImage : SLPLogoImage;
 
 		return (
 			<Outer>
@@ -92,7 +111,7 @@ class BadgerButton extends React.PureComponent<Props> {
 					<Text style={{ textAlign: 'center' }}>{text}</Text>
 					{showQR ? (
 						<ButtonQR
-							amountSatoshis={satoshis}
+							amountSatoshis={amount}
 							toAddress={to}
 							onClick={handleClick}
 							step={step}
@@ -119,18 +138,13 @@ class BadgerButton extends React.PureComponent<Props> {
 						</Button>
 					)}
 
-					{showSatoshis && (
-						<SatoshiText>
-							<img
-								src={BitcoinCashImage}
-								style={{ height: 14, margin: 0 }}
-								alt="BCH"
-							/>{' '}
-							BCH{' '}
-							<span style={{ fontFamily: 'monospace' }}>
-								{formatSatoshis(satoshis)}
-							</span>
-						</SatoshiText>
+					{showAmount && (
+						<PriceDisplay
+							coinType={coinType}
+							price={formatAmount(amount, coinDecimals)}
+							symbol={coinSymbol}
+							name={coinName}
+						/>
 					)}
 				</Wrapper>
 			</Outer>

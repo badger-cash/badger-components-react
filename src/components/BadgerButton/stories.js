@@ -13,6 +13,15 @@ const defaultOpReturn = [
 	'Learn to build on BCH at https://developer.bitcoin.com',
 ];
 
+const coinTypeOptions = ['BCH', 'SLP'];
+
+// [ NAKAMOTO, DOGECASH, BROC ]
+const tokenIdOptions = [
+	'df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb',
+	'3916a24a051f8b3833a7fd128be51dd93015555ed9142d6106ec03267f5cdc4c',
+	'259908ae44f46ef585edef4bcc1e50dc06e4c391ac4be929fae27235b8158cf1',
+];
+
 storiesOf('BadgerButton', module)
 	.add(
 		'default',
@@ -24,7 +33,7 @@ storiesOf('BadgerButton', module)
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
-				opReturn={array('OP_RETURN', defaultOpReturn)}
+				opReturn={array('OP_RETURN', [])}
 				successFn={() => console.log('success example function called')}
 				failFn={() => console.log('fail example function called')}
 			/>
@@ -35,7 +44,7 @@ storiesOf('BadgerButton', module)
 		}
 	)
 	.add(
-		'all knobs',
+		'most knobs',
 		() => (
 			<BadgerButton
 				price={number('Price', 0.001)}
@@ -50,7 +59,7 @@ storiesOf('BadgerButton', module)
 				successFn={() => console.log('success example function called')}
 				failFn={() => console.log('fail example function called')}
 				text={text('Top Text', 'Badger Pay')}
-				showSatoshis={boolean('Toggle Satoshis', true)}
+				showAmount={boolean('Toggle coin amount', true)}
 				showBorder={boolean('Toggle Border', true)}
 				showQR={boolean('Show QR', false)}
 			/>
@@ -70,19 +79,37 @@ storiesOf('BadgerButton', module)
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
 				showSatoshis={false}
+				showQR={boolean('QR?', true)}
+			/>
+		),
+		{
+			notes: 'minimal look',
+		}
+	)
+	.add(
+		'price in fiat',
+		() => (
+			<BadgerButton
+				price={number('Price', 0.001)}
+				currency={select('Currency', currencyOptions, 'USD')}
+				text="Pay with Badger"
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
 			/>
 		),
 		{
 			notes:
-				'minimal look',
+				'Change the currency and price to charge in any fiat currency equivalent of BCH',
 		}
 	)
 	.add(
 		'price in BCH',
 		() => (
 			<BadgerButton
-				ticker={'BCH'}
-				amount={number('BCH amount', 0.001)}
+				coinType="BCH"
+				amount={number('Amount', 0.001)}
 				to={text(
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
@@ -91,6 +118,27 @@ storiesOf('BadgerButton', module)
 		),
 		{
 			notes: 'Without a text prop, it only shows the price',
+		}
+	)
+	.add(
+		'price in SLP tokens',
+		() => (
+			<BadgerButton
+				to={text(
+					'To Address',
+					'simpleledger:qq6qcjt6xlkeqzdwkhdvfyl2q2d2wafkgg8phzcqez'
+				)}
+				coinType="SLP"
+				tokenId={
+					text('Token ID', '') ||
+					select('Token ID select', tokenIdOptions, tokenIdOptions[0])
+				}
+				amount={number('Amount', 5)}
+				text="Send SLP Tokens"
+			/>
+		),
+		{
+			notes: 'Enter the token ID and send whichever SLP tokens you want!',
 		}
 	)
 	.add(
@@ -103,6 +151,7 @@ storiesOf('BadgerButton', module)
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
+				text={text('text', '')}
 				successFn={() => console.log('success example function called')}
 				failFn={() => console.log('fail example function called')}
 			/>
@@ -124,31 +173,16 @@ storiesOf('BadgerButton', module)
 			/>
 		),
 		{
-			notes: 'Optional use a QR code in addition to Button',
+			notes:
+				'Optional QR code in addition to Button.  Only shows if transaction fully compatible in a URI',
 		}
 	)
+
 	.add(
-		'currency variety',
+		'toggle coin amount',
 		() => (
 			<BadgerButton
-				price={number('Price', 0.001)}
-				currency={select('Currency', currencyOptions, 'USD')}
-				text="Pay with Badger"
-				to={text(
-					'To Address',
-					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
-				)}
-			/>
-		),
-		{
-			notes: 'Change the currency and price',
-		}
-	)
-	.add(
-		'toggle Satoshis',
-		() => (
-			<BadgerButton
-				showSatoshis={boolean('Toggle Satoshis', false)}
+				showAmount={boolean('Toggle coin amount', false)}
 				price={0.001}
 				currency={'USD'}
 				text="Pay now"
@@ -159,7 +193,7 @@ storiesOf('BadgerButton', module)
 			/>
 		),
 		{
-			notes: 'Change the currency and price',
+			notes: 'Choose to show the coin or token amount',
 		}
 	)
 	.add(
@@ -230,5 +264,26 @@ storiesOf('BadgerButton', module)
 		{
 			notes:
 				'if watchAddress is true, the payment will turn to confirmed when the address receives a payment from any source.  Including other people.  This is ideal to use if the payment codes are unique for the checkout.  Not great if the payment address is shared by users.',
+		}
+	)
+	.add(
+		'controlled step',
+		() => (
+			<BadgerButton
+				amount={0.0001}
+				to={text(
+					'To Address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				stepControlled={select(
+					'step',
+					['fresh', 'pending', 'complete'],
+					'fresh'
+				)}
+			/>
+		),
+		{
+			notes:
+				'Controlled step overrides the component step state.  Valuable for payment systems where the app/backend does payment confirmation.',
 		}
 	);
