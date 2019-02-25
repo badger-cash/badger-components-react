@@ -47,7 +47,6 @@ storiesOf('Price Display', module)
 	.add(
 		'bch',
 		() => {
-			// const currency = select('Currency', currencyOptions, 'USD');
 			const price = number('Price', 0.001);
 			const satoshis = price * 1e8;
 
