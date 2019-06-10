@@ -57,7 +57,9 @@ class PriceDisplay extends React.PureComponent<Props> {
 		const preContent = preSymbol ? (
 			<PriceText>{preSymbol}</PriceText>
 		) : (
+			<div style={{width: 25, height: 15}}>
 			<img src={CoinImage} style={{ height: '100%' }} alt={coinType} />
+			</div>
 		);
 
 		return (
