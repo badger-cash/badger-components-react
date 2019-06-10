@@ -1,5 +1,9 @@
 # Changelog - Badger Components React
 
+## 0.3.1 (June 10, 2019)
+
+* Fixing rendering issue in Safari
+
 ## 0.3.0 (February xx, 2019)
 
 SLP support added  🎉

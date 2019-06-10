@@ -40,7 +40,7 @@ const PriceText = styled.p`
 
 // Price display
 type Props = {
-	price: string,
+	price: ?string,
 	symbol: string,
 
 	coinType?: ValidCoinTypes,
@@ -57,7 +57,9 @@ class PriceDisplay extends React.PureComponent<Props> {
 		const preContent = preSymbol ? (
 			<PriceText>{preSymbol}</PriceText>
 		) : (
-			<img src={CoinImage} style={{ height: '100%' }} alt={coinType} />
+			<div style={{ width: 25, height: 15 }}>
+				<img src={CoinImage} style={{ height: '100%' }} alt={coinType} />
+			</div>
 		);
 
 		return (
