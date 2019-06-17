@@ -1,5 +1,9 @@
 # Changelog - Badger Components React
 
+## 0.4.0 (Jun 17, 2019)
+
+* Updating to use new green colors
+
 ## 0.3.0 (February xx, 2019)
 
 SLP support added  🎉
