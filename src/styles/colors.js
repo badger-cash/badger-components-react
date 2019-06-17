@@ -1,8 +1,8 @@
 // @flow
 
 const colors = {
-	brand500: '#F59332',
-	brand700: '#F57A00',
+	brand500: '#0AC18E',
+	brand700: '#11a87e',
 	fg100: '#ccc',
 	fg500: '#4d4d4d',
 	pending500: '#00BFFF',
