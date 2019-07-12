@@ -64,6 +64,7 @@
     "styled-components": "^4.0.0"
   },
   "dependencies": {
+    "bignumber.js": "^9.0.0",
     "lodash": "^4.17.11",
     "qrcode.react": "^0.9.2"
   }

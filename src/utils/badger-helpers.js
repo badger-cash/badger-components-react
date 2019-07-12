@@ -1,6 +1,7 @@
 // @flow
 // Currency endpoints, logic, converters and formatters
 
+import BigNumber from 'bignumber.js'
 import { currencySymbolMap, type CurrencyCode } from './currency-helpers';
 
 const buildPriceEndpoint = (currency: CurrencyCode) => {
@@ -63,7 +64,7 @@ const fiatToSatoshis = async (
 };
 
 const adjustAmount = (amount: ?number, decimals: number): ?number => {
-	return amount ? amount * Math.pow(10, decimals) : null;
+	return amount ? new BigNumber(amount).multipliedBy(Math.pow(10, decimals)).toString() : null;
 };
 
 export {
