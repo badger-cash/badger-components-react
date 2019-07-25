@@ -148,13 +148,12 @@ class BadgerBadge extends React.PureComponent<Props> {
 		} = this.props;
 
 		const CoinImage = coinType === 'BCH' ? BitcoinCashImage : SLPLogoImage;
-
 		return (
 			<Outer>
 				<Main showBorder={showBorder}>
 					<H3>{text}</H3>
 					<Prices>
-						{price && (
+						{price != undefined && (
 							<PriceDisplay
 								preSymbol={getCurrencyPreSymbol(currency)}
 								price={formatPriceDisplay(price)}

@@ -29,6 +29,9 @@ const QRCodeWrapper = styled.div`
 	border-radius: 5px 5px 0 0;
 	border-bottom: none;
 	background-color: white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 `;
 
 const A = styled.a`

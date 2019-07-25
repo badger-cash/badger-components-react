@@ -29,7 +29,7 @@ storiesOf('BadgerBadge', module)
 		'most knobs',
 		() => (
 			<BadgerBadge
-				price={number('Price', 0.001)}
+				price={number('Price', 0.0025)}
 				currency={select('Currency', currencyOptions, 'USD')}
 				to={text(
 					'To Address',
@@ -58,7 +58,7 @@ storiesOf('BadgerBadge', module)
 		'minimal look',
 		() => (
 			<BadgerBadge
-				amount={0.001}
+				amount={0.0001}
 				to={text(
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
@@ -76,7 +76,7 @@ storiesOf('BadgerBadge', module)
 		'price in fiat',
 		() => (
 			<BadgerBadge
-				price={number('Price', 0.001)}
+				price={number('Price', 0.0025)}
 				currency={select('Currency', currencyOptions, 'USD')}
 				to={text(
 					'To Address',
@@ -132,7 +132,7 @@ storiesOf('BadgerBadge', module)
 		'custom text',
 		() => (
 			<BadgerBadge
-				price={0.001}
+				price={0.0025}
 				currency={'USD'}
 				to={text(
 					'To Address',
@@ -152,7 +152,7 @@ storiesOf('BadgerBadge', module)
 		'toggle QR code',
 		() => (
 			<BadgerBadge
-				price={number('Price', 0.001)}
+				price={number('Price', 0.0025)}
 				to={text(
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
@@ -171,7 +171,7 @@ storiesOf('BadgerBadge', module)
 		'toggle coin amount',
 		() => (
 			<BadgerBadge
-				price={0.001}
+				price={0.0025}
 				to={text(
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
@@ -189,7 +189,7 @@ storiesOf('BadgerBadge', module)
 		'toggle badger info',
 		() => (
 			<BadgerBadge
-				price={0.001}
+				price={0.0025}
 				to={text(
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
@@ -207,7 +207,7 @@ storiesOf('BadgerBadge', module)
 		'toggle border',
 		() => (
 			<BadgerBadge
-				price={0.001}
+				price={0.0025}
 				showBorder={boolean('Toggle Border', true)}
 				to={text(
 					'To Address',
@@ -223,7 +223,7 @@ storiesOf('BadgerBadge', module)
 		'repeatable payments',
 		() => (
 			<BadgerBadge
-				price={number('Price', 0.001)}
+				price={number('Price', 0.0025)}
 				to={text(
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
@@ -241,7 +241,7 @@ storiesOf('BadgerBadge', module)
 		'payment functions',
 		() => (
 			<BadgerBadge
-				price={0.001}
+				price={0.0025}
 				to={text(
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
@@ -258,7 +258,7 @@ storiesOf('BadgerBadge', module)
 		'OP_RETURN',
 		() => (
 			<BadgerBadge
-				price={0.001}
+				price={0.0025}
 				currency={'USD'}
 				opReturn={array('OP_RETURN', defaultOpReturn)}
 				text="With OP_RETURN"

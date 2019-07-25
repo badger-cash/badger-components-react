@@ -11,7 +11,7 @@ import { BadgerBadge } from 'badger-components-react';
 
 class MyClass extends React.Component {
 	successFn() {
-		console.log('Ack! You got me!');
+		console.log('Transactions successful');
 	}
 	failFn(err) {
 		console.err('Transaction failed or cancelled');
