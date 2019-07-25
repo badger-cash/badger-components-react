@@ -52,7 +52,7 @@ const priceToSatoshis = (BCHRate: number, price: number): number => {
 	const satoshisPerBCH = new BigNumber(100000000);
 	const singleDollarSatoshis = satoshisPerBCH.div(singleDollarValue);
 
-	return singleDollarSatoshis.times(price).integerValue(BigNumber.ROUND_FLOOR);
+	return +singleDollarSatoshis.times(price).integerValue(BigNumber.ROUND_FLOOR);
 };
 
 const fiatToSatoshis = async (
