@@ -1,5 +1,10 @@
 # Changelog - Badger Components React
 
+## 0.4.1 (July 25, 2019)
+
+* Updating lots of development packages
+* Math fix when calculating numbers
+  
 ## 0.4.0 (Jun 17, 2019)
 
 * Updating to use new green colors
