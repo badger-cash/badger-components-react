@@ -1,7 +1,7 @@
 // @flow
 // Currency endpoints, logic, converters and formatters
 
-import BigNumber from 'bignumber.js'
+import BigNumber from 'bignumber.js';
 import { currencySymbolMap, type CurrencyCode } from './currency-helpers';
 
 const buildPriceEndpoint = (currency: CurrencyCode) => {
@@ -40,16 +40,19 @@ const formatAmount = (amount: ?number, decimals: ?number): string => {
 	if (!amount) {
 		return `-.`.padEnd(decimals + 2, '-');
 	}
-	const adjustDecimals = (amount / Math.pow(10, decimals)).toFixed(decimals);
+	const baseAmount = new BigNumber(amount);
+	const adjustDecimals = baseAmount.shiftedBy(-1 * decimals).toFixed(decimals)
 	const removeTrailing = +adjustDecimals + '';
 
 	return removeTrailing;
 };
 
 const priceToSatoshis = (BCHRate: number, price: number): number => {
-	const singleDollarValue = BCHRate / 100;
-	const singleDollarSatoshis = 100000000 / singleDollarValue;
-	return Math.floor(price * singleDollarSatoshis);
+	const singleDollarValue = new BigNumber(BCHRate).div(100);
+	const satoshisPerBCH = new BigNumber(100000000);
+	const singleDollarSatoshis = satoshisPerBCH.div(singleDollarValue);
+
+	return singleDollarSatoshis.times(price).integerValue(BigNumber.ROUND_FLOOR);
 };
 
 const fiatToSatoshis = async (
@@ -64,7 +67,9 @@ const fiatToSatoshis = async (
 };
 
 const adjustAmount = (amount: ?number, decimals: number): ?number => {
-	return amount ? new BigNumber(amount).shiftedBy(decimals || 0).toString() : null;
+	return amount
+		? new BigNumber(amount).shiftedBy(decimals || 0).toString()
+		: null;
 };
 
 export {
