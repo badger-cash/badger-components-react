@@ -41,7 +41,7 @@ const formatAmount = (amount: ?number, decimals: ?number): string => {
 		return `-.`.padEnd(decimals + 2, '-');
 	}
 	const baseAmount = new BigNumber(amount);
-	const adjustDecimals = baseAmount.shiftedBy(-1 * decimals).toFixed(decimals)
+	const adjustDecimals = baseAmount.shiftedBy(-1 * decimals).toFixed(decimals);
 	const removeTrailing = +adjustDecimals + '';
 
 	return removeTrailing;
