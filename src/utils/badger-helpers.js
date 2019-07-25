@@ -28,7 +28,7 @@ const getCurrencyPreSymbol = (currency: CurrencyCode) => {
 	return currencySymbolMap[currency];
 };
 
-const formatPriceDisplay = (price: ?number): ?string => {
+const formatPriceDisplay = (price: ?number): ?number => {
 	if (!price) return null;
 	return +price.toFixed(5);
 };
@@ -64,7 +64,7 @@ const fiatToSatoshis = async (
 };
 
 const adjustAmount = (amount: ?number, decimals: number): ?number => {
-	return amount ? new BigNumber(amount).multipliedBy(Math.pow(10, decimals)).toString() : null;
+	return amount ? new BigNumber(amount).shiftedBy(decimals || 0).toString() : null;
 };
 
 export {
