@@ -112,7 +112,7 @@ storiesOf('BadgerBadge', module)
 			<BadgerBadge
 				to={text(
 					'To Address',
-					'simpleledger:qqzjzzlmx8h3hum3drsuk894jnf8r909ku4lankkg5'
+					'simpleledger:qq6qcjt6xlkeqzdwkhdvfyl2q2d2wafkgg8phzcqez'
 				)}
 				coinType="SLP"
 				tokenId={
