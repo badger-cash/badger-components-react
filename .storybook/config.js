@@ -1,5 +1,5 @@
-import { configure, addDecorator } from '@storybook/react';
-import { themes } from '@storybook/components';
+import { configure, addDecorator, addParameters } from '@storybook/react';
+import { themes } from '@storybook/theming';
 
 import { withNotes } from '@storybook/addon-notes';
 import { withKnobs } from '@storybook/addon-knobs'
@@ -15,12 +15,12 @@ addDecorator(withNotes);
 addDecorator(withKnobs);
 
 
-addDecorator(
-  withOptions({
+addParameters({
+  options: {
     name: 'Badger Components React',
     url: 'https://www.npmjs.com/package/badger-components-react',
-    theme: {...themes.normal, highlightColor: '#F59332'}
-  })
-);
+    theme: {...themes.normal, colorSecondary: '#0AC18E'}
+  }
+});
 
 configure(loadStories, module);
