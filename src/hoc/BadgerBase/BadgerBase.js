@@ -267,7 +267,6 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					prevUnconfirmedCount != null &&
 					unconfirmedCount > prevUnconfirmedCount
 				) {
-					console.log('success?');
 					this.paymentSendSuccess();
 				}
 			}, URI_CHECK_INTERVAL);

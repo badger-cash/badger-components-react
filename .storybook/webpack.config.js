@@ -1,5 +1,5 @@
-module.exports = function(baseConfig, env, defaultConfig) {
-	defaultConfig.module.rules.push({
+module.exports = function({config}) {
+	config.module.rules.push({
 		test: /stories\.jsx?$/,
 		loaders: [
 			{
@@ -9,5 +9,5 @@ module.exports = function(baseConfig, env, defaultConfig) {
 		enforce: 'pre',
 	});
 
-	return defaultConfig;
+	return config;
 };

@@ -66,7 +66,7 @@ class PriceDisplay extends React.PureComponent<Props> {
 			<Outer>
 				<Top>
 					{preContent}
-					<PriceText>{price}</PriceText>
+					<PriceText>{price || '-'}</PriceText>
 					<Small>{symbol}</Small>
 				</Top>
 				{name && (

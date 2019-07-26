@@ -78,7 +78,6 @@ class BadgerButton extends React.PureComponent<Props> {
 	static defaultProps = {
 		showAmount: true,
 		showBorder: false,
-		showQR: false,
 	};
 
 	render() {

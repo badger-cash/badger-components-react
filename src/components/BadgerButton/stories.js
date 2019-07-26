@@ -15,8 +15,9 @@ const defaultOpReturn = [
 
 const coinTypeOptions = ['BCH', 'SLP'];
 
-// [ NAKAMOTO, DOGECASH, BROC ]
+// [ SPICE, NAKAMOTO, DOGECASH, BROC ]
 const tokenIdOptions = [
+	'4de69e374a8ed21cbddd47f2338cc0f479dc58daa2bbe11cd604ca488eca0ddf',
 	'df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb',
 	'3916a24a051f8b3833a7fd128be51dd93015555ed9142d6106ec03267f5cdc4c',
 	'259908ae44f46ef585edef4bcc1e50dc06e4c391ac4be929fae27235b8158cf1',
@@ -27,7 +28,7 @@ storiesOf('BadgerButton', module)
 		'default',
 		() => (
 			<BadgerButton
-				price={number('Price', 0.001)}
+				price={number('Price', 0.0025)}
 				currency={select('Currency', currencyOptions, 'USD')}
 				to={text(
 					'To Address',
@@ -47,7 +48,7 @@ storiesOf('BadgerButton', module)
 		'most knobs',
 		() => (
 			<BadgerButton
-				price={number('Price', 0.001)}
+				price={number('Price', 0.0025)}
 				currency={select('Currency', currencyOptions, 'USD')}
 				to={text(
 					'To Address',
@@ -90,7 +91,7 @@ storiesOf('BadgerButton', module)
 		'price in fiat',
 		() => (
 			<BadgerButton
-				price={number('Price', 0.001)}
+				price={number('Price', 0.0025)}
 				currency={select('Currency', currencyOptions, 'USD')}
 				text="Pay with Badger"
 				to={text(
@@ -109,7 +110,7 @@ storiesOf('BadgerButton', module)
 		() => (
 			<BadgerButton
 				coinType="BCH"
-				amount={number('Amount', 0.001)}
+				amount={number('Amount', 0.0001)}
 				to={text(
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
@@ -145,13 +146,13 @@ storiesOf('BadgerButton', module)
 		'optional text',
 		() => (
 			<BadgerButton
-				price={0.001}
+				price={0.0025}
 				currency={'USD'}
 				to={text(
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
-				text={text('text', '')}
+				text={text('text', 'Change this text in section below')}
 				successFn={() => console.log('success example function called')}
 				failFn={() => console.log('fail example function called')}
 			/>
@@ -183,7 +184,7 @@ storiesOf('BadgerButton', module)
 		() => (
 			<BadgerButton
 				showAmount={boolean('Toggle coin amount', false)}
-				price={0.001}
+				price={0.0025}
 				currency={'USD'}
 				text="Pay now"
 				to={text(
@@ -200,7 +201,7 @@ storiesOf('BadgerButton', module)
 		'toggle border',
 		() => (
 			<BadgerButton
-				price={0.001}
+				price={0.0025}
 				showBorder={boolean('Toggle Border', true)}
 				currency={'USD'}
 				to={text(
@@ -217,7 +218,7 @@ storiesOf('BadgerButton', module)
 		'OP_RETURN',
 		() => (
 			<BadgerButton
-				price={0.001}
+				price={0.0025}
 				currency={'USD'}
 				opReturn={array('OP_RETURN', defaultOpReturn)}
 				text="With OP_RETURN"
@@ -258,7 +259,7 @@ storiesOf('BadgerButton', module)
 					'To Address',
 					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
 				)}
-				watchAddress={boolean('watch Address', true)}
+				watchAddress={boolean('Watch Address', true)}
 			/>
 		),
 		{

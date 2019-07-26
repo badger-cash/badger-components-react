@@ -1,5 +1,11 @@
 # Changelog - Badger Components React
 
+## 0.5.0 (July 25, 2019)
+
+* Updating lots of development packages
+* Upgrading storybook to latest version
+* Math fix when calculating numbers
+  
 ## 0.4.0 (Jun 17, 2019)
 
 * Updating to use new green colors
