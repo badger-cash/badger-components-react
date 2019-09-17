@@ -287,4 +287,19 @@ storiesOf('BadgerButton', module)
 			notes:
 				'Controlled step overrides the component step state.  Valuable for payment systems where the app/backend does payment confirmation.',
 		}
+	)
+	.add(
+		'BIP070 Invoicing',
+		() => (
+			<BadgerButton
+				paymentRequestUrl={text(
+					'Invoice URL',
+					'https://pay.bitcoin.com/i/94vjqppNVYbUUMDbQeD7G8'
+				)}
+			/>
+		),
+		{
+			notes:
+				'If paymentRequestUrl is set, this parameter defines the entire transaction.',
+		}
 	);

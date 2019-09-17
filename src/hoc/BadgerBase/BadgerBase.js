@@ -46,6 +46,9 @@ type BadgerBaseProps = {
 	opReturn?: string[],
 	showQR: boolean, // Intent to show QR.  Only show if amount is BCH or fiat as OP_RETURN and SLP do not work with QR
 
+	// Support for BIP070 Invoices
+	paymentRequestUrl?: string,
+
 	successFn?: Function,
 	failFn?: Function,
 };
@@ -130,6 +133,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				coinType,
 				isRepeatable,
 				tokenId,
+				paymentRequestUrl,
 			} = this.props;
 
 			const { satoshis } = this.state;
@@ -168,18 +172,23 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				const txParamsSLP =
 					coinType === 'SLP' && tokenId
 						? {
-								...txParamsBase,
-								sendTokenData: {
-									tokenId,
-									tokenProtocol: 'slp',
-								},
-						  }
+							...txParamsBase,
+							sendTokenData: {
+								tokenId,
+								tokenProtocol: 'slp',
+							},
+						}
 						: txParamsBase;
 
-				const txParams =
+				const txParamsOpReturn =
 					opReturn && opReturn.length
 						? { ...txParamsSLP, opReturn: { data: opReturn } }
 						: txParamsSLP;
+
+				const txParams =
+					paymentRequestUrl && paymentRequestUrl.length
+						? { paymentRequestUrl } // If there is an invoice, this will be the only txParams
+						: txParamsOpReturn;
 
 				this.setState({ step: 'pending' });
 

@@ -121,21 +121,21 @@ class BadgerButton extends React.PureComponent<Props> {
 									<Small> {currency}</Small>
 								</Text>
 							) : (
-								<Text>Badger Pay</Text>
-							)}
+									<Text>Badger Pay</Text>
+								)}
 						</ButtonQR>
 					) : (
-						<Button onClick={handleClick} step={step}>
-							{price ? (
-								<Text>
-									{getCurrencyPreSymbol(currency)} {formatPriceDisplay(price)}
-									<Small> {currency}</Small>
-								</Text>
-							) : (
-								<Text>Badger Pay</Text>
-							)}
-						</Button>
-					)}
+							<Button onClick={handleClick} step={step}>
+								{price ? (
+									<Text>
+										{getCurrencyPreSymbol(currency)} {formatPriceDisplay(price)}
+										<Small> {currency}</Small>
+									</Text>
+								) : (
+										<Text>Badger Pay</Text>
+									)}
+							</Button>
+						)}
 
 					{showAmount && (
 						<PriceDisplay
