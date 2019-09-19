@@ -139,7 +139,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			const { satoshis } = this.state;
 
 			// Satoshis might not set be set during server rendering
-			if (!amount && !satoshis) {
+			if (!amount && !satoshis && !paymentRequestUrl) {
 				return;
 			}
 
@@ -172,12 +172,12 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				const txParamsSLP =
 					coinType === 'SLP' && tokenId
 						? {
-							...txParamsBase,
-							sendTokenData: {
-								tokenId,
-								tokenProtocol: 'slp',
-							},
-						}
+								...txParamsBase,
+								sendTokenData: {
+									tokenId,
+									tokenProtocol: 'slp',
+								},
+						  }
 						: txParamsBase;
 
 				const txParamsOpReturn =
@@ -384,14 +384,24 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		}
 
 		render() {
-			const { amount, showQR, opReturn, coinType, stepControlled } = this.props;
+			const {
+				amount,
+				showQR,
+				opReturn,
+				coinType,
+				stepControlled,
+				paymentRequestUrl,
+			} = this.props;
 			const { step, satoshis, coinDecimals, coinSymbol, coinName } = this.state;
 
 			const calculatedAmount = adjustAmount(amount, coinDecimals) || satoshis;
 
 			// Only show QR if all requested features can be encoded in the BIP44 URI
 			const shouldShowQR =
-				showQR && coinType === 'BCH' && (!opReturn || !opReturn.length);
+				showQR &&
+				coinType === 'BCH' &&
+				(!opReturn || !opReturn.length) &&
+				(!paymentRequestUrl || !paymentRequestUrl.length);
 
 			return (
 				<Wrapped

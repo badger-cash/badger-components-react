@@ -294,8 +294,9 @@ storiesOf('BadgerButton', module)
 			<BadgerButton
 				paymentRequestUrl={text(
 					'Invoice URL',
-					'https://pay.bitcoin.com/i/94vjqppNVYbUUMDbQeD7G8'
+					'https://pay.bitcoin.com/i/G6guA954EsEvr1ZZG38V4R'
 				)}
+				showAmount={false}
 			/>
 		),
 		{
