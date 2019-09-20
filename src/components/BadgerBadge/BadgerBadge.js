@@ -107,8 +107,6 @@ type Props = BadgerBaseProps & {
 
 	showBrand?: boolean,
 	showQR?: boolean,
-	// Support for BIP070 Invoices in QR code
-	paymentRequestUrl?: string,
 	showBorder?: boolean,
 
 	handleClick: Function,
