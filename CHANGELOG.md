@@ -3,6 +3,12 @@
 ## 0.6.0 (September 19, 2019)
 
 * Added support for BIP 70 invoices
+* new prop
+  * `paymentRequestUrl` - The URL of a generated BIP70 invoice, e.g. `https://pay.bitcoin.com/i/85WzjgbFrDL5F6LX5DHqkf`
+* New prop passed to wrapped components
+  * `BadgerButton` and `BadgerBadge` can accept `paymentRequestUrl`
+  * If `paymentRequestUrl` is set, `showQR` will render QR code for the invoice, and `showAmount` will show that the button references an invoice
+  * There is not an obvious default fail mode for malformed or expired `paymentRequestUrl` entries; this should be handled with the `failFn` prop depending on the developer's use case
 
 ## 0.5.0 (July 25, 2019)
 

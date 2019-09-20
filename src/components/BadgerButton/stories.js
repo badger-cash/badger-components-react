@@ -298,6 +298,10 @@ storiesOf('BadgerButton', module)
 				)}
 				showQR={boolean('showQR', true)}
 				showAmount={boolean('showAmount', true)}
+				successFn={() => console.log('BIP70 Invoice successfully paid')}
+				failFn={() =>
+					console.log('BIP70 Invoice is expired or the URL is invalid')
+				}
 			/>
 		),
 		{
