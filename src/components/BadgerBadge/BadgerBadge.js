@@ -107,6 +107,8 @@ type Props = BadgerBaseProps & {
 
 	showBrand?: boolean,
 	showQR?: boolean,
+	// Support for BIP070 Invoices in QR code
+	paymentRequestUrl?: string,
 	showBorder?: boolean,
 
 	handleClick: Function,
@@ -143,6 +145,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 
 			showAmount,
 			showQR,
+			paymentRequestUrl,
 			showBorder,
 			showBrand,
 		} = this.props;
@@ -176,6 +179,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 								step={step}
 								amountSatoshis={amount}
 								toAddress={to}
+								paymentRequestUrl={paymentRequestUrl}
 							>
 								<Text>{tag}</Text>
 							</ButtonQR>

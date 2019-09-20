@@ -398,10 +398,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 			// Only show QR if all requested features can be encoded in the BIP44 URI
 			const shouldShowQR =
-				showQR &&
-				coinType === 'BCH' &&
-				(!opReturn || !opReturn.length) &&
-				(!paymentRequestUrl || !paymentRequestUrl.length);
+				showQR && coinType === 'BCH' && (!opReturn || !opReturn.length);
 
 			return (
 				<Wrapped
@@ -413,6 +410,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					coinDecimals={coinDecimals}
 					coinSymbol={coinSymbol}
 					coinName={coinName}
+					paymentRequestUrl={paymentRequestUrl}
 				/>
 			);
 		}

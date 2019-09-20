@@ -309,4 +309,21 @@ storiesOf('BadgerBadge', module)
 			notes:
 				'Controlled step overrides the component step state.  Valuable for payment systems where the app/backend does payment confirmation.',
 		}
+	)
+	.add(
+		'BIP070 Invoicing',
+		() => (
+			<BadgerBadge
+				paymentRequestUrl={text(
+					'Invoice URL',
+					'https://yourInvoiceUrlHere.com/String'
+				)}
+				showQR={boolean('showQR', true)}
+				showAmount={boolean('showAmount', true)}
+			/>
+		),
+		{
+			notes:
+				'If paymentRequestUrl is set, this parameter defines the entire transaction.',
+		}
 	);

@@ -65,6 +65,9 @@ type Props = BadgerBaseProps & {
 	showBorder?: boolean,
 	showQR?: boolean,
 
+	// Support for BIP070 Invoices in QR code
+	paymentRequestUrl?: string,
+
 	showAmount?: boolean,
 	coinSymbol: string,
 	coinDecimals?: number,
@@ -100,6 +103,7 @@ class BadgerButton extends React.PureComponent<Props> {
 			text,
 			showBorder,
 			showQR,
+			paymentRequestUrl,
 		} = this.props;
 
 		const CoinImage = coinType === 'BCH' ? BitcoinCashImage : SLPLogoImage;
@@ -114,6 +118,7 @@ class BadgerButton extends React.PureComponent<Props> {
 							toAddress={to}
 							onClick={handleClick}
 							step={step}
+							paymentRequestUrl={paymentRequestUrl}
 						>
 							{price ? (
 								<Text>

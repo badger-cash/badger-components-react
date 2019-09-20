@@ -292,8 +292,12 @@ storiesOf('BadgerButton', module)
 		'BIP070 Invoicing',
 		() => (
 			<BadgerButton
-				paymentRequestUrl={text('Invoice URL', 'https://yourInvoiceUrlHere/')}
-				showAmount={false}
+				paymentRequestUrl={text(
+					'Invoice URL',
+					'https://yourInvoiceUrlHere.com/String'
+				)}
+				showQR={boolean('showQR', true)}
+				showAmount={boolean('showAmount', true)}
 			/>
 		),
 		{
