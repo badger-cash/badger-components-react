@@ -1,5 +1,9 @@
 # Changelog - Badger Components React
 
+## 0.6.0 (September 19, 2019)
+
+* Added support for BIP 70 invoices
+
 ## 0.5.0 (July 25, 2019)
 
 * Updating lots of development packages

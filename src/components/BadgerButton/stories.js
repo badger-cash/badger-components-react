@@ -292,10 +292,7 @@ storiesOf('BadgerButton', module)
 		'BIP070 Invoicing',
 		() => (
 			<BadgerButton
-				paymentRequestUrl={text(
-					'Invoice URL',
-					'https://pay.bitcoin.com/i/G6guA954EsEvr1ZZG38V4R'
-				)}
+				paymentRequestUrl={text('Invoice URL', 'https://yourInvoiceUrlHere/')}
 				showAmount={false}
 			/>
 		),
