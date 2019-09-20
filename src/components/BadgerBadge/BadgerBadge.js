@@ -167,6 +167,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 								price={formatAmount(amount, coinDecimals)}
 								symbol={coinSymbol}
 								name={coinName}
+								paymentRequestUrl={paymentRequestUrl}
 							/>
 						)}
 					</Prices>

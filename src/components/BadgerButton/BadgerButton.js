@@ -145,6 +145,7 @@ class BadgerButton extends React.PureComponent<Props> {
 							price={formatAmount(amount, coinDecimals)}
 							symbol={coinSymbol}
 							name={coinName}
+							paymentRequestUrl={paymentRequestUrl}
 						/>
 					)}
 				</Wrapper>
