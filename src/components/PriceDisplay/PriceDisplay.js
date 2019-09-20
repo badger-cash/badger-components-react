@@ -46,11 +46,20 @@ type Props = {
 	coinType?: ValidCoinTypes,
 	preSymbol?: string,
 	name?: string,
+
+	paymentRequestUrl?: string,
 };
 
 class PriceDisplay extends React.PureComponent<Props> {
 	render() {
-		const { price, name, coinType, symbol, preSymbol } = this.props;
+		const {
+			price,
+			name,
+			coinType,
+			symbol,
+			preSymbol,
+			paymentRequestUrl,
+		} = this.props;
 
 		const CoinImage = coinType === 'BCH' ? BitcoinCashImage : SLPLogoImage;
 
@@ -61,13 +70,22 @@ class PriceDisplay extends React.PureComponent<Props> {
 				<img src={CoinImage} style={{ height: '100%' }} alt={coinType} />
 			</div>
 		);
+		const priceContent = paymentRequestUrl ? (
+			<div>
+				<PriceText>BIP70 Invoice</PriceText>
+			</div>
+		) : (
+			<div>
+				<PriceText>{price || '-'}</PriceText>
+				<Small>{symbol}</Small>
+			</div>
+		);
 
 		return (
 			<Outer>
 				<Top>
 					{preContent}
-					<PriceText>{price || '-'}</PriceText>
-					<Small>{symbol}</Small>
+					{priceContent}
 				</Top>
 				{name && (
 					<Bottom>
