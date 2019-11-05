@@ -71,14 +71,12 @@ class PriceDisplay extends React.PureComponent<Props> {
 			</div>
 		);
 		const priceContent = paymentRequestUrl ? (
-			<div>
-				<PriceText>BIP70 Invoice</PriceText>
-			</div>
+			<PriceText>BIP70 Invoice</PriceText>
 		) : (
-			<div>
+			<React.Fragment>
 				<PriceText>{price || '-'}</PriceText>
 				<Small>{symbol}</Small>
-			</div>
+			</React.Fragment>
 		);
 
 		return (
