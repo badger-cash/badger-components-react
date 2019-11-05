@@ -100,6 +100,7 @@ class BadgerButton extends React.PureComponent<Props> {
 			text,
 			showBorder,
 			showQR,
+			paymentRequestUrl,
 		} = this.props;
 
 		const CoinImage = coinType === 'BCH' ? BitcoinCashImage : SLPLogoImage;
@@ -114,6 +115,7 @@ class BadgerButton extends React.PureComponent<Props> {
 							toAddress={to}
 							onClick={handleClick}
 							step={step}
+							paymentRequestUrl={paymentRequestUrl}
 						>
 							{price ? (
 								<Text>
@@ -143,6 +145,7 @@ class BadgerButton extends React.PureComponent<Props> {
 							price={formatAmount(amount, coinDecimals)}
 							symbol={coinSymbol}
 							name={coinName}
+							paymentRequestUrl={paymentRequestUrl}
 						/>
 					)}
 				</Wrapper>

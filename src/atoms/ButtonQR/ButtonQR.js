@@ -128,6 +128,7 @@ type Props = {
 	toAddress: string,
 	amountSatoshis: ?number,
 	sizeQR: number,
+	paymentRequestUrl?: string,
 };
 
 class ButtonQR extends React.PureComponent<Props> {
@@ -136,16 +137,27 @@ class ButtonQR extends React.PureComponent<Props> {
 	};
 
 	render() {
-		const { children, step, toAddress, amountSatoshis, sizeQR } = this.props;
+		const {
+			children,
+			step,
+			toAddress,
+			amountSatoshis,
+			sizeQR,
+			paymentRequestUrl,
+		} = this.props;
 
 		const widthQR = sizeQR >= 125 ? sizeQR : 125; // Minimum width 125
 
 		// QR code source
 		const uriBase = toAddress;
 
-		const uri = amountSatoshis
+		let uri = amountSatoshis
 			? `${uriBase}?amount=${amountSatoshis / 1e8}`
 			: uriBase;
+
+		if (paymentRequestUrl && paymentRequestUrl.length) {
+			uri = `bitcoincash:?r=${paymentRequestUrl}`;
+		}
 
 		// State booleans
 		const isFresh = step === 'fresh';

@@ -143,6 +143,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 
 			showAmount,
 			showQR,
+			paymentRequestUrl,
 			showBorder,
 			showBrand,
 		} = this.props;
@@ -166,6 +167,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 								price={formatAmount(amount, coinDecimals)}
 								symbol={coinSymbol}
 								name={coinName}
+								paymentRequestUrl={paymentRequestUrl}
 							/>
 						)}
 					</Prices>
@@ -176,6 +178,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 								step={step}
 								amountSatoshis={amount}
 								toAddress={to}
+								paymentRequestUrl={paymentRequestUrl}
 							>
 								<Text>{tag}</Text>
 							</ButtonQR>

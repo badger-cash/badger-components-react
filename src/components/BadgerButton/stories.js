@@ -287,4 +287,25 @@ storiesOf('BadgerButton', module)
 			notes:
 				'Controlled step overrides the component step state.  Valuable for payment systems where the app/backend does payment confirmation.',
 		}
+	)
+	.add(
+		'BIP070 Invoicing',
+		() => (
+			<BadgerButton
+				paymentRequestUrl={text(
+					'Invoice URL',
+					'https://yourInvoiceUrlHere.com/String'
+				)}
+				showQR={boolean('showQR', true)}
+				showAmount={boolean('showAmount', true)}
+				successFn={() => console.log('BIP70 Invoice successfully paid')}
+				failFn={() =>
+					console.log('BIP70 Invoice is expired or the URL is invalid')
+				}
+			/>
+		),
+		{
+			notes:
+				'If paymentRequestUrl is set, this parameter defines the entire transaction.',
+		}
 	);
