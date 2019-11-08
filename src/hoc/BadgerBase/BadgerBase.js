@@ -107,11 +107,6 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			errors: [],
 		};
 
-		// Websocket for invoice monitoring
-		//console.log(`balls`)
-		//const paymentId = this.props.paymentRequestUrl.slice(26);
-		//console.log(`Payment ID: ${paymentId}`);
-
 		addError = (error: string) => {
 			const { errors } = this.state;
 			this.setState({ errors: [...errors, error] });
