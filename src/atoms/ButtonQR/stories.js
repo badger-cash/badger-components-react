@@ -107,4 +107,22 @@ storiesOf('ButtonQR', module)
 		{
 			notes: 'Badger plugin not installed, prompt user to install Badger',
 		}
+	)
+	.add(
+		'expired',
+		() => (
+			<ButtonQR
+				paymentRequestUrl={text(
+					'Invoice URL',
+					// expired invoice
+					'https://pay.bitcoin.com/i/Fz4AaMpzuSde9DgpFwDt13'
+				)}
+				step={'expired'}
+			>
+				<Text>{ButtonText}</Text>
+			</ButtonQR>
+		),
+		{
+			notes: 'Shown for an expired BIP70 invoice',
+		}
 	);
