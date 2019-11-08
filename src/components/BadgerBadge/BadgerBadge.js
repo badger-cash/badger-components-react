@@ -110,6 +110,8 @@ type Props = BadgerBaseProps & {
 	showQR?: boolean,
 	showBorder?: boolean,
 
+	invoiceTimeLeftSeconds: ?number,
+
 	handleClick: Function,
 };
 

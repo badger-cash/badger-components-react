@@ -71,6 +71,8 @@ type Props = BadgerBaseProps & {
 	coinDecimals?: number,
 	coinName?: string,
 
+	invoiceTimeLeftSeconds: ?number,
+
 	handleClick: Function,
 	step: ButtonStates,
 };
