@@ -23,6 +23,7 @@ import BadgerBase, {
 } from '../../hoc/BadgerBase';
 
 import PriceDisplay from '../PriceDisplay';
+import InvoiceTimer from '../InvoiceTimer';
 
 import Button from '../../atoms/Button';
 import ButtonQR from '../../atoms/ButtonQR';
@@ -101,6 +102,7 @@ class BadgerButton extends React.PureComponent<Props> {
 			showBorder,
 			showQR,
 			paymentRequestUrl,
+			invoiceTimeLeftSeconds,
 		} = this.props;
 
 		const CoinImage = coinType === 'BCH' ? BitcoinCashImage : SLPLogoImage;
@@ -146,6 +148,7 @@ class BadgerButton extends React.PureComponent<Props> {
 							symbol={coinSymbol}
 							name={coinName}
 							paymentRequestUrl={paymentRequestUrl}
+							invoiceTimeLeftSeconds={invoiceTimeLeftSeconds}
 						/>
 					)}
 				</Wrapper>

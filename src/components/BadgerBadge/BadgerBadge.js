@@ -23,6 +23,7 @@ import SLPLogoImage from '../../images/slp-logo.png';
 import colors from '../../styles/colors';
 
 import PriceDisplay from '../PriceDisplay';
+import InvoiceTimer from '../InvoiceTimer';
 
 import Button from '../../atoms/Button';
 import ButtonQR from '../../atoms/ButtonQR';
@@ -144,6 +145,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 			showAmount,
 			showQR,
 			paymentRequestUrl,
+			invoiceTimeLeftSeconds,
 			showBorder,
 			showBrand,
 		} = this.props;
@@ -159,6 +161,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 								preSymbol={getCurrencyPreSymbol(currency)}
 								price={formatPriceDisplay(price)}
 								symbol={currency}
+								invoiceTimeLeftSeconds={invoiceTimeLeftSeconds}
 							/>
 						)}
 						{showAmount && (
@@ -168,6 +171,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 								symbol={coinSymbol}
 								name={coinName}
 								paymentRequestUrl={paymentRequestUrl}
+								invoiceTimeLeftSeconds={invoiceTimeLeftSeconds}
 							/>
 						)}
 					</Prices>

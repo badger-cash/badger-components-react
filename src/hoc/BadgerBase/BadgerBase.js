@@ -24,7 +24,13 @@ const URI_CHECK_INTERVAL = 10 * SECOND;
 type ValidCoinTypes = 'BCH' | 'SLP';
 
 // TODO - Login/Install are badger states, others are payment states.  Separate them to be independent
-type ButtonStates = 'fresh' | 'pending' | 'complete' | 'login' | 'install';
+type ButtonStates =
+	| 'fresh'
+	| 'pending'
+	| 'complete'
+	| 'expired'
+	| 'login'
+	| 'install';
 
 type BadgerBaseProps = {
 	to: string,
@@ -63,10 +69,12 @@ type State = {
 	coinName: ?string,
 	coinDecimals: ?number,
 	unconfirmedCount: ?number,
+	invoiceTimeLeftSeconds: ?number,
 
 	intervalPrice: ?IntervalID,
 	intervalLogin: ?IntervalID,
 	intervalUnconfirmed: ?IntervalID,
+	intervalTimer: ?IntervalId,
 };
 
 const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
@@ -90,12 +98,19 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			coinName: null,
 
 			unconfirmedCount: null,
+			invoiceTimeLeftSeconds: null,
 
 			intervalPrice: null,
 			intervalLogin: null,
 			intervalUnconfirmed: null,
+			intervalTimer: null,
 			errors: [],
 		};
+
+		// Websocket for invoice monitoring
+		//console.log(`balls`)
+		//const paymentId = this.props.paymentRequestUrl.slice(26);
+		//console.log(`Payment ID: ${paymentId}`);
 
 		addError = (error: string) => {
 			const { errors } = this.state;
@@ -109,7 +124,11 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 		paymentSendSuccess = () => {
 			const { isRepeatable } = this.props;
-			const { intervalUnconfirmed, unconfirmedCount } = this.state;
+			const {
+				intervalUnconfirmed,
+				unconfirmedCount,
+				intervalTimer,
+			} = this.state;
 
 			this.setState({
 				step: 'complete',
@@ -120,7 +139,18 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				this.startRepeatable();
 			} else {
 				intervalUnconfirmed && clearInterval(intervalUnconfirmed);
+				// If invoice is paid, clear timer, and set secondsLeft to null to hide clock
+				intervalTimer && clearInterval(intervalTimer);
+				this.setState({ invoiceTimeLeftSeconds: null });
 			}
+		};
+
+		invoiceExpired = () => {
+			const { intervalTimer } = this.state;
+			this.setState({
+				step: 'expired',
+			});
+			intervalTimer && clearInterval(intervalTimer);
 		};
 
 		handleClick = () => {
@@ -283,6 +313,56 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			this.setState({ intervalUnconfirmed: intervalUnconfirmedNext });
 		};
 
+		setupWatchInvoice = async () => {
+			const { paymentRequestUrl } = this.props;
+
+			this.ws = new WebSocket(
+				`wss://pay.bitcoin.com/s/${paymentRequestUrl.slice(26)}`
+			);
+
+			this.ws.onmessage = (evt) => {
+				// listen to data sent from the websocket server
+				const initialInvoiceInfo = JSON.parse(evt.data);
+				const invoiceStatus = initialInvoiceInfo.status;
+				if (invoiceStatus === 'paid') {
+					return this.paymentSendSuccess();
+				}
+				if (invoiceStatus === 'expired') {
+					return this.invoiceExpired();
+				}
+
+				// If invoice is not expired or paid, start the timer (add this logic after timer works) TODO
+				// Get current UTC time for timer
+				const now = new Date();
+				const nowUTC = Date.parse(now.toUTCString());
+
+				const invoiceExpiresAt = Date.parse(initialInvoiceInfo.expires);
+
+				let invoiceTimeLeftSeconds = Math.round(
+					(invoiceExpiresAt - nowUTC) / 1000
+				);
+
+				// Prod
+				if (invoiceTimeLeftSeconds > 0) {
+					this.setState({ invoiceTimeLeftSeconds });
+					// start timer
+					const intervalTimerNext = setInterval(() => {
+						const prevInvoiceTimeLeftSeconds = this.state
+							.invoiceTimeLeftSeconds;
+						if (prevInvoiceTimeLeftSeconds === 1) {
+							this.invoiceExpired();
+						}
+						const newInvoiceTimeLeftSeconds = prevInvoiceTimeLeftSeconds - 1;
+						this.setState({
+							invoiceTimeLeftSeconds: newInvoiceTimeLeftSeconds,
+						});
+					}, 1000);
+
+					this.setState({ intervalTimer: intervalTimerNext });
+				}
+			};
+		};
+
 		setupCoinMeta = async () => {
 			const { coinType, tokenId } = this.props;
 			if (coinType === 'BCH') {
@@ -310,10 +390,17 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 		async componentDidMount() {
 			if (typeof window !== 'undefined') {
-				const { price, coinType, amount, watchAddress } = this.props;
+				const {
+					price,
+					coinType,
+					amount,
+					watchAddress,
+					paymentRequestUrl,
+				} = this.props;
 
 				// setup state, intervals, and listeners
 				watchAddress && this.setupWatchAddress();
+				paymentRequestUrl && this.setupWatchInvoice();
 				price && this.setupSatoshisFiat();
 				this.setupCoinMeta();
 
@@ -392,7 +479,14 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				stepControlled,
 				paymentRequestUrl,
 			} = this.props;
-			const { step, satoshis, coinDecimals, coinSymbol, coinName } = this.state;
+			const {
+				step,
+				satoshis,
+				coinDecimals,
+				coinSymbol,
+				coinName,
+				invoiceTimeLeftSeconds,
+			} = this.state;
 
 			const calculatedAmount = adjustAmount(amount, coinDecimals) || satoshis;
 
@@ -410,7 +504,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					coinDecimals={coinDecimals}
 					coinSymbol={coinSymbol}
 					coinName={coinName}
-					paymentRequestUrl={paymentRequestUrl}
+					invoiceTimeLeftSeconds={invoiceTimeLeftSeconds}
 				/>
 			);
 		}

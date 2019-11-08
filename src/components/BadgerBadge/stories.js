@@ -316,9 +316,12 @@ storiesOf('BadgerBadge', module)
 			<BadgerBadge
 				paymentRequestUrl={text(
 					'Invoice URL',
-					'https://yourInvoiceUrlHere.com/String'
+					//'https://yourInvoiceUrlHere.com/String'
+					'https://pay.bitcoin.com/i/9S21uXfxguax3RtewXmWch'
 				)}
 				showQR={boolean('showQR', true)}
+				showBorder={boolean('Toggle Border', true)}
+				showBrand={boolean('Badger info', true)}
 				showAmount={boolean('showAmount', true)}
 				successFn={() => console.log('BIP70 Invoice successfully paid')}
 				failFn={() =>

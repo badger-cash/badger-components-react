@@ -9,6 +9,7 @@ import SLPLogoImage from '../../images/slp-logo.png';
 import { type ValidCoinTypes } from '../../hoc/BadgerBase';
 
 import Small from '../../atoms/Small';
+import InvoiceTimer from '../InvoiceTimer';
 
 const Outer = styled.div`
 	font-family: sans-serif;
@@ -27,7 +28,8 @@ const Top = styled.div`
 
 const Bottom = styled.div`
 	display: flex;
-	justify-content: flex-end;
+	justify-content: ${({ timerShown = false }) =>
+		timerShown === true ? 'space-between' : 'end'};
 `;
 
 const PriceText = styled.p`
@@ -48,6 +50,7 @@ type Props = {
 	name?: string,
 
 	paymentRequestUrl?: string,
+	invoiceTimeLeftSeconds?: number,
 };
 
 class PriceDisplay extends React.PureComponent<Props> {
@@ -59,7 +62,13 @@ class PriceDisplay extends React.PureComponent<Props> {
 			symbol,
 			preSymbol,
 			paymentRequestUrl,
+			invoiceTimeLeftSeconds,
 		} = this.props;
+
+		let isTimerShown = false;
+		if (invoiceTimeLeftSeconds !== null) {
+			isTimerShown = true;
+		}
 
 		const CoinImage = coinType === 'BCH' ? BitcoinCashImage : SLPLogoImage;
 
@@ -86,7 +95,12 @@ class PriceDisplay extends React.PureComponent<Props> {
 					{priceContent}
 				</Top>
 				{name && (
-					<Bottom>
+					<Bottom timerShown={isTimerShown}>
+						{invoiceTimeLeftSeconds !== null && (
+							<InvoiceTimer
+								secondsRemaining={invoiceTimeLeftSeconds}
+							></InvoiceTimer>
+						)}
 						<Small muted>{name}</Small>
 					</Bottom>
 				)}
