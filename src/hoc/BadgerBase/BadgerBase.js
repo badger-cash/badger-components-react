@@ -314,9 +314,15 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		setupWatchInvoice = async () => {
 			const { paymentRequestUrl } = this.props;
 
-			this.ws = new WebSocket(
-				`wss://pay.bitcoin.com/s/${paymentRequestUrl.slice(26)}`
-			);
+			const urlParts = paymentRequestUrl.split('/');
+			const server = urlParts[2];
+			if (server !== 'pay.bitcoin.com') {
+				// InvoiceTimer and showAmount fields are only supported for pay.bitcoin.com invoices
+				return;
+			}
+
+			const paymentId = urlParts[urlParts.length - 1];
+			this.ws = new WebSocket(`wss://pay.bitcoin.com/s/${paymentId}`);
 
 			this.ws.onmessage = (evt) => {
 				// listen to data sent from the websocket server
