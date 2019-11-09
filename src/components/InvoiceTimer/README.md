@@ -1,5 +1,5 @@
-# PriceDisplay
+# InvoiceTimer
 
-Show a price display item in fiat, BCH, or SLP.  
+Show a countdown timer for an open BIP070 invoice from pay.bitcoin.com  
 
-Used in BadgerBadge and BadgerButton.  Useful tool when building custom Badger integrations.
+Used in BadgerBadge and BadgerButton.
