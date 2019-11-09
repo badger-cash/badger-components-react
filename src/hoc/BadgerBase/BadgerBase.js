@@ -69,6 +69,7 @@ type State = {
 	coinName: ?string,
 	coinDecimals: ?number,
 	unconfirmedCount: ?number,
+	invoiceInfo: ?Object,
 	invoiceTimeLeftSeconds: ?number,
 
 	intervalPrice: ?IntervalID,
@@ -98,6 +99,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			coinName: null,
 
 			unconfirmedCount: null,
+			invoiceInfo: {},
 			invoiceTimeLeftSeconds: null,
 
 			intervalPrice: null,
@@ -134,10 +136,10 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				this.startRepeatable();
 			} else {
 				intervalUnconfirmed && clearInterval(intervalUnconfirmed);
-				// If invoice is paid, clear timer, and set secondsLeft to null to hide clock
-				intervalTimer && clearInterval(intervalTimer);
-				this.setState({ invoiceTimeLeftSeconds: null });
 			}
+			// If invoice is paid, clear timer, and set secondsLeft to null to hide clock
+			intervalTimer && clearInterval(intervalTimer);
+			this.setState({ invoiceTimeLeftSeconds: null });
 		};
 
 		invoiceExpired = () => {
@@ -146,6 +148,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				step: 'expired',
 			});
 			intervalTimer && clearInterval(intervalTimer);
+			this.setState({ invoiceTimeLeftSeconds: null });
 		};
 
 		handleClick = () => {
@@ -317,8 +320,13 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 			this.ws.onmessage = (evt) => {
 				// listen to data sent from the websocket server
-				const initialInvoiceInfo = JSON.parse(evt.data);
-				const invoiceStatus = initialInvoiceInfo.status;
+				const invoiceInfo = JSON.parse(evt.data);
+
+				const invoiceStatus = invoiceInfo.status; // for InvoiceDisplay
+
+				this.setState({ invoiceInfo });
+				this.setupCoinMeta(invoiceInfo);
+
 				if (invoiceStatus === 'paid') {
 					return this.paymentSendSuccess();
 				}
@@ -331,7 +339,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				const now = new Date();
 				const nowUTC = Date.parse(now.toUTCString());
 
-				const invoiceExpiresAt = Date.parse(initialInvoiceInfo.expires);
+				const invoiceExpiresAt = Date.parse(invoiceInfo.expires);
 
 				let invoiceTimeLeftSeconds = Math.round(
 					(invoiceExpiresAt - nowUTC) / 1000
@@ -358,15 +366,31 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			};
 		};
 
-		setupCoinMeta = async () => {
-			const { coinType, tokenId } = this.props;
-			if (coinType === 'BCH') {
+		setupCoinMeta = async (invoiceInfo = null) => {
+			const { coinType, tokenId, paymentRequestUrl } = this.props;
+			// If this is a BIP070 invoice for an SLP token, set values from the invoice
+
+			if (invoiceInfo !== null && invoiceInfo.currency !== 'BCH') {
+				const invoiceTokenId = invoiceInfo.outputs[0].token_id;
+				const invoiceTokenInfo = await getTokenInfo(invoiceTokenId);
+
+				const { symbol, decimals, name } = invoiceTokenInfo;
+
+				this.setState({
+					coinSymbol: symbol,
+					coinDecimals: decimals,
+					coinName: name,
+				});
+			} else if (
+				(!paymentRequestUrl && coinType === 'BCH') ||
+				invoiceInfo.currency === 'BCH'
+			) {
 				this.setState({
 					coinSymbol: 'BCH',
 					coinDecimals: 8,
 					coinName: 'Bitcoin Cash',
 				});
-			} else if (coinType === 'SLP' && tokenId) {
+			} else if (!paymentRequestUrl && coinType === 'SLP' && tokenId) {
 				this.setState({
 					coinSymbol: null,
 					coinName: null,
@@ -397,7 +421,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				watchAddress && this.setupWatchAddress();
 				paymentRequestUrl && this.setupWatchInvoice();
 				price && this.setupSatoshisFiat();
-				this.setupCoinMeta();
+				!paymentRequestUrl && this.setupCoinMeta();
 
 				// Detect Badger and determine if button should show login or install CTA
 				if (window.Web4Bch) {
@@ -431,7 +455,6 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					watchAddress,
 					tokenId,
 				} = this.props;
-				const { intervalPrice } = this.state;
 
 				const prevCurrency = prevProps.currency;
 				const prevCoinType = prevProps.coinType;
@@ -450,7 +473,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					this.startRepeatable();
 				}
 
-				if (tokenId !== prevTokenId) {
+				if (tokenId !== prevTokenId && !paymentRequestUrl) {
 					this.setupCoinMeta();
 				}
 
@@ -480,18 +503,39 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				coinDecimals,
 				coinSymbol,
 				coinName,
+				invoiceInfo,
 				invoiceTimeLeftSeconds,
 			} = this.state;
 
-			const calculatedAmount = adjustAmount(amount, coinDecimals) || satoshis;
+			let calculatedAmount = adjustAmount(amount, coinDecimals) || satoshis;
 
-			// Only show QR if all requested features can be encoded in the BIP44 URI
+			// If this is a BIP70 invoice with a specified BCH amount, use that
+			if (paymentRequestUrl && invoiceInfo.currency === 'BCH') {
+				calculatedAmount = adjustAmount(invoiceInfo.fiatTotal, coinDecimals);
+			} else if (paymentRequestUrl && invoiceInfo.currency === 'SLP') {
+				// Sum up the SLP amounts from invoiceInfo.outputs[0].send_amounts
+				const amounts = invoiceInfo.outputs[0].send_amounts;
+				calculatedAmount = 0;
+				for (let i = 0; i < amounts.length; i++) {
+					calculatedAmount += amounts[i];
+				}
+			}
+
+			// Only show QR if all requested features can be encoded in the BIP44 URI, or if it's a BIP70 invoice
 			const shouldShowQR =
-				showQR && coinType === 'BCH' && (!opReturn || !opReturn.length);
+				(showQR && coinType === 'BCH' && (!opReturn || !opReturn.length)) ||
+				paymentRequestUrl;
+
+			// Show SLP icon if BIP70 invoice is for SLP
+			let determinedCoinType = coinType;
+			if (paymentRequestUrl && coinSymbol !== 'BCH' && coinSymbol !== null) {
+				determinedCoinType = 'SLP';
+			}
 
 			return (
 				<Wrapped
 					{...this.props}
+					coinType={determinedCoinType}
 					showQR={shouldShowQR}
 					handleClick={this.handleClick}
 					step={stepControlled || step}
@@ -499,6 +543,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					coinDecimals={coinDecimals}
 					coinSymbol={coinSymbol}
 					coinName={coinName}
+					invoiceInfo={invoiceInfo}
 					invoiceTimeLeftSeconds={invoiceTimeLeftSeconds}
 				/>
 			);

@@ -10,7 +10,7 @@ const TimeText = styled.p`
 	line-height: 10px;
 	margin: 0;
 	display: grid;
-	text-align: left;
+	text-align: right;
 	color: ${({ alert = false }) => (alert === true ? 'red' : '#000')};
 `;
 
@@ -20,16 +20,16 @@ const TimeText = styled.p`
 // align right so alignment doesn't change when time goes from 10:00 to 9:59
 // Only render if the invoice is active; not paid or expired
 type Props = {
-	secondsRemaining: ?number,
+	invoiceTimeLeftSeconds: ?number,
 };
 
 class InvoiceTimer extends React.PureComponent<Props> {
 	render() {
-		const { secondsRemaining } = this.props;
+		const { invoiceTimeLeftSeconds } = this.props;
 		let isAlert = false;
 
-		let timeLeftMinutes = Math.floor(secondsRemaining / 60);
-		let remainderSeconds = secondsRemaining % 60;
+		let timeLeftMinutes = Math.floor(invoiceTimeLeftSeconds / 60);
+		let remainderSeconds = invoiceTimeLeftSeconds % 60;
 
 		if (timeLeftMinutes < 10) {
 			timeLeftMinutes = '0' + timeLeftMinutes.toString();

@@ -149,9 +149,10 @@ class BadgerButton extends React.PureComponent<Props> {
 							price={formatAmount(amount, coinDecimals)}
 							symbol={coinSymbol}
 							name={coinName}
-							paymentRequestUrl={paymentRequestUrl}
-							invoiceTimeLeftSeconds={invoiceTimeLeftSeconds}
 						/>
+					)}
+					{invoiceTimeLeftSeconds !== null && (
+						<InvoiceTimer invoiceTimeLeftSeconds={invoiceTimeLeftSeconds} />
 					)}
 				</Wrapper>
 			</Outer>

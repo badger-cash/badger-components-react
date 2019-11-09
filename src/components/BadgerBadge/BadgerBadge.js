@@ -163,7 +163,6 @@ class BadgerBadge extends React.PureComponent<Props> {
 								preSymbol={getCurrencyPreSymbol(currency)}
 								price={formatPriceDisplay(price)}
 								symbol={currency}
-								invoiceTimeLeftSeconds={invoiceTimeLeftSeconds}
 							/>
 						)}
 						{showAmount && (
@@ -172,11 +171,12 @@ class BadgerBadge extends React.PureComponent<Props> {
 								price={formatAmount(amount, coinDecimals)}
 								symbol={coinSymbol}
 								name={coinName}
-								paymentRequestUrl={paymentRequestUrl}
-								invoiceTimeLeftSeconds={invoiceTimeLeftSeconds}
 							/>
 						)}
 					</Prices>
+					{invoiceTimeLeftSeconds !== null && (
+						<InvoiceTimer invoiceTimeLeftSeconds={invoiceTimeLeftSeconds} />
+					)}
 					<ButtonContainer>
 						{showQR ? (
 							<ButtonQR

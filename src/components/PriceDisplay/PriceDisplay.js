@@ -9,7 +9,6 @@ import SLPLogoImage from '../../images/slp-logo.png';
 import { type ValidCoinTypes } from '../../hoc/BadgerBase';
 
 import Small from '../../atoms/Small';
-import InvoiceTimer from '../InvoiceTimer';
 
 const Outer = styled.div`
 	font-family: sans-serif;
@@ -28,8 +27,7 @@ const Top = styled.div`
 
 const Bottom = styled.div`
 	display: flex;
-	justify-content: ${({ timerShown = false }) =>
-		timerShown === true ? 'space-between' : 'end'};
+	justify-content: end;
 `;
 
 const PriceText = styled.p`
@@ -48,27 +46,11 @@ type Props = {
 	coinType?: ValidCoinTypes,
 	preSymbol?: string,
 	name?: string,
-
-	paymentRequestUrl?: string,
-	invoiceTimeLeftSeconds?: number,
 };
 
 class PriceDisplay extends React.PureComponent<Props> {
 	render() {
-		const {
-			price,
-			name,
-			coinType,
-			symbol,
-			preSymbol,
-			paymentRequestUrl,
-			invoiceTimeLeftSeconds,
-		} = this.props;
-
-		let isTimerShown = false;
-		if (invoiceTimeLeftSeconds !== null) {
-			isTimerShown = true;
-		}
+		const { price, name, coinType, symbol, preSymbol } = this.props;
 
 		const CoinImage = coinType === 'BCH' ? BitcoinCashImage : SLPLogoImage;
 
@@ -79,28 +61,16 @@ class PriceDisplay extends React.PureComponent<Props> {
 				<img src={CoinImage} style={{ height: '100%' }} alt={coinType} />
 			</div>
 		);
-		const priceContent = paymentRequestUrl ? (
-			<PriceText>BIP70 Invoice</PriceText>
-		) : (
-			<React.Fragment>
-				<PriceText>{price || '-'}</PriceText>
-				<Small>{symbol}</Small>
-			</React.Fragment>
-		);
 
 		return (
 			<Outer>
 				<Top>
 					{preContent}
-					{priceContent}
+					<PriceText>{price || '-'}</PriceText>
+					<Small>{symbol}</Small>
 				</Top>
 				{name && (
-					<Bottom timerShown={isTimerShown}>
-						{invoiceTimeLeftSeconds !== null && (
-							<InvoiceTimer
-								secondsRemaining={invoiceTimeLeftSeconds}
-							></InvoiceTimer>
-						)}
+					<Bottom>
 						<Small muted>{name}</Small>
 					</Bottom>
 				)}
