@@ -289,28 +289,7 @@ storiesOf('BadgerButton', module)
 		}
 	)
 	.add(
-		'BIP070 Invoicing',
-		() => (
-			<BadgerButton
-				paymentRequestUrl={text(
-					'Invoice URL',
-					// expired invoice
-					'https://pay.bitcoin.com/i/Fz4AaMpzuSde9DgpFwDt13'
-				)}
-				showAmount={boolean('showAmount', true)}
-				successFn={() => console.log('BIP70 Invoice successfully paid')}
-				failFn={() =>
-					console.log('BIP70 Invoice is expired or the URL is invalid')
-				}
-			/>
-		),
-		{
-			notes:
-				'If paymentRequestUrl is set, this parameter defines the entire transaction.',
-		}
-	)
-	.add(
-		'BIP070 Invoicing 2',
+		'BIP070 Invoicing, SLP, paid',
 		() => (
 			<BadgerButton
 				paymentRequestUrl={text(
@@ -331,53 +310,13 @@ storiesOf('BadgerButton', module)
 		}
 	)
 	.add(
-		'BIP070 Invoicing 3',
+		'BIP070 Invoicing, BCH, expired',
 		() => (
 			<BadgerButton
 				paymentRequestUrl={text(
 					'Invoice URL',
 					// paid invoice
 					'https://pay.bitcoin.com/i/FrN2FSGmrMMQyvNphqaz9w'
-				)}
-				showAmount={boolean('showAmount', true)}
-				successFn={() => console.log('BIP70 Invoice successfully paid')}
-				failFn={() =>
-					console.log('BIP70 Invoice is expired or the URL is invalid')
-				}
-			/>
-		),
-		{
-			notes:
-				'If paymentRequestUrl is set, this parameter defines the entire transaction.',
-		}
-	)
-	.add(
-		'BIP070 Invoicing 4 - SLP',
-		() => (
-			<BadgerButton
-				paymentRequestUrl={text(
-					'Invoice URL',
-					'https://pay.bitcoin.com/i/AvoW8UoArJ2Cxr3LRi49se'
-				)}
-				showAmount={boolean('showAmount', true)}
-				successFn={() => console.log('BIP70 Invoice successfully paid')}
-				failFn={() =>
-					console.log('BIP70 Invoice is expired or the URL is invalid')
-				}
-			/>
-		),
-		{
-			notes:
-				'If paymentRequestUrl is set, this parameter defines the entire transaction.',
-		}
-	)
-	.add(
-		'BIP070 Invoicing 5 - BCH',
-		() => (
-			<BadgerButton
-				paymentRequestUrl={text(
-					'Invoice URL',
-					'https://pay.bitcoin.com/i/7UG3Z5y56DoXLQzQJAJxoD'
 				)}
 				showAmount={boolean('showAmount', true)}
 				successFn={() => console.log('BIP70 Invoice successfully paid')}
