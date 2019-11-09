@@ -335,7 +335,6 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			ws.onmessage = (evt) => {
 				// listen to data sent from the websocket server
 				const invoiceInfo = JSON.parse(evt.data);
-				console.log(invoiceInfo);
 
 				const invoiceStatus = invoiceInfo.status; // for InvoiceDisplay
 
@@ -361,22 +360,24 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 				if (invoiceTimeLeftSeconds > 0) {
 					this.setState({ invoiceTimeLeftSeconds });
-					// start timer
-					const intervalTimerNext = setInterval(() => {
-						const prevInvoiceTimeLeftSeconds = this.state
-							.invoiceTimeLeftSeconds;
-						if (prevInvoiceTimeLeftSeconds === 1) {
-							this.invoiceExpired();
-						}
-						const newInvoiceTimeLeftSeconds = prevInvoiceTimeLeftSeconds - 1;
-						this.setState({
-							invoiceTimeLeftSeconds: newInvoiceTimeLeftSeconds,
-						});
-					}, 1000);
-
-					this.setState({ intervalTimer: intervalTimerNext });
 				}
 			};
+		};
+
+		setupInvoiceTimer = () => {
+			// start timer
+			const intervalTimerNext = setInterval(() => {
+				const prevInvoiceTimeLeftSeconds = this.state.invoiceTimeLeftSeconds;
+				if (prevInvoiceTimeLeftSeconds === 1) {
+					this.invoiceExpired();
+				}
+				const newInvoiceTimeLeftSeconds = prevInvoiceTimeLeftSeconds - 1;
+				this.setState({
+					invoiceTimeLeftSeconds: newInvoiceTimeLeftSeconds,
+				});
+			}, 1000);
+
+			this.setState({ intervalTimer: intervalTimerNext });
 		};
 
 		setupCoinMeta = async (invoiceInfo = null) => {
@@ -456,14 +457,16 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				intervalLogin,
 				intervalUnconfirmed,
 				websocketInvoice,
+				intervalTimer,
 			} = this.state;
 			intervalPrice && clearInterval(intervalPrice);
 			intervalLogin && clearInterval(intervalLogin);
 			intervalUnconfirmed && clearInterval(intervalUnconfirmed);
+			intervalTimer && clearInterval(intervalTimer);
 			websocketInvoice && websocketInvoice.close();
 		}
 
-		componentDidUpdate(prevProps: BadgerBaseProps) {
+		componentDidUpdate(prevProps: BadgerBaseProps, prevState) {
 			if (typeof window !== 'undefined') {
 				const {
 					currency,
@@ -474,6 +477,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					watchAddress,
 					tokenId,
 				} = this.props;
+				const { invoiceTimeLeftSeconds } = this.state;
 
 				const prevCurrency = prevProps.currency;
 				const prevCoinType = prevProps.coinType;
@@ -482,6 +486,15 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				const prevIsRepeatable = prevProps.isRepeatable;
 				const prevWatchAddress = prevProps.watchAddress;
 				const prevTokenId = prevProps.tokenId;
+
+				const prevInvoiceTimeLeftSeconds = prevState.invoiceTimeLeftSeconds;
+
+				if (
+					invoiceTimeLeftSeconds !== null &&
+					prevInvoiceTimeLeftSeconds === null
+				) {
+					this.setupInvoiceTimer();
+				}
 
 				// Fiat price or currency changes
 				if (currency !== prevCurrency || price !== prevPrice) {

@@ -338,7 +338,7 @@ storiesOf('BadgerBadge', module)
 				paymentRequestUrl={text(
 					'Invoice URL',
 					//'https://yourInvoiceUrlHere.com/String'
-					'https://pay.bitcoin.com/i/AvoW8UoArJ2Cxr3LRi49se'
+					'https://pay.bitcoin.com/i/DFFwn544tB2A2YvekWd3Y9'
 				)}
 				showAmount={boolean('showAmount', true)}
 				successFn={() => console.log('BIP70 Invoice successfully paid')}

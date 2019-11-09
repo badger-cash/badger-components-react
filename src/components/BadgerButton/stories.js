@@ -329,4 +329,25 @@ storiesOf('BadgerButton', module)
 			notes:
 				'If paymentRequestUrl is set, this parameter defines the entire transaction.',
 		}
+	)
+	.add(
+		'BIP070 Invoicing, SLP, open',
+		() => (
+			<BadgerButton
+				paymentRequestUrl={text(
+					'Invoice URL',
+					// paid invoice
+					'https://pay.bitcoin.com/i/Fyaoqd5LC3x4raWjdsXuXB'
+				)}
+				showAmount={boolean('showAmount', true)}
+				successFn={() => console.log('BIP70 Invoice successfully paid')}
+				failFn={() =>
+					console.log('BIP70 Invoice is expired or the URL is invalid')
+				}
+			/>
+		),
+		{
+			notes:
+				'If paymentRequestUrl is set, this parameter defines the entire transaction.',
+		}
 	);
