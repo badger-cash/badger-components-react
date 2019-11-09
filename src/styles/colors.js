@@ -9,8 +9,8 @@ const colors = {
 	pending700: '#0070AA',
 	success500: '#00C571',
 	success700: '#007328',
-	expired500: '#FF0000',
-	expired700: '#8B0000',
+	expired500: '#FFBABA', //'#FF0000',
+	expired700: '#D8000C', //'#8B0000',
 	bg100: '#ffffff',
 };
 
