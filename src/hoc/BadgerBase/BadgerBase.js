@@ -351,8 +351,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 				// If invoice is not expired or paid, start the timer (add this logic after timer works) TODO
 				// Get current UTC time for timer
-				const now = new Date();
-				const nowUTC = Date.parse(now.toUTCString());
+				const nowUTC = Date.now();
 
 				const invoiceExpiresAt = Date.parse(invoiceInfo.expires);
 
