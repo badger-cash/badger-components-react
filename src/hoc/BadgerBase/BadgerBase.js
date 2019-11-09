@@ -76,6 +76,8 @@ type State = {
 	intervalLogin: ?IntervalID,
 	intervalUnconfirmed: ?IntervalID,
 	intervalTimer: ?IntervalId,
+
+	websocketInvoice: ?Object,
 };
 
 const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
@@ -107,6 +109,8 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			intervalUnconfirmed: null,
 			intervalTimer: null,
 			errors: [],
+
+			websocketInvoice: null,
 		};
 
 		addError = (error: string) => {
@@ -322,11 +326,16 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			}
 
 			const paymentId = urlParts[urlParts.length - 1];
-			this.ws = new WebSocket(`wss://pay.bitcoin.com/s/${paymentId}`);
+			const ws = new WebSocket(`wss://pay.bitcoin.com/s/${paymentId}`);
 
-			this.ws.onmessage = (evt) => {
+			ws.onopen = () => {
+				this.setState({ websocketInvoice: ws });
+			};
+
+			ws.onmessage = (evt) => {
 				// listen to data sent from the websocket server
 				const invoiceInfo = JSON.parse(evt.data);
+				console.log(invoiceInfo);
 
 				const invoiceStatus = invoiceInfo.status; // for InvoiceDisplay
 
@@ -351,7 +360,6 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					(invoiceExpiresAt - nowUTC) / 1000
 				);
 
-				// Prod
 				if (invoiceTimeLeftSeconds > 0) {
 					this.setState({ invoiceTimeLeftSeconds });
 					// start timer
@@ -425,9 +433,9 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 				// setup state, intervals, and listeners
 				watchAddress && this.setupWatchAddress();
-				paymentRequestUrl && this.setupWatchInvoice();
+				paymentRequestUrl && this.setupWatchInvoice(); // sets up websocket for invoice which calls setupCoinMeta() when the necessary information has been received
 				price && this.setupSatoshisFiat();
-				!paymentRequestUrl && this.setupCoinMeta();
+				!paymentRequestUrl && this.setupCoinMeta(); // normal call for setupCoinMeta()
 
 				// Detect Badger and determine if button should show login or install CTA
 				if (window.Web4Bch) {
@@ -444,10 +452,16 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		}
 
 		componentWillUnmount() {
-			const { intervalPrice, intervalLogin, intervalUnconfirmed } = this.state;
+			const {
+				intervalPrice,
+				intervalLogin,
+				intervalUnconfirmed,
+				websocketInvoice,
+			} = this.state;
 			intervalPrice && clearInterval(intervalPrice);
 			intervalLogin && clearInterval(intervalLogin);
 			intervalUnconfirmed && clearInterval(intervalUnconfirmed);
+			websocketInvoice && websocketInvoice.close();
 		}
 
 		componentDidUpdate(prevProps: BadgerBaseProps) {
