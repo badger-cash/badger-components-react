@@ -6,6 +6,7 @@ import debounce from 'lodash/debounce';
 
 import {
 	fiatToSatoshis,
+	bchToFiat,
 	adjustAmount,
 	getAddressUnconfirmed,
 	getTokenInfo,
@@ -64,6 +65,7 @@ type State = {
 	errors: string[],
 
 	satoshis: ?number, // Used when converting fiat to BCH
+	invoiceFiat: ?number, // Used to show USD cost of a BCH BIP70 invoice
 
 	coinSymbol: ?string,
 	coinName: ?string,
@@ -73,6 +75,7 @@ type State = {
 	invoiceTimeLeftSeconds: ?number,
 
 	intervalPrice: ?IntervalID,
+	intervalInvoicePrice: ?IntervalID,
 	intervalLogin: ?IntervalID,
 	intervalUnconfirmed: ?IntervalID,
 	intervalTimer: ?IntervalId,
@@ -105,6 +108,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			invoiceTimeLeftSeconds: null,
 
 			intervalPrice: null,
+			intervalInvoicePrice: null,
 			intervalLogin: null,
 			intervalUnconfirmed: null,
 			intervalTimer: null,
@@ -288,6 +292,33 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			this.setState({ intervalPrice: intervalPriceNext });
 		};
 
+		updateInvoiceFiat = debounce(
+			async () => {
+				const { currency } = this.props;
+				const { invoiceInfo } = this.state;
+				const invoicePriceBCH = invoiceInfo.fiatTotal;
+
+				if (!invoiceInfo.fiatTotal || invoiceInfo.currency !== 'BCH') return;
+				const invoiceFiat = await bchToFiat(currency, invoicePriceBCH);
+				this.setState({ invoiceFiat });
+			},
+			250,
+			{ lead: true, trailing: true }
+		);
+
+		setupInvoiceFiat = () => {
+			const { intervalInvoicePrice } = this.state;
+			intervalInvoicePrice && clearInterval(intervalInvoicePrice);
+
+			this.updateInvoiceFiat();
+			const intervalInvoicePriceNext = setInterval(
+				() => this.updateInvoiceFiat(),
+				PRICE_UPDATE_INTERVAL
+			);
+
+			this.setState({ intervalInvoicePrice: intervalInvoicePriceNext });
+		};
+
 		setupWatchAddress = async () => {
 			const { to } = this.props;
 			const { intervalUnconfirmed } = this.state;
@@ -338,7 +369,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 				const invoiceStatus = invoiceInfo.status; // for InvoiceDisplay
 
-				this.setState({ invoiceInfo });
+				this.setState({ invoiceInfo }, this.setupInvoiceFiat());
 				this.setupCoinMeta(invoiceInfo);
 
 				if (invoiceStatus === 'paid') {
@@ -453,12 +484,14 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		componentWillUnmount() {
 			const {
 				intervalPrice,
+				intervalInvoicePrice,
 				intervalLogin,
 				intervalUnconfirmed,
 				websocketInvoice,
 				intervalTimer,
 			} = this.state;
 			intervalPrice && clearInterval(intervalPrice);
+			intervalInvoicePrice && clearInterval(intervalInvoicePrice);
 			intervalLogin && clearInterval(intervalLogin);
 			intervalUnconfirmed && clearInterval(intervalUnconfirmed);
 			intervalTimer && clearInterval(intervalTimer);
@@ -537,6 +570,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				coinName,
 				invoiceInfo,
 				invoiceTimeLeftSeconds,
+				invoiceFiat,
 			} = this.state;
 
 			let calculatedAmount = adjustAmount(amount, coinDecimals) || satoshis;
@@ -577,6 +611,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					coinName={coinName}
 					invoiceInfo={invoiceInfo}
 					invoiceTimeLeftSeconds={invoiceTimeLeftSeconds}
+					invoiceFiat={invoiceFiat}
 				/>
 			);
 		}

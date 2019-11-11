@@ -111,6 +111,7 @@ type Props = BadgerBaseProps & {
 	showBorder?: boolean,
 
 	invoiceTimeLeftSeconds: ?number,
+	invoiceFiat: ?number,
 
 	handleClick: Function,
 };
@@ -148,6 +149,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 			showQR,
 			paymentRequestUrl,
 			invoiceTimeLeftSeconds,
+			invoiceFiat,
 			showBorder,
 			showBrand,
 		} = this.props;
@@ -162,6 +164,13 @@ class BadgerBadge extends React.PureComponent<Props> {
 							<PriceDisplay
 								preSymbol={getCurrencyPreSymbol(currency)}
 								price={formatPriceDisplay(price)}
+								symbol={currency}
+							/>
+						)}
+						{invoiceFiat != undefined && (
+							<PriceDisplay
+								preSymbol={getCurrencyPreSymbol(currency)}
+								price={formatPriceDisplay(invoiceFiat)}
 								symbol={currency}
 							/>
 						)}

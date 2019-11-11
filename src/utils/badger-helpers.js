@@ -30,7 +30,16 @@ const getCurrencyPreSymbol = (currency: CurrencyCode) => {
 
 const formatPriceDisplay = (price: ?number): ?number => {
 	if (!price) return null;
-	return +price.toFixed(5);
+	if (price > 1) {
+		return price
+			.toLocaleString('en-US', {
+				style: 'currency',
+				currency: 'USD',
+			})
+			.slice(1);
+	} else {
+		return +price.toFixed(5);
+	}
 };
 
 const formatAmount = (amount: ?number, decimals: ?number): string => {
@@ -55,6 +64,11 @@ const priceToSatoshis = (BCHRate: number, price: number): number => {
 	return +singleDollarSatoshis.times(price).integerValue(BigNumber.ROUND_FLOOR);
 };
 
+const priceToFiat = (BCHRate: number, price: number): number => {
+	const singleDollarValue = new BigNumber(BCHRate).div(100);
+	return +singleDollarValue.times(price);
+};
+
 const fiatToSatoshis = async (
 	currency: CurrencyCode,
 	price: number
@@ -64,6 +78,18 @@ const fiatToSatoshis = async (
 	const fiatPrice = result.price;
 	const satoshis = priceToSatoshis(fiatPrice, price);
 	return satoshis;
+};
+
+const bchToFiat = async (
+	currency: CurrencyCode,
+	price: number
+): Promise<number> => {
+	const priceRequest = await fetch(buildPriceEndpoint(currency));
+	const result = await priceRequest.json();
+	const fiatPrice = result.price;
+
+	const fiatInvoiceTotal = priceToFiat(fiatPrice, price);
+	return fiatInvoiceTotal;
 };
 
 const adjustAmount = (amount: ?number, decimals: number): ?number => {
@@ -76,6 +102,7 @@ export {
 	adjustAmount,
 	buildPriceEndpoint,
 	fiatToSatoshis,
+	bchToFiat,
 	formatAmount,
 	formatPriceDisplay,
 	getAddressUnconfirmed,

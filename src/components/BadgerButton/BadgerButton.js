@@ -72,6 +72,7 @@ type Props = BadgerBaseProps & {
 	coinName?: string,
 
 	invoiceTimeLeftSeconds: ?number,
+	invoiceFiat: ?number,
 
 	handleClick: Function,
 	step: ButtonStates,
@@ -105,6 +106,7 @@ class BadgerButton extends React.PureComponent<Props> {
 			showQR,
 			paymentRequestUrl,
 			invoiceTimeLeftSeconds,
+			invoiceFiat,
 		} = this.props;
 
 		const CoinImage = coinType === 'BCH' ? BitcoinCashImage : SLPLogoImage;
@@ -142,6 +144,13 @@ class BadgerButton extends React.PureComponent<Props> {
 							)}
 						</Button>
 					)}
+					{invoiceFiat != undefined && (
+						<PriceDisplay
+							preSymbol={getCurrencyPreSymbol(currency)}
+							price={formatPriceDisplay(invoiceFiat)}
+							symbol={currency}
+						/>
+					)}
 
 					{showAmount && (
 						<PriceDisplay
@@ -151,6 +160,7 @@ class BadgerButton extends React.PureComponent<Props> {
 							name={coinName}
 						/>
 					)}
+
 					{invoiceTimeLeftSeconds !== null && (
 						<InvoiceTimer invoiceTimeLeftSeconds={invoiceTimeLeftSeconds} />
 					)}
