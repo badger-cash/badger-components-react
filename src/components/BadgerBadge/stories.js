@@ -332,7 +332,7 @@ storiesOf('BadgerBadge', module)
 		}
 	)
 	.add(
-		'BIP070 Invoicing, SLP, Paid',
+		'BIP070 Invoicing - SLP, Paid',
 		() => (
 			<BadgerBadge
 				paymentRequestUrl={text(
