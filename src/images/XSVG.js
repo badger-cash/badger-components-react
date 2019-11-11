@@ -5,15 +5,12 @@ import styled from 'styled-components';
 
 import colors from '../styles/colors';
 
-const ExpiredLabel = styled.h5`
+import H3 from '../atoms/H3';
+
+const ExpiredLabel = styled(H3)`
 	color: ${colors.expired700};
-	text-align: center;
 `;
 
-const XSVG = () => (
-	<React.Fragment>
-		<ExpiredLabel>Invoice Expired</ExpiredLabel>
-	</React.Fragment>
-);
+const XSVG = () => <ExpiredLabel>Invoice Expired</ExpiredLabel>;
 
 export default XSVG;
