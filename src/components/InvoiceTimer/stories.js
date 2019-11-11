@@ -14,7 +14,7 @@ storiesOf('Invoice Timer', module)
 	.add(
 		'Default',
 		() => {
-			return <InvoiceTimer secondsRemaining={600} />;
+			return <InvoiceTimer invoiceTimeLeftSeconds={600} />;
 		},
 		{
 			notes: 'Default display',
