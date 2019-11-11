@@ -21,7 +21,7 @@ const Top = styled.div`
 	display: grid;
 	grid-gap: 5px;
 	grid-auto-flow: column;
-	justify-content: end;
+	justify-content: flex-end;
 	align-items: end;
 `;
 
