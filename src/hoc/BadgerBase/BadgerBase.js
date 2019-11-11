@@ -382,7 +382,6 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 		setupCoinMeta = async (invoiceInfo = null) => {
 			const { coinType, tokenId, paymentRequestUrl } = this.props;
-			// If this is a BIP070 invoice for an SLP token, set values from the invoice
 
 			if (invoiceInfo !== null && invoiceInfo.currency !== 'BCH') {
 				const invoiceTokenId = invoiceInfo.outputs[0].token_id;
@@ -397,7 +396,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				});
 			} else if (
 				(!paymentRequestUrl && coinType === 'BCH') ||
-				invoiceInfo.currency === 'BCH'
+				(invoiceInfo !== null && invoiceInfo.currency === 'BCH')
 			) {
 				this.setState({
 					coinSymbol: 'BCH',
@@ -476,6 +475,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					isRepeatable,
 					watchAddress,
 					tokenId,
+					paymentRequestUrl,
 				} = this.props;
 				const { invoiceTimeLeftSeconds } = this.state;
 
