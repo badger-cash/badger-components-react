@@ -27,7 +27,7 @@ const Top = styled.div`
 
 const Bottom = styled.div`
 	display: flex;
-	justify-content: end;
+	justify-content: flex-end;
 `;
 
 const PriceText = styled.p`
