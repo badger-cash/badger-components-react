@@ -105,6 +105,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 
 			unconfirmedCount: null,
 			invoiceInfo: {},
+			invoiceFiat: null,
 			invoiceTimeLeftSeconds: null,
 
 			intervalPrice: null,
@@ -510,7 +511,12 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 					tokenId,
 					paymentRequestUrl,
 				} = this.props;
-				const { invoiceTimeLeftSeconds } = this.state;
+				const {
+					invoiceTimeLeftSeconds,
+					websocketInvoice,
+					intervalInvoicePrice,
+					intervalTimer,
+				} = this.state;
 
 				const prevCurrency = prevProps.currency;
 				const prevCoinType = prevProps.coinType;
@@ -519,9 +525,24 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				const prevIsRepeatable = prevProps.isRepeatable;
 				const prevWatchAddress = prevProps.watchAddress;
 				const prevTokenId = prevProps.tokenId;
+				const prevPaymentRequestUrl = prevProps.paymentRequestUrl;
 
 				const prevInvoiceTimeLeftSeconds = prevState.invoiceTimeLeftSeconds;
 
+				if (paymentRequestUrl !== prevPaymentRequestUrl) {
+					// clear all invoice intervals and websockets
+					intervalTimer && clearInterval(intervalTimer);
+					intervalInvoicePrice && clearInterval(intervalInvoicePrice);
+					websocketInvoice && websocketInvoice.close();
+					// reset all invoice info, then set it up again
+					this.setState({
+						step: 'fresh',
+						invoiceInfo: {},
+						invoiceFiat: null,
+						invoiceTimeLeftSeconds: null,
+					});
+					paymentRequestUrl && this.setupWatchInvoice();
+				}
 				if (
 					invoiceTimeLeftSeconds !== null &&
 					prevInvoiceTimeLeftSeconds === null
