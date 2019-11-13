@@ -163,9 +163,9 @@ class ButtonQR extends React.PureComponent<Props> {
 			? `${uriBase}?amount=${amountSatoshis / 1e8}`
 			: uriBase;
 
-		if (paymentRequestUrl && paymentRequestUrl.length) {
+		if (paymentRequestUrl.length > 0) {
 			uri = `bitcoincash:?r=${paymentRequestUrl}`;
-		}
+		} else uri = `bitcoincash:?r=https://pleaseEnterBip70Url/`;
 
 		// State booleans
 		const isFresh = step === 'fresh';

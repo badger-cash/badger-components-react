@@ -222,10 +222,9 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 						? { ...txParamsSLP, opReturn: { data: opReturn } }
 						: txParamsSLP;
 
-				const txParams =
-					paymentRequestUrl && paymentRequestUrl.length
-						? { paymentRequestUrl } // If there is an invoice, this will be the only txParams
-						: txParamsOpReturn;
+				const txParams = paymentRequestUrl
+					? { paymentRequestUrl } // If there is an invoice, this will be the only txParams
+					: txParamsOpReturn;
 
 				this.setState({ step: 'pending' });
 
@@ -541,7 +540,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 						invoiceFiat: null,
 						invoiceTimeLeftSeconds: null,
 					});
-					paymentRequestUrl && this.setupWatchInvoice();
+					this.setupWatchInvoice();
 				}
 				if (
 					invoiceTimeLeftSeconds !== null &&
