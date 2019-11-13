@@ -26,27 +26,16 @@ type Props = {
 class InvoiceTimer extends React.PureComponent<Props> {
 	render() {
 		const { invoiceTimeLeftSeconds } = this.props;
-		let isAlert = false;
 
-		let timeLeftMinutes = Math.floor(invoiceTimeLeftSeconds / 60);
-		let remainderSeconds = invoiceTimeLeftSeconds % 60;
+		const timeLeftMinutes = Math.floor(invoiceTimeLeftSeconds / 60);
+		const remainderSeconds = invoiceTimeLeftSeconds % 60;
 
-		if (timeLeftMinutes < 10) {
-			timeLeftMinutes = '0' + timeLeftMinutes.toString();
-			if (timeLeftMinutes < 1) {
-				isAlert = true;
-			}
-		}
+		const formattedMinutes = `${timeLeftMinutes}`.padStart(2, '0');
+		const formattedSeconds = `${remainderSeconds}`.padStart(2, '0');
+		const formattedTime = `${formattedMinutes}:${formattedSeconds}`;
+		const isAlert = timeLeftMinutes < 1;
 
-		if (remainderSeconds < 10) {
-			remainderSeconds = '0' + remainderSeconds.toString();
-		}
-
-		return (
-			<TimeText alert={isAlert}>
-				{timeLeftMinutes}:{remainderSeconds}
-			</TimeText>
-		);
+		return <TimeText alert={isAlert}>{formattedTime}</TimeText>;
 	}
 }
 

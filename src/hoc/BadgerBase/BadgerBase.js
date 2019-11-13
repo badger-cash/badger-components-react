@@ -400,7 +400,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			const intervalTimerNext = setInterval(() => {
 				const prevInvoiceTimeLeftSeconds = this.state.invoiceTimeLeftSeconds;
 				if (prevInvoiceTimeLeftSeconds === 1) {
-					this.invoiceExpired();
+					return this.invoiceExpired();
 				}
 				const newInvoiceTimeLeftSeconds = prevInvoiceTimeLeftSeconds - 1;
 				this.setState({
@@ -596,6 +596,9 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			let determinedCoinType = coinType;
 			if (paymentRequestUrl && coinSymbol !== 'BCH' && coinSymbol !== null) {
 				determinedCoinType = 'SLP';
+			}
+			if (paymentRequestUrl && coinSymbol === 'BCH') {
+				determinedCoinType = 'BCH';
 			}
 
 			return (

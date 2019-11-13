@@ -110,6 +110,7 @@ type Props = BadgerBaseProps & {
 	showQR?: boolean,
 	showBorder?: boolean,
 
+	invoiceInfo: ?Object,
 	invoiceTimeLeftSeconds: ?number,
 	invoiceFiat: ?number,
 
@@ -148,6 +149,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 			showAmount,
 			showQR,
 			paymentRequestUrl,
+			invoiceInfo,
 			invoiceTimeLeftSeconds,
 			invoiceFiat,
 			showBorder,
@@ -155,34 +157,66 @@ class BadgerBadge extends React.PureComponent<Props> {
 		} = this.props;
 
 		const CoinImage = coinType === 'BCH' ? BitcoinCashImage : SLPLogoImage;
+
+		// Handle cases for displaying price
+		// Case 1: no bip70 invoice
+		// Case 2: bip70 invoice, supported pay.bitcoin.com invoice with websocket info over-riding props, showAmount={true}
+		// Case 3: bip70 invoice, no supported websocket price updating, only display a "Bip70 invoice" label and no cointype or price, OR valid invoice but showAmount={false}; a bip70 invoice must be labeled as such even if showAmount={false} and price in props must be over-ridden
+
+		// Case 1: no bip70 invoice
+		let displayedPriceInfo = (
+			<Prices>
+				{price != undefined && (
+					<PriceDisplay
+						preSymbol={getCurrencyPreSymbol(currency)}
+						price={formatPriceDisplay(price)}
+						symbol={currency}
+					/>
+				)}
+				{showAmount && (
+					<PriceDisplay
+						coinType={coinType}
+						price={formatAmount(amount, coinDecimals)}
+						symbol={coinSymbol}
+						name={coinName}
+					/>
+				)}
+			</Prices>
+		);
+		// Case 2: bip70 invoice, supported pay.bitcoin.com invoice with websocket info over-riding props, showAmount={true}
+		if (showAmount && paymentRequestUrl && invoiceInfo.currency) {
+			displayedPriceInfo = (
+				<Prices>
+					{invoiceFiat != undefined && (
+						<PriceDisplay
+							preSymbol={getCurrencyPreSymbol(currency)}
+							price={formatPriceDisplay(invoiceFiat)}
+							symbol={currency}
+						/>
+					)}
+
+					<PriceDisplay
+						coinType={coinType}
+						price={formatAmount(amount, coinDecimals)}
+						symbol={coinSymbol}
+						name={coinName}
+					/>
+				</Prices>
+			);
+			// Case 3: bip70 invoice, no supported websocket price updating, only display a "Bip70 invoice" label and no cointype or price, OR valid invoice but showAmount={false}
+			// Bip70 invoice must be labeled as such if amounts are not shown
+		} else if (paymentRequestUrl) {
+			displayedPriceInfo = (
+				<Prices>
+					<PriceText>BIP70 Invoice</PriceText>
+				</Prices>
+			);
+		}
 		return (
 			<Outer>
 				<Main showBorder={showBorder}>
 					<H3>{text}</H3>
-					<Prices>
-						{price != undefined && (
-							<PriceDisplay
-								preSymbol={getCurrencyPreSymbol(currency)}
-								price={formatPriceDisplay(price)}
-								symbol={currency}
-							/>
-						)}
-						{invoiceFiat != undefined && (
-							<PriceDisplay
-								preSymbol={getCurrencyPreSymbol(currency)}
-								price={formatPriceDisplay(invoiceFiat)}
-								symbol={currency}
-							/>
-						)}
-						{showAmount && (
-							<PriceDisplay
-								coinType={coinType}
-								price={formatAmount(amount, coinDecimals)}
-								symbol={coinSymbol}
-								name={coinName}
-							/>
-						)}
-					</Prices>
+					{displayedPriceInfo}
 					{invoiceTimeLeftSeconds !== null && (
 						<InvoiceTimer invoiceTimeLeftSeconds={invoiceTimeLeftSeconds} />
 					)}

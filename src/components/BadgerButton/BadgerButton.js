@@ -58,6 +58,18 @@ const Wrapper = styled.div`
 	border-radius: 4px;
 `;
 
+const PriceText = styled.p`
+	font-family: monospace;
+	font-size: 16px;
+	line-height: 1em;
+	margin: 0;
+	display: grid;
+	grid-gap: 5px;
+	grid-auto-flow: column;
+	justify-content: flex-end;
+	align-items: center;
+`;
+
 // Badger Button Props
 type Props = BadgerBaseProps & {
 	text?: string,
@@ -71,6 +83,7 @@ type Props = BadgerBaseProps & {
 	coinDecimals?: number,
 	coinName?: string,
 
+	invoiceInfo: ?Object,
 	invoiceTimeLeftSeconds: ?number,
 	invoiceFiat: ?number,
 
@@ -105,12 +118,50 @@ class BadgerButton extends React.PureComponent<Props> {
 			showBorder,
 			showQR,
 			paymentRequestUrl,
+
+			invoiceInfo,
 			invoiceTimeLeftSeconds,
 			invoiceFiat,
 		} = this.props;
 
 		const CoinImage = coinType === 'BCH' ? BitcoinCashImage : SLPLogoImage;
 
+		// buttonPriceDisplay -- handle different cases for BIP70 invoices
+
+		// buttonPriceDisplay if no price, or if a bip70 invoice is set from a server without supported websocket updates
+		let buttonPriceDisplay = <Text>Badger Pay</Text>;
+
+		// buttonPriceDisplay of price set in props and no invoice is set
+		if (price && !paymentRequestUrl) {
+			buttonPriceDisplay = (
+				<Text>
+					{getCurrencyPreSymbol(currency)} {formatPriceDisplay(price)}
+					<Small> {currency}</Small>
+				</Text>
+			);
+			// buttonPriceDisplay if valid bip70 invoice with price information is available
+		} else if (paymentRequestUrl && invoiceFiat != undefined) {
+			buttonPriceDisplay = (
+				<Text>
+					{getCurrencyPreSymbol(currency)} {formatPriceDisplay(invoiceFiat)}
+					<Small> {currency}</Small>
+				</Text>
+			);
+		}
+
+		let determinedShowAmount = (
+			<PriceDisplay
+				coinType={coinType}
+				price={formatAmount(amount, coinDecimals)}
+				symbol={coinSymbol}
+				name={coinName}
+			/>
+		);
+		if (!showAmount) {
+			determinedShowAmount = <React.Fragment></React.Fragment>;
+		} else if (showAmount && !invoiceInfo.currency) {
+			determinedShowAmount = <PriceText>BIP70 Invoice</PriceText>;
+		}
 		return (
 			<Outer>
 				<Wrapper hasBorder={showBorder}>
@@ -123,43 +174,15 @@ class BadgerButton extends React.PureComponent<Props> {
 							step={step}
 							paymentRequestUrl={paymentRequestUrl}
 						>
-							{price ? (
-								<Text>
-									{getCurrencyPreSymbol(currency)} {formatPriceDisplay(price)}
-									<Small> {currency}</Small>
-								</Text>
-							) : (
-								<Text>Badger Pay</Text>
-							)}
+							{buttonPriceDisplay}
 						</ButtonQR>
 					) : (
 						<Button onClick={handleClick} step={step}>
-							{price ? (
-								<Text>
-									{getCurrencyPreSymbol(currency)} {formatPriceDisplay(price)}
-									<Small> {currency}</Small>
-								</Text>
-							) : (
-								<Text>Badger Pay</Text>
-							)}
+							{buttonPriceDisplay}
 						</Button>
 					)}
-					{invoiceFiat != undefined && (
-						<PriceDisplay
-							preSymbol={getCurrencyPreSymbol(currency)}
-							price={formatPriceDisplay(invoiceFiat)}
-							symbol={currency}
-						/>
-					)}
 
-					{showAmount && (
-						<PriceDisplay
-							coinType={coinType}
-							price={formatAmount(amount, coinDecimals)}
-							symbol={coinSymbol}
-							name={coinName}
-						/>
-					)}
+					{determinedShowAmount}
 
 					{invoiceTimeLeftSeconds !== null && (
 						<InvoiceTimer invoiceTimeLeftSeconds={invoiceTimeLeftSeconds} />
