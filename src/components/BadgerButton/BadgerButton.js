@@ -159,7 +159,7 @@ class BadgerButton extends React.PureComponent<Props> {
 		);
 		if (!showAmount) {
 			determinedShowAmount = <React.Fragment></React.Fragment>;
-		} else if (showAmount && !invoiceInfo.currency) {
+		} else if (showAmount && paymentRequestUrl && !invoiceInfo.currency) {
 			determinedShowAmount = <PriceText>BIP70 Invoice</PriceText>;
 		}
 		return (
