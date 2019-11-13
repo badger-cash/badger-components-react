@@ -1,6 +1,6 @@
 # Changelog - Badger Components React
 
-## 00.7.0 (Nov 7, 2019)
+## 0.7.0 (Nov 7, 2019)
 
 * Added invoice timer for BIP 70 invoices
 * Added status animations for BIP 70 invoices (paid, expired), checked via websocket (support for pay.bitcoin.com BIP70 invoices only)
