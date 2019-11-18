@@ -9,6 +9,7 @@ import { type ButtonStates } from '../../hoc/BadgerBase';
 import colors from '../../styles/colors';
 
 import CheckSVG from '../../images/CheckSVG';
+import XSVG from '../../images/XSVG';
 import LoadSVG from '../../images/LoadSVG';
 
 import Text from '../Text';
@@ -89,6 +90,13 @@ const CompleteCover = styled.div`
 	background-color: ${colors.success500};
 `;
 
+const ExpiredCover = styled.div`
+	${cover};
+	border-radius: 5px;
+	border: 1px solid ${colors.expired700};
+	background-color: ${colors.expired500};
+`;
+
 const LoginCover = styled.div`
 	${cover};
 	font-size: 16px;
@@ -155,14 +163,15 @@ class ButtonQR extends React.PureComponent<Props> {
 			? `${uriBase}?amount=${amountSatoshis / 1e8}`
 			: uriBase;
 
-		if (paymentRequestUrl && paymentRequestUrl.length) {
+		if (paymentRequestUrl && paymentRequestUrl.length > 0) {
 			uri = `bitcoincash:?r=${paymentRequestUrl}`;
-		}
+		} else uri = `bitcoincash:?r=https://pleaseEnterBip70Url/`;
 
 		// State booleans
 		const isFresh = step === 'fresh';
 		const isPending = step === 'pending';
 		const isComplete = step === 'complete';
+		const isExpired = step === 'expired';
 		const isLogin = step === 'login';
 		const isInstall = step === 'install';
 
@@ -180,6 +189,11 @@ class ButtonQR extends React.PureComponent<Props> {
 						<CompleteCover>
 							<CheckSVG />
 						</CompleteCover>
+					)}
+					{isExpired && (
+						<ExpiredCover>
+							<XSVG />
+						</ExpiredCover>
 					)}
 
 					<QRCodeWrapper>
