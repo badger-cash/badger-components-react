@@ -347,7 +347,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 		};
 
 		setupWatchInvoice = async () => {
-			const { paymentRequestUrl } = this.props;
+			const { paymentRequestUrl, successFn } = this.props;
 
 			const urlParts = paymentRequestUrl.split('/');
 			const server = urlParts[2];
@@ -373,6 +373,7 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				this.setupCoinMeta(invoiceInfo);
 
 				if (invoiceStatus === 'paid') {
+					successFn && successFn();
 					return this.paymentSendSuccess();
 				}
 				if (invoiceStatus === 'expired') {
