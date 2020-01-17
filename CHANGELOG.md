@@ -1,5 +1,10 @@
 # Changelog - Badger Components React
 
+
+## 0.8.0 (January 17, 2020)
+
+* Success function calls when invoice paid from non-badger wallet
+  
 ## 0.7.0 (Nov 7, 2019)
 
 * Added invoice timer for BIP 70 invoices
