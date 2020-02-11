@@ -234,6 +234,10 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			if (coinType === 'SLP') {
 				sendParams.assetId = tokenId;
 			}
+
+			if (opReturn && opReturn.length) {
+				sendParams.opReturn = opReturn;
+			}
 			
 			this.setState({ step: 'pending' });
 			console.info('Badger sendAssets begin', sendParams);
