@@ -66,8 +66,9 @@
     "styled-components": "^4.0.0"
   },
   "dependencies": {
+    "bignumber.js": "^9.0.0",
+    "bitcoin-wallet-api": "^0.1.4",
     "lodash": "^4.17.15",
-    "qrcode.react": "^0.9.3",
-    "bignumber.js": "^9.0.0"
+    "qrcode.react": "^0.9.3"
   }
 }
