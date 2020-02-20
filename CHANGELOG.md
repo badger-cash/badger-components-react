@@ -1,5 +1,8 @@
 # Changelog - Badger Components React
 
+## 0.9.0 (February 20, 2020)
+
+* Adds support for wallet api package for multi wallet support (https://developer.bitcoin.com/wallet-api/)
 
 ## 0.8.0 (January 17, 2020)
 

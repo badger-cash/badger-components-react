@@ -92,9 +92,13 @@ const bchToFiat = async (
 	return fiatInvoiceTotal;
 };
 
-const adjustAmount = (amount: ?number, decimals: number): ?number => {
+const adjustAmount = (amount: ?number, decimals: number, fromSatoshis: ?boolean): ?number => {
+	decimals = decimals || 0;
+	const shiftBy = !fromSatoshis ? decimals : decimals * -1;
 	return amount
-		? new BigNumber(amount).shiftedBy(decimals || 0).toString()
+		? new BigNumber(amount)
+			.shiftedBy(shiftBy)
+			.toString()
 		: null;
 };
 

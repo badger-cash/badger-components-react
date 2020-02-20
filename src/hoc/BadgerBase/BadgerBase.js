@@ -12,6 +12,14 @@ import {
 	getTokenInfo,
 } from '../../utils/badger-helpers';
 
+import {
+	getWalletProviderStatus,
+	constants,
+	sendAssets,
+	payInvoice,
+} from 'bitcoin-wallet-api';
+const { WalletProviderStatus } = constants;
+
 import { type CurrencyCode } from '../../utils/currency-helpers';
 
 const SECOND = 1000;
@@ -180,73 +188,70 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				return;
 			}
 
+			const walletProviderStatus = getWalletProviderStatus();
+
 			if (
-				typeof window !== `undefined` &&
-				typeof window.Web4Bch !== 'undefined'
+				typeof window === `undefined` ||
+				(walletProviderStatus.badger === WalletProviderStatus.NOT_AVAILABLE &&
+					walletProviderStatus.android === WalletProviderStatus.NOT_AVAILABLE &&
+					walletProviderStatus.ios === WalletProviderStatus.NOT_AVAILABLE)
 			) {
-				const { web4bch } = window;
-
-				const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
-				const { defaultAccount } = web4bch2.bch;
-
-				if (!defaultAccount) {
-					this.setState({ step: 'login' });
-					return;
-				}
-
-				// BCH amount = satoshis, SLP amount = absolute value
-				const calculatedValue =
-					coinType === 'BCH' && amount
-						? adjustAmount(amount, 8)
-						: amount || satoshis;
-
-				const txParamsBase = {
-					to,
-					from: defaultAccount,
-					value: calculatedValue,
-				};
-
-				const txParamsSLP =
-					coinType === 'SLP' && tokenId
-						? {
-								...txParamsBase,
-								sendTokenData: {
-									tokenId,
-									tokenProtocol: 'slp',
-								},
-						  }
-						: txParamsBase;
-
-				const txParamsOpReturn =
-					opReturn && opReturn.length
-						? { ...txParamsSLP, opReturn: { data: opReturn } }
-						: txParamsSLP;
-
-				const txParams = paymentRequestUrl
-					? { paymentRequestUrl } // If there is an invoice, this will be the only txParams
-					: txParamsOpReturn;
-
-				this.setState({ step: 'pending' });
-
-				console.info('Badger send begin', txParams);
-				web4bch2.bch.sendTransaction(txParams, (err, res) => {
-					if (err) {
-						console.info('Badger send cancel', err);
-						failFn && failFn(err);
-						this.setState({ step: 'fresh' });
-					} else {
-						console.info('Badger send success:', res);
-						successFn && successFn(res);
-						this.paymentSendSuccess();
-					}
-				});
-			} else {
 				this.setState({ step: 'install' });
 
 				if (typeof window !== 'undefined') {
 					window.open('https://badger.bitcoin.com');
 				}
+				return;
 			}
+
+			if (walletProviderStatus.badger === WalletProviderStatus.AVAILABLE) {
+				this.setState({ step: 'login' });
+				return;
+			}
+
+			if (paymentRequestUrl) {
+				this.setState({ step: 'pending' });
+				console.info('Badger payInvoice begin', paymentRequestUrl);
+				payInvoice({ url: paymentRequestUrl })
+				.then(({ memo }) => {
+					console.info('Badger send success:', memo);
+					successFn && successFn(memo);
+					this.paymentSendSuccess();
+				})
+				.catch((err) => {
+					console.info('Badger send cancel', err);
+					failFn && failFn(err);
+					this.setState({ step: 'fresh' });
+				});
+				return;
+			}
+
+			const sendParams = {
+				to,
+				protocol: coinType,
+				value: amount || adjustAmount(satoshis, 8, true),
+			};
+			if (coinType === 'SLP') {
+				sendParams.assetId = tokenId;
+			}
+
+			if (opReturn && opReturn.length) {
+				sendParams.opReturn = opReturn;
+			}
+			
+			this.setState({ step: 'pending' });
+			console.info('Badger sendAssets begin', sendParams);
+			sendAssets(sendParams)
+			.then(({txid}) => {
+				console.info('Badger send success:', txid);
+				successFn && successFn(txid);
+				this.paymentSendSuccess();
+			})
+			.catch(err => {
+				console.info('Badger send cancel', err);
+				failFn && failFn(err);
+				this.setState({ step: 'fresh' });
+			});
 		};
 
 		gotoLoginState = () => {
@@ -254,10 +259,12 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			this.setState({ step: 'login' });
 			if (typeof window !== 'undefined') {
 				const intervalLogin = setInterval(() => {
-					const { web4bch } = window;
-					const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
-					const { defaultAccount } = web4bch2.bch;
-					if (defaultAccount) {
+					const walletProviderStatus = getWalletProviderStatus();
+					if (
+						walletProviderStatus.badger === WalletProviderStatus.LOGGED_IN ||
+						walletProviderStatus.android === WalletProviderStatus.AVAILABLE ||
+						walletProviderStatus.ios === WalletProviderStatus.AVAILABLE
+					) {
 						clearInterval(intervalLogin);
 						this.setState({ step: 'fresh' });
 					}
@@ -469,14 +476,15 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				!paymentRequestUrl && this.setupCoinMeta(); // normal call for setupCoinMeta()
 
 				// Detect Badger and determine if button should show login or install CTA
-				if (window.Web4Bch) {
-					const { web4bch } = window;
-					const web4bch2 = new window.Web4Bch(web4bch.currentProvider);
-					const { defaultAccount } = web4bch2.bch;
-					if (!defaultAccount) {
-						this.gotoLoginState();
-					}
-				} else {
+				const walletProviderStatus = getWalletProviderStatus();
+				if (walletProviderStatus.badger === WalletProviderStatus.AVAILABLE) {
+					this.gotoLoginState();
+				}
+				if (
+					walletProviderStatus.badger === WalletProviderStatus.NOT_AVAILABLE &&
+					walletProviderStatus.android === WalletProviderStatus.NOT_AVAILABLE &&
+					walletProviderStatus.ios === WalletProviderStatus.NOT_AVAILABLE
+				) {
 					this.setState({ step: 'install' });
 				}
 			}
