@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import { currencySymbolMap, type CurrencyCode } from './currency-helpers';
 
 const buildPriceEndpoint = (currency: CurrencyCode) => {
-	return `https://index-api.bitcoin.com/api/v0/cash/price/${currency}`;
+	return `https://markets.api.bitcoin.com/rates/convertor?c=BCH&q=${currency}`;
 };
 
 const getAddressUnconfirmed = async (address: string): Promise<string[]> => {
@@ -57,7 +57,7 @@ const formatAmount = (amount: ?number, decimals: ?number): string => {
 };
 
 const priceToSatoshis = (BCHRate: number, price: number): number => {
-	const singleDollarValue = new BigNumber(BCHRate).div(100);
+	const singleDollarValue = new BigNumber(BCHRate);
 	const satoshisPerBCH = new BigNumber(100000000);
 	const singleDollarSatoshis = satoshisPerBCH.div(singleDollarValue);
 
@@ -65,7 +65,7 @@ const priceToSatoshis = (BCHRate: number, price: number): number => {
 };
 
 const priceToFiat = (BCHRate: number, price: number): number => {
-	const singleDollarValue = new BigNumber(BCHRate).div(100);
+	const singleDollarValue = new BigNumber(BCHRate);
 	return +singleDollarValue.times(price);
 };
 
@@ -75,7 +75,7 @@ const fiatToSatoshis = async (
 ): Promise<number> => {
 	const priceRequest = await fetch(buildPriceEndpoint(currency));
 	const result = await priceRequest.json();
-	const fiatPrice = result.price;
+	const fiatPrice = result[currency].rate;
 	const satoshis = priceToSatoshis(fiatPrice, price);
 	return satoshis;
 };
@@ -86,20 +86,20 @@ const bchToFiat = async (
 ): Promise<number> => {
 	const priceRequest = await fetch(buildPriceEndpoint(currency));
 	const result = await priceRequest.json();
-	const fiatPrice = result.price;
+	const fiatPrice = result[currency].rate;
 
 	const fiatInvoiceTotal = priceToFiat(fiatPrice, price);
 	return fiatInvoiceTotal;
 };
 
-const adjustAmount = (amount: ?number, decimals: number, fromSatoshis: ?boolean): ?number => {
+const adjustAmount = (
+	amount: ?number,
+	decimals: number,
+	fromSatoshis: ?boolean
+): ?number => {
 	decimals = decimals || 0;
 	const shiftBy = !fromSatoshis ? decimals : decimals * -1;
-	return amount
-		? new BigNumber(amount)
-			.shiftedBy(shiftBy)
-			.toString()
-		: null;
+	return amount ? new BigNumber(amount).shiftedBy(shiftBy).toString() : null;
 };
 
 export {
