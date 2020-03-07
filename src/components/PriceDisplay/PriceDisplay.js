@@ -21,7 +21,7 @@ const Top = styled.div`
 	display: grid;
 	grid-gap: 5px;
 	grid-auto-flow: column;
-	justify-content: end;
+	justify-content: flex-end;
 	align-items: end;
 `;
 
@@ -46,20 +46,11 @@ type Props = {
 	coinType?: ValidCoinTypes,
 	preSymbol?: string,
 	name?: string,
-
-	paymentRequestUrl?: string,
 };
 
 class PriceDisplay extends React.PureComponent<Props> {
 	render() {
-		const {
-			price,
-			name,
-			coinType,
-			symbol,
-			preSymbol,
-			paymentRequestUrl,
-		} = this.props;
+		const { price, name, coinType, symbol, preSymbol } = this.props;
 
 		const CoinImage = coinType === 'BCH' ? BitcoinCashImage : SLPLogoImage;
 
@@ -70,22 +61,13 @@ class PriceDisplay extends React.PureComponent<Props> {
 				<img src={CoinImage} style={{ height: '100%' }} alt={coinType} />
 			</div>
 		);
-		const priceContent = paymentRequestUrl ? (
-			<div>
-				<PriceText>BIP70 Invoice</PriceText>
-			</div>
-		) : (
-			<div>
-				<PriceText>{price || '-'}</PriceText>
-				<Small>{symbol}</Small>
-			</div>
-		);
 
 		return (
 			<Outer>
 				<Top>
 					{preContent}
-					{priceContent}
+					<PriceText>{price || '-'}</PriceText>
+					<Small>{symbol}</Small>
 				</Top>
 				{name && (
 					<Bottom>

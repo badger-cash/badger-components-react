@@ -311,14 +311,14 @@ storiesOf('BadgerBadge', module)
 		}
 	)
 	.add(
-		'BIP070 Invoicing',
+		'BIP70 Invoicing - BCH, expired',
 		() => (
 			<BadgerBadge
 				paymentRequestUrl={text(
 					'Invoice URL',
-					'https://yourInvoiceUrlHere.com/String'
+					//'https://yourInvoiceUrlHere.com/String'
+					'https://pay.bitcoin.com/i/7UG3Z5y56DoXLQzQJAJxoD'
 				)}
-				showQR={boolean('showQR', true)}
 				showAmount={boolean('showAmount', true)}
 				successFn={() => console.log('BIP70 Invoice successfully paid')}
 				failFn={() =>
@@ -327,7 +327,26 @@ storiesOf('BadgerBadge', module)
 			/>
 		),
 		{
-			notes:
-				'If paymentRequestUrl is set, this parameter defines the entire transaction.',
+			notes: 'Expired BCH invoice with no conflicting props',
+		}
+	)
+	.add(
+		'BIP70 Invoicing - SLP, Paid',
+		() => (
+			<BadgerBadge
+				paymentRequestUrl={text(
+					'Invoice URL',
+					//'https://yourInvoiceUrlHere.com/String'
+					'https://pay.bitcoin.com/i/DFFwn544tB2A2YvekWd3Y9'
+				)}
+				showAmount={boolean('showAmount', true)}
+				successFn={() => console.log('BIP70 Invoice successfully paid')}
+				failFn={() =>
+					console.log('BIP70 Invoice is expired or the URL is invalid')
+				}
+			/>
+		),
+		{
+			notes: 'Paid SLP invoice with no conflicting props',
 		}
 	);
