@@ -213,16 +213,16 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 				this.setState({ step: 'pending' });
 				console.info('Badger payInvoice begin', paymentRequestUrl);
 				payInvoice({ url: paymentRequestUrl })
-				.then(({ memo }) => {
-					console.info('Badger send success:', memo);
-					successFn && successFn(memo);
-					this.paymentSendSuccess();
-				})
-				.catch((err) => {
-					console.info('Badger send cancel', err);
-					failFn && failFn(err);
-					this.setState({ step: 'fresh' });
-				});
+					.then(({ memo }) => {
+						console.info('Badger send success:', memo);
+						successFn && successFn(memo);
+						this.paymentSendSuccess();
+					})
+					.catch((err) => {
+						console.info('Badger send cancel', err);
+						failFn && failFn(err);
+						this.setState({ step: 'fresh' });
+					});
 				return;
 			}
 
@@ -238,20 +238,20 @@ const BadgerBase = (Wrapped: React.AbstractComponent<any>) => {
 			if (opReturn && opReturn.length) {
 				sendParams.opReturn = opReturn;
 			}
-			
+
 			this.setState({ step: 'pending' });
 			console.info('Badger sendAssets begin', sendParams);
 			sendAssets(sendParams)
-			.then(({txid}) => {
-				console.info('Badger send success:', txid);
-				successFn && successFn(txid);
-				this.paymentSendSuccess();
-			})
-			.catch(err => {
-				console.info('Badger send cancel', err);
-				failFn && failFn(err);
-				this.setState({ step: 'fresh' });
-			});
+				.then(({ txid }) => {
+					console.info('Badger send success:', txid);
+					successFn && successFn(txid);
+					this.paymentSendSuccess();
+				})
+				.catch((err) => {
+					console.info('Badger send cancel', err);
+					failFn && failFn(err);
+					this.setState({ step: 'fresh' });
+				});
 		};
 
 		gotoLoginState = () => {
