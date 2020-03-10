@@ -1,5 +1,9 @@
 # Changelog - Badger Components React
 
+## 0.10.0 (March 10, 2020)
+
+* Updating price conversion API endpoint to be consistent with other bitcoin.com prices
+
 ## 0.9.0 (February 20, 2020)
 
 * Adds support for wallet api package for multi wallet support (https://developer.bitcoin.com/wallet-api/)
