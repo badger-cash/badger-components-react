@@ -11,13 +11,17 @@ import {
 	getAddressUnconfirmed,
 	getTokenInfo,
 } from '../../utils/badger-helpers';
-
+// TODO remove ignore once typings are fixed for bitcoincom-link
 import {
+	// @ts-ignore
 	getWalletProviderStatus,
+	// @ts-ignore
 	constants,
+	// @ts-ignore
 	sendAssets,
+	// @ts-ignore
 	payInvoice,
-} from 'bitcoin-wallet-api';
+} from 'bitcoincom-link';
 const { WalletProviderStatus } = constants;
 
 import { type CurrencyCode } from '../../utils/currency-helpers';
