@@ -4,10 +4,13 @@ import * as React from 'react';
 import styled, { css, keyframes } from 'styled-components';
 
 import QRCode from 'qrcode.react';
+import { QRCode as QRCodeLogo } from 'react-qrcode-logo';
 
 import { type ButtonStates } from '../../hoc/BadgerBase';
 import colors from '../../styles/colors';
 
+import bchLogo from '../../images/bch-icon-qrcode.png';
+import slpLogo from '../../images/slp-logo.png';
 import CheckSVG from '../../images/CheckSVG';
 import XSVG from '../../images/XSVG';
 import LoadSVG from '../../images/LoadSVG';
@@ -137,6 +140,7 @@ type Props = {
 	amountSatoshis: ?number,
 	sizeQR: number,
 	paymentRequestUrl?: string,
+	logoQR?: string,
 };
 
 class ButtonQR extends React.PureComponent<Props> {
@@ -152,6 +156,7 @@ class ButtonQR extends React.PureComponent<Props> {
 			amountSatoshis,
 			sizeQR,
 			paymentRequestUrl,
+			logoQR,
 		} = this.props;
 
 		const widthQR = sizeQR >= 125 ? sizeQR : 125; // Minimum width 125
@@ -198,7 +203,23 @@ class ButtonQR extends React.PureComponent<Props> {
 
 					<QRCodeWrapper>
 						<a href={uri}>
-							<QRCode value={uri} size={widthQR} />
+							{logoQR ? (
+								<QRCodeLogo
+									style={{ position: 'absolute' }}
+									logoWidth={widthQR}
+									logoHeight={widthQR}
+									value={uri}
+									size={widthQR}
+									logoOpacity={0.3}
+									qrStyle={'dots'}
+									ecLevel="M"
+									quietZone={10}
+									bgColor="#fff"
+									logoImage={logoQR === 'SLP' ? slpLogo : bchLogo}
+								/>
+							) : (
+								<QRCode value={uri} size={widthQR} />
+							)}
 						</a>
 					</QRCodeWrapper>
 

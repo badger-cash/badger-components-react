@@ -47,6 +47,7 @@ storiesOf('BadgerBadge', module)
 				showBorder={boolean('Toggle Border', false)}
 				successFn={() => console.log('success')}
 				failFn={() => console.log('fail')}
+				logoQR={text('logoQR', '')}
 			/>
 		),
 		{

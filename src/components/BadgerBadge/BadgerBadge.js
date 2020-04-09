@@ -115,6 +115,8 @@ type Props = BadgerBaseProps & {
 	invoiceFiat: ?number,
 
 	handleClick: Function,
+
+	logoQR?: string,
 };
 
 class BadgerBadge extends React.PureComponent<Props> {
@@ -154,6 +156,8 @@ class BadgerBadge extends React.PureComponent<Props> {
 			invoiceFiat,
 			showBorder,
 			showBrand,
+
+			logoQR,
 		} = this.props;
 
 		const CoinImage = coinType === 'BCH' ? BitcoinCashImage : SLPLogoImage;
@@ -228,6 +232,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 								amountSatoshis={amount}
 								toAddress={to}
 								paymentRequestUrl={paymentRequestUrl}
+								logoQR={logoQR}
 							>
 								<Text>{tag}</Text>
 							</ButtonQR>

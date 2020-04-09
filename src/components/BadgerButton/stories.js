@@ -37,6 +37,7 @@ storiesOf('BadgerButton', module)
 				opReturn={array('OP_RETURN', [])}
 				successFn={() => console.log('success example function called')}
 				failFn={() => console.log('fail example function called')}
+				logoQR={text('logoQR', '')}
 			/>
 		),
 		{

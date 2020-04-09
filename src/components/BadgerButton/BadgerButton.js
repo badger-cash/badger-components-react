@@ -89,6 +89,8 @@ type Props = BadgerBaseProps & {
 
 	handleClick: Function,
 	step: ButtonStates,
+
+	logoQR?: string,
 };
 
 class BadgerButton extends React.PureComponent<Props> {
@@ -173,6 +175,7 @@ class BadgerButton extends React.PureComponent<Props> {
 							onClick={handleClick}
 							step={step}
 							paymentRequestUrl={paymentRequestUrl}
+							logoQR={logoQR}
 						>
 							{buttonPriceDisplay}
 						</ButtonQR>

@@ -27,6 +27,49 @@ storiesOf('ButtonQR', module)
 				amountSatoshis={number('Satoshis', 550)}
 				sizeQR={number('QR size', 125)}
 				step={'fresh'}
+				logoQR={text('logoQR', '')}
+			>
+				<Text>{ButtonText}</Text>
+			</ButtonQR>
+		),
+		{
+			notes:
+				'Button is a stateful controlled component which is the primary visual indicator for the badger payment process',
+		}
+	)
+	.add(
+		'BCH Logo QR - all knobs',
+		() => (
+			<ButtonQR
+				toAddress={text(
+					'To address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				amountSatoshis={number('Satoshis', 550)}
+				sizeQR={number('QR size', 125)}
+				step={'fresh'}
+				logoQR={text('logoQR', 'BCH')}
+			>
+				<Text>{ButtonText}</Text>
+			</ButtonQR>
+		),
+		{
+			notes:
+				'Button is a stateful controlled component which is the primary visual indicator for the badger payment process',
+		}
+	)
+	.add(
+		'SLP Logo QR - all knobs',
+		() => (
+			<ButtonQR
+				toAddress={text(
+					'To address',
+					'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g'
+				)}
+				amountSatoshis={number('Satoshis', 550)}
+				sizeQR={number('QR size', 125)}
+				step={'fresh'}
+				logoQR={text('logoQR', 'SLP')}
 			>
 				<Text>{ButtonText}</Text>
 			</ButtonQR>
