@@ -1,5 +1,9 @@
 # Changelog - Badger Components React
 
+## 0.11.0 (April 9, 2020)
+
+* Adds support for new prop, `logoQR`, can be set to "SLP" or "BCH" for a new QR code style in BadgerBadge or BadgerButton
+
 ## 0.10.0 (March 10, 2020)
 
 * Updating price conversion API endpoint to be consistent with other bitcoin.com prices
